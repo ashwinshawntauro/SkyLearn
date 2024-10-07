@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "site": "skylearn",
+    "public": "public"
+  }
+}
