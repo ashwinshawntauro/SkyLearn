@@ -3,15 +3,23 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { auth, createUserWithEmailAndPassword } from "@/lib/firebase/auth"; 
 import {useRouter} from 'next/navigation';
+import { AuthContext } from "@/providers/AuthProvider";
 
 export default function Page() {  
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState(null); 
   const router = useRouter()
+
+  const {isLogged} = AuthContext();
+  useEffect(()=>{
+    if(isLogged){
+      router.push('/profile');
+    }
+  })
 
   const handleSubmit = async (event) => {
     event.preventDefault();
