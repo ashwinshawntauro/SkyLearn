@@ -67,6 +67,17 @@ module.exports = require("path");
 
 /***/ }),
 
+/***/ "string_decoder":
+/*!*********************************!*\
+  !*** external "string_decoder" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("string_decoder");
+
+/***/ }),
+
 /***/ "url":
 /*!**********************!*\
   !*** external "url" ***!
@@ -75,6 +86,215 @@ module.exports = require("path");
 
 "use strict";
 module.exports = require("url");
+
+/***/ }),
+
+/***/ "node:assert":
+/*!******************************!*\
+  !*** external "node:assert" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:assert");
+
+/***/ }),
+
+/***/ "node:async_hooks":
+/*!***********************************!*\
+  !*** external "node:async_hooks" ***!
+  \***********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:async_hooks");
+
+/***/ }),
+
+/***/ "node:buffer":
+/*!******************************!*\
+  !*** external "node:buffer" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:buffer");
+
+/***/ }),
+
+/***/ "node:console":
+/*!*******************************!*\
+  !*** external "node:console" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:console");
+
+/***/ }),
+
+/***/ "node:crypto":
+/*!******************************!*\
+  !*** external "node:crypto" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:crypto");
+
+/***/ }),
+
+/***/ "node:diagnostics_channel":
+/*!*******************************************!*\
+  !*** external "node:diagnostics_channel" ***!
+  \*******************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:diagnostics_channel");
+
+/***/ }),
+
+/***/ "node:events":
+/*!******************************!*\
+  !*** external "node:events" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:events");
+
+/***/ }),
+
+/***/ "node:http":
+/*!****************************!*\
+  !*** external "node:http" ***!
+  \****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:http");
+
+/***/ }),
+
+/***/ "node:http2":
+/*!*****************************!*\
+  !*** external "node:http2" ***!
+  \*****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:http2");
+
+/***/ }),
+
+/***/ "node:net":
+/*!***************************!*\
+  !*** external "node:net" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:net");
+
+/***/ }),
+
+/***/ "node:perf_hooks":
+/*!**********************************!*\
+  !*** external "node:perf_hooks" ***!
+  \**********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:perf_hooks");
+
+/***/ }),
+
+/***/ "node:querystring":
+/*!***********************************!*\
+  !*** external "node:querystring" ***!
+  \***********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:querystring");
+
+/***/ }),
+
+/***/ "node:stream":
+/*!******************************!*\
+  !*** external "node:stream" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:stream");
+
+/***/ }),
+
+/***/ "node:tls":
+/*!***************************!*\
+  !*** external "node:tls" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:tls");
+
+/***/ }),
+
+/***/ "node:url":
+/*!***************************!*\
+  !*** external "node:url" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:url");
+
+/***/ }),
+
+/***/ "node:util":
+/*!****************************!*\
+  !*** external "node:util" ***!
+  \****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:util");
+
+/***/ }),
+
+/***/ "node:util/types":
+/*!**********************************!*\
+  !*** external "node:util/types" ***!
+  \**********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:util/types");
+
+/***/ }),
+
+/***/ "node:worker_threads":
+/*!**************************************!*\
+  !*** external "node:worker_threads" ***!
+  \**************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:worker_threads");
+
+/***/ }),
+
+/***/ "node:zlib":
+/*!****************************!*\
+  !*** external "node:zlib" ***!
+  \****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:zlib");
 
 /***/ }),
 
@@ -99,13 +319,13 @@ eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(__w
 
 /***/ }),
 
-/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cdist%5C%5Cclient%5C%5Cimage-component.js%22%2C%22ids%22%3A%5B%5D%7D&server=true!":
-/*!************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cdist%5C%5Cclient%5C%5Cimage-component.js%22%2C%22ids%22%3A%5B%5D%7D&server=true! ***!
-  \************************************************************************************************************************************************************************************************************************************************************/
+/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cdist%5C%5Cclient%5C%5Cimage-component.js%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Cproviders%5C%5CAuthProvider.js%22%2C%22ids%22%3A%5B%22default%22%5D%7D&server=true!":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cdist%5C%5Cclient%5C%5Cimage-component.js%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Cproviders%5C%5CAuthProvider.js%22%2C%22ids%22%3A%5B%22default%22%5D%7D&server=true! ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(__webpack_require__, /*! ./node_modules/next/dist/client/image-component.js */ \"(ssr)/./node_modules/next/dist/client/image-component.js\", 23));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LWZsaWdodC1jbGllbnQtZW50cnktbG9hZGVyLmpzP21vZHVsZXM9JTdCJTIycmVxdWVzdCUyMiUzQSUyMkQlM0ElNUMlNUNza3lsZWFybiU1QyU1Q25vZGVfbW9kdWxlcyU1QyU1Q25leHQlNUMlNUNkaXN0JTVDJTVDY2xpZW50JTVDJTVDaW1hZ2UtY29tcG9uZW50LmpzJTIyJTJDJTIyaWRzJTIyJTNBJTVCJTVEJTdEJnNlcnZlcj10cnVlISIsIm1hcHBpbmdzIjoiQUFBQSxzTkFBdUciLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9za3lsZWFybi8/NzBjYiJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQoLyogd2VicGFja01vZGU6IFwiZWFnZXJcIiAqLyBcIkQ6XFxcXHNreWxlYXJuXFxcXG5vZGVfbW9kdWxlc1xcXFxuZXh0XFxcXGRpc3RcXFxcY2xpZW50XFxcXGltYWdlLWNvbXBvbmVudC5qc1wiKTtcbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cdist%5C%5Cclient%5C%5Cimage-component.js%22%2C%22ids%22%3A%5B%5D%7D&server=true!\n");
+eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(__webpack_require__, /*! ./node_modules/next/dist/client/image-component.js */ \"(ssr)/./node_modules/next/dist/client/image-component.js\", 23));\n;\nPromise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./src/providers/AuthProvider.js */ \"(ssr)/./src/providers/AuthProvider.js\"));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LWZsaWdodC1jbGllbnQtZW50cnktbG9hZGVyLmpzP21vZHVsZXM9JTdCJTIycmVxdWVzdCUyMiUzQSUyMkQlM0ElNUMlNUNza3lsZWFybiU1QyU1Q25vZGVfbW9kdWxlcyU1QyU1Q25leHQlNUMlNUNkaXN0JTVDJTVDY2xpZW50JTVDJTVDaW1hZ2UtY29tcG9uZW50LmpzJTIyJTJDJTIyaWRzJTIyJTNBJTVCJTVEJTdEJm1vZHVsZXM9JTdCJTIycmVxdWVzdCUyMiUzQSUyMkQlM0ElNUMlNUNza3lsZWFybiU1QyU1Q3NyYyU1QyU1Q3Byb3ZpZGVycyU1QyU1Q0F1dGhQcm92aWRlci5qcyUyMiUyQyUyMmlkcyUyMiUzQSU1QiUyMmRlZmF1bHQlMjIlNUQlN0Qmc2VydmVyPXRydWUhIiwibWFwcGluZ3MiOiJBQUFBLHNOQUF1RztBQUN2RztBQUNBLDBLQUErRyIsInNvdXJjZXMiOlsid2VicGFjazovL3NreWxlYXJuLz85NGIwIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCgvKiB3ZWJwYWNrTW9kZTogXCJlYWdlclwiICovIFwiRDpcXFxcc2t5bGVhcm5cXFxcbm9kZV9tb2R1bGVzXFxcXG5leHRcXFxcZGlzdFxcXFxjbGllbnRcXFxcaW1hZ2UtY29tcG9uZW50LmpzXCIpO1xuO1xuaW1wb3J0KC8qIHdlYnBhY2tNb2RlOiBcImVhZ2VyXCIsIHdlYnBhY2tFeHBvcnRzOiBbXCJkZWZhdWx0XCJdICovIFwiRDpcXFxcc2t5bGVhcm5cXFxcc3JjXFxcXHByb3ZpZGVyc1xcXFxBdXRoUHJvdmlkZXIuanNcIik7XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cdist%5C%5Cclient%5C%5Cimage-component.js%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Cproviders%5C%5CAuthProvider.js%22%2C%22ids%22%3A%5B%22default%22%5D%7D&server=true!\n");
 
 /***/ }),
 
@@ -119,13 +339,13 @@ eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.t.bind(__w
 
 /***/ }),
 
-/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-sans%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistSans%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistMonoVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-mono%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistMono%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&server=true!":
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-sans%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistSans%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistMonoVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-mono%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistMono%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&server=true! ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ (() => {
+/***/ "(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-sans%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistSans%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistMonoVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-mono%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistMono%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Cproviders%5C%5CAuthProvider.js%22%2C%22ids%22%3A%5B%22default%22%5D%7D&server=true!":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-sans%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistSans%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistMonoVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-mono%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistMono%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Cproviders%5C%5CAuthProvider.js%22%2C%22ids%22%3A%5B%22default%22%5D%7D&server=true! ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-
+eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__webpack_require__, /*! ./src/providers/AuthProvider.js */ \"(ssr)/./src/providers/AuthProvider.js\"));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvbmV4dC9kaXN0L2J1aWxkL3dlYnBhY2svbG9hZGVycy9uZXh0LWZsaWdodC1jbGllbnQtZW50cnktbG9hZGVyLmpzP21vZHVsZXM9JTdCJTIycmVxdWVzdCUyMiUzQSUyMkQlM0ElNUMlNUNza3lsZWFybiU1QyU1Q25vZGVfbW9kdWxlcyU1QyU1Q25leHQlNUMlNUNmb250JTVDJTVDbG9jYWwlNUMlNUN0YXJnZXQuY3NzJTNGJTdCJTVDJTIycGF0aCU1QyUyMiUzQSU1QyUyMnNyYyU1QyU1QyU1QyU1Q2FwcCU1QyU1QyU1QyU1Q2xheW91dC5qcyU1QyUyMiUyQyU1QyUyMmltcG9ydCU1QyUyMiUzQSU1QyUyMiU1QyUyMiUyQyU1QyUyMmFyZ3VtZW50cyU1QyUyMiUzQSU1QiU3QiU1QyUyMnNyYyU1QyUyMiUzQSU1QyUyMi4lMkZmb250cyUyRkdlaXN0VkYud29mZiU1QyUyMiUyQyU1QyUyMnZhcmlhYmxlJTVDJTIyJTNBJTVDJTIyLS1mb250LWdlaXN0LXNhbnMlNUMlMjIlMkMlNUMlMjJ3ZWlnaHQlNUMlMjIlM0ElNUMlMjIxMDAlMjA5MDAlNUMlMjIlN0QlNUQlMkMlNUMlMjJ2YXJpYWJsZU5hbWUlNUMlMjIlM0ElNUMlMjJnZWlzdFNhbnMlNUMlMjIlN0QlMjIlMkMlMjJpZHMlMjIlM0ElNUIlNUQlN0QmbW9kdWxlcz0lN0IlMjJyZXF1ZXN0JTIyJTNBJTIyRCUzQSU1QyU1Q3NreWxlYXJuJTVDJTVDbm9kZV9tb2R1bGVzJTVDJTVDbmV4dCU1QyU1Q2ZvbnQlNUMlNUNsb2NhbCU1QyU1Q3RhcmdldC5jc3MlM0YlN0IlNUMlMjJwYXRoJTVDJTIyJTNBJTVDJTIyc3JjJTVDJTVDJTVDJTVDYXBwJTVDJTVDJTVDJTVDbGF5b3V0LmpzJTVDJTIyJTJDJTVDJTIyaW1wb3J0JTVDJTIyJTNBJTVDJTIyJTVDJTIyJTJDJTVDJTIyYXJndW1lbnRzJTVDJTIyJTNBJTVCJTdCJTVDJTIyc3JjJTVDJTIyJTNBJTVDJTIyLiUyRmZvbnRzJTJGR2Vpc3RNb25vVkYud29mZiU1QyUyMiUyQyU1QyUyMnZhcmlhYmxlJTVDJTIyJTNBJTVDJTIyLS1mb250LWdlaXN0LW1vbm8lNUMlMjIlMkMlNUMlMjJ3ZWlnaHQlNUMlMjIlM0ElNUMlMjIxMDAlMjA5MDAlNUMlMjIlN0QlNUQlMkMlNUMlMjJ2YXJpYWJsZU5hbWUlNUMlMjIlM0ElNUMlMjJnZWlzdE1vbm8lNUMlMjIlN0QlMjIlMkMlMjJpZHMlMjIlM0ElNUIlNUQlN0QmbW9kdWxlcz0lN0IlMjJyZXF1ZXN0JTIyJTNBJTIyRCUzQSU1QyU1Q3NreWxlYXJuJTVDJTVDc3JjJTVDJTVDYXBwJTVDJTVDZ2xvYmFscy5jc3MlMjIlMkMlMjJpZHMlMjIlM0ElNUIlNUQlN0QmbW9kdWxlcz0lN0IlMjJyZXF1ZXN0JTIyJTNBJTIyRCUzQSU1QyU1Q3NreWxlYXJuJTVDJTVDc3JjJTVDJTVDcHJvdmlkZXJzJTVDJTVDQXV0aFByb3ZpZGVyLmpzJTIyJTJDJTIyaWRzJTIyJTNBJTVCJTIyZGVmYXVsdCUyMiU1RCU3RCZzZXJ2ZXI9dHJ1ZSEiLCJtYXBwaW5ncyI6IkFBQUEsMEtBQStHIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vc2t5bGVhcm4vP2M4YWYiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0KC8qIHdlYnBhY2tNb2RlOiBcImVhZ2VyXCIsIHdlYnBhY2tFeHBvcnRzOiBbXCJkZWZhdWx0XCJdICovIFwiRDpcXFxcc2t5bGVhcm5cXFxcc3JjXFxcXHByb3ZpZGVyc1xcXFxBdXRoUHJvdmlkZXIuanNcIik7XG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/next/dist/build/webpack/loaders/next-flight-client-entry-loader.js?modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-sans%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistSans%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Cnode_modules%5C%5Cnext%5C%5Cfont%5C%5Clocal%5C%5Ctarget.css%3F%7B%5C%22path%5C%22%3A%5C%22src%5C%5C%5C%5Capp%5C%5C%5C%5Clayout.js%5C%22%2C%5C%22import%5C%22%3A%5C%22%5C%22%2C%5C%22arguments%5C%22%3A%5B%7B%5C%22src%5C%22%3A%5C%22.%2Ffonts%2FGeistMonoVF.woff%5C%22%2C%5C%22variable%5C%22%3A%5C%22--font-geist-mono%5C%22%2C%5C%22weight%5C%22%3A%5C%22100%20900%5C%22%7D%5D%2C%5C%22variableName%5C%22%3A%5C%22geistMono%5C%22%7D%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Capp%5C%5Cglobals.css%22%2C%22ids%22%3A%5B%5D%7D&modules=%7B%22request%22%3A%22D%3A%5C%5Cskylearn%5C%5Csrc%5C%5Cproviders%5C%5CAuthProvider.js%22%2C%22ids%22%3A%5B%22default%22%5D%7D&server=true!\n");
 
 /***/ }),
 
@@ -157,6 +377,39 @@ eval("Promise.resolve(/*! import() eager */).then(__webpack_require__.bind(__web
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Error)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* __next_internal_client_entry_do_not_use__ default auto */ \n\nfunction Error({ error, reset }) {\n    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{\n        console.error(error);\n    }, [\n        error\n    ]);\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        children: [\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                children: \"Something went wrong!\"\n            }, void 0, false, {\n                fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\error.js\",\n                lineNumber: 11,\n                columnNumber: 7\n            }, this),\n            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"button\", {\n                onClick: reset,\n                children: \"Try again\"\n            }, void 0, false, {\n                fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\error.js\",\n                lineNumber: 12,\n                columnNumber: 7\n            }, this)\n        ]\n    }, void 0, true, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\error.js\",\n        lineNumber: 10,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvYXBwL2Vycm9yLmpzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUNpQztBQUVsQixTQUFTQyxNQUFNLEVBQUVDLEtBQUssRUFBRUMsS0FBSyxFQUFFO0lBQzNDSCxnREFBU0EsQ0FBQztRQUNSSSxRQUFRRixLQUFLLENBQUNBO0lBQ2hCLEdBQUU7UUFBQ0E7S0FBTTtJQUVWLHFCQUNFLDhEQUFDRzs7MEJBQ0MsOERBQUNDOzBCQUFHOzs7Ozs7MEJBQ0osOERBQUNDO2dCQUFPQyxTQUFTTDswQkFBTzs7Ozs7Ozs7Ozs7O0FBSzlCIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vc2t5bGVhcm4vLi9zcmMvYXBwL2Vycm9yLmpzPzUwYTUiXSwic291cmNlc0NvbnRlbnQiOlsiXCJ1c2UgY2xpZW50XCJcbmltcG9ydCB7IHVzZUVmZmVjdCB9IGZyb20gXCJyZWFjdFwiXG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIEVycm9yKHsgZXJyb3IsIHJlc2V0IH0pIHtcbiAgIHVzZUVmZmVjdCgoKSA9PiB7XG4gICAgIGNvbnNvbGUuZXJyb3IoZXJyb3IpXG4gICB9LFtlcnJvcl0pXG5cbiAgcmV0dXJuIChcbiAgICA8ZGl2PlxuICAgICAgPGgyPlNvbWV0aGluZyB3ZW50IHdyb25nITwvaDI+XG4gICAgICA8YnV0dG9uIG9uQ2xpY2s9e3Jlc2V0fT5cbiAgICAgICAgIFRyeSBhZ2FpblxuICAgICAgPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICk7XG59Il0sIm5hbWVzIjpbInVzZUVmZmVjdCIsIkVycm9yIiwiZXJyb3IiLCJyZXNldCIsImNvbnNvbGUiLCJkaXYiLCJoMiIsImJ1dHRvbiIsIm9uQ2xpY2siXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./src/app/error.js\n");
+
+/***/ }),
+
+/***/ "(ssr)/./src/lib/firebase/auth.js":
+/*!**********************************!*\
+  !*** ./src/lib/firebase/auth.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   auth: () => (/* binding */ auth),\n/* harmony export */   createUserWithEmailAndPassword: () => (/* reexport safe */ firebase_auth__WEBPACK_IMPORTED_MODULE_0__.createUserWithEmailAndPassword),\n/* harmony export */   onAuthStateChanged: () => (/* reexport safe */ firebase_auth__WEBPACK_IMPORTED_MODULE_0__.onAuthStateChanged)\n/* harmony export */ });\n/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/auth */ \"(ssr)/./node_modules/firebase/auth/dist/index.mjs\");\n/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config */ \"(ssr)/./src/lib/firebase/config.js\");\n\n // Ensure this points to your config file\nconst auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_0__.getAuth)(_config__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvbGliL2ZpcmViYXNlL2F1dGguanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBMkY7QUFDaEUsQ0FBQyx5Q0FBeUM7QUFFckUsTUFBTUksT0FBT0osc0RBQU9BLENBQUNHLCtDQUFHQTtBQUMwQyIsInNvdXJjZXMiOlsid2VicGFjazovL3NreWxlYXJuLy4vc3JjL2xpYi9maXJlYmFzZS9hdXRoLmpzP2M2YjMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgZ2V0QXV0aCwgY3JlYXRlVXNlcldpdGhFbWFpbEFuZFBhc3N3b3JkLCBvbkF1dGhTdGF0ZUNoYW5nZWR9IGZyb20gXCJmaXJlYmFzZS9hdXRoXCI7XHJcbmltcG9ydCBhcHAgZnJvbSBcIi4vY29uZmlnXCI7IC8vIEVuc3VyZSB0aGlzIHBvaW50cyB0byB5b3VyIGNvbmZpZyBmaWxlXHJcblxyXG5jb25zdCBhdXRoID0gZ2V0QXV0aChhcHApOyBcclxuZXhwb3J0IHthdXRoLCBjcmVhdGVVc2VyV2l0aEVtYWlsQW5kUGFzc3dvcmQsIG9uQXV0aFN0YXRlQ2hhbmdlZH07Il0sIm5hbWVzIjpbImdldEF1dGgiLCJjcmVhdGVVc2VyV2l0aEVtYWlsQW5kUGFzc3dvcmQiLCJvbkF1dGhTdGF0ZUNoYW5nZWQiLCJhcHAiLCJhdXRoIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./src/lib/firebase/auth.js\n");
+
+/***/ }),
+
+/***/ "(ssr)/./src/lib/firebase/config.js":
+/*!************************************!*\
+  !*** ./src/lib/firebase/config.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/app */ \"(ssr)/./node_modules/firebase/app/dist/index.mjs\");\n/* harmony import */ var firebase_analytics__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/analytics */ \"(ssr)/./node_modules/firebase/analytics/dist/index.mjs\");\n// Import the functions you need from the SDKs you need\n\n\n// TODO: Add SDKs for Firebase products that you want to use\n// https://firebase.google.com/docs/web/setup#available-libraries\n// Your web app's Firebase configuration\n// For Firebase JS SDK v7.20.0 and later, measurementId is optional\nconst firebaseConfig = {\n    apiKey: \"AIzaSyDrzFNmxdmIfVN2bqi9mp2g6vaz71AfEFE\",\n    authDomain: \"axial-radius-436608-q6.firebaseapp.com\",\n    databaseURL: \"https://axial-radius-436608-q6-default-rtdb.firebaseio.com\",\n    projectId: \"axial-radius-436608-q6\",\n    storageBucket: \"axial-radius-436608-q6.appspot.com\",\n    messagingSenderId: \"128899871237\",\n    appId: \"1:128899871237:web:30ded11d2a1dd26627226c\",\n    measurementId: \"G-8W9YR4NBKP\"\n};\n// Initialize Firebase\nconst app = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(firebaseConfig);\n// const analytics = getAnalytics(app);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (app);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvbGliL2ZpcmViYXNlL2NvbmZpZy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQSx1REFBdUQ7QUFDVjtBQUNLO0FBQ2xELDREQUE0RDtBQUM1RCxpRUFBaUU7QUFFakUsd0NBQXdDO0FBQ3hDLG1FQUFtRTtBQUNuRSxNQUFNRSxpQkFBaUI7SUFDckJDLFFBQVE7SUFDUkMsWUFBWTtJQUNaQyxhQUFhO0lBQ2JDLFdBQVc7SUFDWEMsZUFBZTtJQUNmQyxtQkFBbUI7SUFDbkJDLE9BQU87SUFDUEMsZUFBZTtBQUNqQjtBQUVBLHNCQUFzQjtBQUN0QixNQUFNQyxNQUFNWCwyREFBYUEsQ0FBQ0U7QUFDMUIsdUNBQXVDO0FBRXZDLGlFQUFlUyxHQUFHQSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vc2t5bGVhcm4vLi9zcmMvbGliL2ZpcmViYXNlL2NvbmZpZy5qcz9kZjIwIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIEltcG9ydCB0aGUgZnVuY3Rpb25zIHlvdSBuZWVkIGZyb20gdGhlIFNES3MgeW91IG5lZWRcclxuaW1wb3J0IHsgaW5pdGlhbGl6ZUFwcCB9IGZyb20gXCJmaXJlYmFzZS9hcHBcIjtcclxuaW1wb3J0IHsgZ2V0QW5hbHl0aWNzIH0gZnJvbSBcImZpcmViYXNlL2FuYWx5dGljc1wiO1xyXG4vLyBUT0RPOiBBZGQgU0RLcyBmb3IgRmlyZWJhc2UgcHJvZHVjdHMgdGhhdCB5b3Ugd2FudCB0byB1c2VcclxuLy8gaHR0cHM6Ly9maXJlYmFzZS5nb29nbGUuY29tL2RvY3Mvd2ViL3NldHVwI2F2YWlsYWJsZS1saWJyYXJpZXNcclxuXHJcbi8vIFlvdXIgd2ViIGFwcCdzIEZpcmViYXNlIGNvbmZpZ3VyYXRpb25cclxuLy8gRm9yIEZpcmViYXNlIEpTIFNESyB2Ny4yMC4wIGFuZCBsYXRlciwgbWVhc3VyZW1lbnRJZCBpcyBvcHRpb25hbFxyXG5jb25zdCBmaXJlYmFzZUNvbmZpZyA9IHtcclxuICBhcGlLZXk6IFwiQUl6YVN5RHJ6Rk5teGRtSWZWTjJicWk5bXAyZzZ2YXo3MUFmRUZFXCIsXHJcbiAgYXV0aERvbWFpbjogXCJheGlhbC1yYWRpdXMtNDM2NjA4LXE2LmZpcmViYXNlYXBwLmNvbVwiLFxyXG4gIGRhdGFiYXNlVVJMOiBcImh0dHBzOi8vYXhpYWwtcmFkaXVzLTQzNjYwOC1xNi1kZWZhdWx0LXJ0ZGIuZmlyZWJhc2Vpby5jb21cIixcclxuICBwcm9qZWN0SWQ6IFwiYXhpYWwtcmFkaXVzLTQzNjYwOC1xNlwiLFxyXG4gIHN0b3JhZ2VCdWNrZXQ6IFwiYXhpYWwtcmFkaXVzLTQzNjYwOC1xNi5hcHBzcG90LmNvbVwiLFxyXG4gIG1lc3NhZ2luZ1NlbmRlcklkOiBcIjEyODg5OTg3MTIzN1wiLFxyXG4gIGFwcElkOiBcIjE6MTI4ODk5ODcxMjM3OndlYjozMGRlZDExZDJhMWRkMjY2MjcyMjZjXCIsXHJcbiAgbWVhc3VyZW1lbnRJZDogXCJHLThXOVlSNE5CS1BcIlxyXG59O1xyXG5cclxuLy8gSW5pdGlhbGl6ZSBGaXJlYmFzZVxyXG5jb25zdCBhcHAgPSBpbml0aWFsaXplQXBwKGZpcmViYXNlQ29uZmlnKTtcclxuLy8gY29uc3QgYW5hbHl0aWNzID0gZ2V0QW5hbHl0aWNzKGFwcCk7XHJcblxyXG5leHBvcnQgZGVmYXVsdCBhcHA7Il0sIm5hbWVzIjpbImluaXRpYWxpemVBcHAiLCJnZXRBbmFseXRpY3MiLCJmaXJlYmFzZUNvbmZpZyIsImFwaUtleSIsImF1dGhEb21haW4iLCJkYXRhYmFzZVVSTCIsInByb2plY3RJZCIsInN0b3JhZ2VCdWNrZXQiLCJtZXNzYWdpbmdTZW5kZXJJZCIsImFwcElkIiwibWVhc3VyZW1lbnRJZCIsImFwcCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(ssr)/./src/lib/firebase/config.js\n");
+
+/***/ }),
+
+/***/ "(ssr)/./src/providers/AuthProvider.js":
+/*!***************************************!*\
+  !*** ./src/providers/AuthProvider.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   AuthContext: () => (/* binding */ AuthContext),\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var next_cache__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/cache */ \"(ssr)/./node_modules/next/cache.js\");\n/* harmony import */ var next_cache__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_cache__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _lib_firebase_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/lib/firebase/auth */ \"(ssr)/./src/lib/firebase/auth.js\");\n/* __next_internal_client_entry_do_not_use__ AuthContext,default auto */ \n\n\n\nconst Context = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_2__.createContext)({});\nconst AuthProvider = ({ children })=>{\n    const [user, setUser] = (0,react__WEBPACK_IMPORTED_MODULE_2__.useState)(null);\n    (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(()=>{\n        const unsubscribe = (0,_lib_firebase_auth__WEBPACK_IMPORTED_MODULE_3__.onAuthStateChanged)(_lib_firebase_auth__WEBPACK_IMPORTED_MODULE_3__.auth, (user)=>{\n            setUser(user);\n        });\n        return ()=>unsubscribe();\n    }, []);\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(Context.Provider, {\n        value: {\n            user\n        },\n        children: children\n    }, void 0, false, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\providers\\\\AuthProvider.js\",\n        lineNumber: 19,\n        columnNumber: 9\n    }, undefined);\n};\nconst AuthContext = ()=>(0,react__WEBPACK_IMPORTED_MODULE_2__.useContext)(Context);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AuthProvider);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvcHJvdmlkZXJzL0F1dGhQcm92aWRlci5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7O0FBRTJDO0FBQ3dCO0FBQ0w7QUFFOUQsTUFBTU8sd0JBQVVMLG9EQUFhQSxDQUFDLENBQUM7QUFFL0IsTUFBTU0sZUFBZSxDQUFDLEVBQUNDLFFBQVEsRUFBQztJQUM1QixNQUFNLENBQUNDLE1BQUtDLFFBQVEsR0FBR1AsK0NBQVFBLENBQUM7SUFFaENELGdEQUFTQSxDQUFDO1FBQ04sTUFBTVMsY0FBY04sc0VBQWtCQSxDQUFDRCxvREFBSUEsRUFBRSxDQUFDSztZQUMxQ0MsUUFBUUQ7UUFDWjtRQUNBLE9BQU8sSUFBT0U7SUFDbEIsR0FBRSxFQUFFO0lBQ0oscUJBQ0ksOERBQUNMLFFBQVFNLFFBQVE7UUFBQ0MsT0FBTztZQUFDSjtRQUFJO2tCQUN6QkQ7Ozs7OztBQUdiO0FBRU8sTUFBTU0sY0FBYyxJQUFNZCxpREFBVUEsQ0FBQ00sU0FBUztBQUNyRCxpRUFBZUMsWUFBWUEsRUFBQyIsInNvdXJjZXMiOlsid2VicGFjazovL3NreWxlYXJuLy4vc3JjL3Byb3ZpZGVycy9BdXRoUHJvdmlkZXIuanM/NDQyMyJdLCJzb3VyY2VzQ29udGVudCI6WyJcInVzZSBjbGllbnRcIjtcclxuXHJcbmltcG9ydCB7IHJldmFsaWRhdGVUYWcgfSBmcm9tIFwibmV4dC9jYWNoZVwiO1xyXG5pbXBvcnQge3VzZUNvbnRleHQsY3JlYXRlQ29udGV4dCx1c2VFZmZlY3QsIHVzZVN0YXRlfSBmcm9tIFwicmVhY3RcIjtcclxuaW1wb3J0IHsgYXV0aCwgb25BdXRoU3RhdGVDaGFuZ2VkfSBmcm9tIFwiQC9saWIvZmlyZWJhc2UvYXV0aFwiO1xyXG5cclxuY29uc3QgQ29udGV4dCA9IGNyZWF0ZUNvbnRleHQoe30pO1xyXG5cclxuY29uc3QgQXV0aFByb3ZpZGVyID0gKHtjaGlsZHJlbn0pID0+IHtcclxuICAgIGNvbnN0IFt1c2VyLHNldFVzZXJdID0gdXNlU3RhdGUobnVsbCk7XHJcblxyXG4gICAgdXNlRWZmZWN0KCgpPT57XHJcbiAgICAgICAgY29uc3QgdW5zdWJzY3JpYmUgPSBvbkF1dGhTdGF0ZUNoYW5nZWQoYXV0aCwgKHVzZXIpID0+IHtcclxuICAgICAgICAgICAgc2V0VXNlcih1c2VyKTtcclxuICAgICAgICB9KTtcclxuICAgICAgICByZXR1cm4gKCkgPT4gIHVuc3Vic2NyaWJlKCk7XHJcbiAgICB9LFtdKVxyXG4gICAgcmV0dXJuKFxyXG4gICAgICAgIDxDb250ZXh0LlByb3ZpZGVyIHZhbHVlPXt7dXNlcn19PlxyXG4gICAgICAgICAgICB7Y2hpbGRyZW59XHJcbiAgICAgICAgPC9Db250ZXh0LlByb3ZpZGVyPlxyXG4gICAgKVxyXG59XHJcblxyXG5leHBvcnQgY29uc3QgQXV0aENvbnRleHQgPSAoKSA9PiB1c2VDb250ZXh0KENvbnRleHQpO1xyXG5leHBvcnQgZGVmYXVsdCBBdXRoUHJvdmlkZXI7Il0sIm5hbWVzIjpbInJldmFsaWRhdGVUYWciLCJ1c2VDb250ZXh0IiwiY3JlYXRlQ29udGV4dCIsInVzZUVmZmVjdCIsInVzZVN0YXRlIiwiYXV0aCIsIm9uQXV0aFN0YXRlQ2hhbmdlZCIsIkNvbnRleHQiLCJBdXRoUHJvdmlkZXIiLCJjaGlsZHJlbiIsInVzZXIiLCJzZXRVc2VyIiwidW5zdWJzY3JpYmUiLCJQcm92aWRlciIsInZhbHVlIiwiQXV0aENvbnRleHQiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./src/providers/AuthProvider.js\n");
 
 /***/ }),
 
@@ -196,7 +449,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ RootLayout),\n/* harmony export */   metadata: () => (/* binding */ metadata)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/font/local/target.css?{\"path\":\"src\\\\app\\\\layout.js\",\"import\":\"\",\"arguments\":[{\"src\":\"./fonts/GeistVF.woff\",\"variable\":\"--font-geist-sans\",\"weight\":\"100 900\"}],\"variableName\":\"geistSans\"} */ \"(rsc)/./node_modules/next/font/local/target.css?{\\\"path\\\":\\\"src\\\\\\\\app\\\\\\\\layout.js\\\",\\\"import\\\":\\\"\\\",\\\"arguments\\\":[{\\\"src\\\":\\\"./fonts/GeistVF.woff\\\",\\\"variable\\\":\\\"--font-geist-sans\\\",\\\"weight\\\":\\\"100 900\\\"}],\\\"variableName\\\":\\\"geistSans\\\"}\");\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/font/local/target.css?{\"path\":\"src\\\\app\\\\layout.js\",\"import\":\"\",\"arguments\":[{\"src\":\"./fonts/GeistMonoVF.woff\",\"variable\":\"--font-geist-mono\",\"weight\":\"100 900\"}],\"variableName\":\"geistMono\"} */ \"(rsc)/./node_modules/next/font/local/target.css?{\\\"path\\\":\\\"src\\\\\\\\app\\\\\\\\layout.js\\\",\\\"import\\\":\\\"\\\",\\\"arguments\\\":[{\\\"src\\\":\\\"./fonts/GeistMonoVF.woff\\\",\\\"variable\\\":\\\"--font-geist-mono\\\",\\\"weight\\\":\\\"100 900\\\"}],\\\"variableName\\\":\\\"geistMono\\\"}\");\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _globals_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./globals.css */ \"(rsc)/./src/app/globals.css\");\n\n\n\n\nconst metadata = {\n    title: \"SkyLearn\",\n    description: \"Cloud enhanced E-Learning Platform\",\n    icons: {\n        icon: \"/favicon.ico\"\n    }\n};\nfunction RootLayout({ children }) {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"html\", {\n        lang: \"en\",\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"body\", {\n            className: `${(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_2___default().variable)} ${(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_3___default().variable)} antialiased`,\n            children: children\n        }, void 0, false, {\n            fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\layout.js\",\n            lineNumber: 26,\n            columnNumber: 7\n        }, this)\n    }, void 0, false, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\layout.js\",\n        lineNumber: 25,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9zcmMvYXBwL2xheW91dC5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7O0FBR01BO0FBS0FDO0FBUGlCO0FBYWhCLE1BQU1DLFdBQVc7SUFDdEJDLE9BQU87SUFDUEMsYUFBYTtJQUNiQyxPQUFPO1FBQ0xDLE1BQU07SUFDUjtBQUNGLEVBQUU7QUFFYSxTQUFTQyxXQUFXLEVBQUVDLFFBQVEsRUFBRTtJQUM3QyxxQkFDRSw4REFBQ0M7UUFBS0MsTUFBSztrQkFDVCw0RUFBQ0M7WUFDQ0MsV0FBVyxDQUFDLEVBQUVaLDJNQUFrQixDQUFDLENBQUMsRUFBRUMsK01BQWtCLENBQUMsWUFBWSxDQUFDO3NCQUVuRU87Ozs7Ozs7Ozs7O0FBSVQiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9za3lsZWFybi8uL3NyYy9hcHAvbGF5b3V0LmpzPzViMTkiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGxvY2FsRm9udCBmcm9tIFwibmV4dC9mb250L2xvY2FsXCI7XG5pbXBvcnQgXCIuL2dsb2JhbHMuY3NzXCI7XG5cbmNvbnN0IGdlaXN0U2FucyA9IGxvY2FsRm9udCh7XG4gIHNyYzogXCIuL2ZvbnRzL0dlaXN0VkYud29mZlwiLFxuICB2YXJpYWJsZTogXCItLWZvbnQtZ2Vpc3Qtc2Fuc1wiLFxuICB3ZWlnaHQ6IFwiMTAwIDkwMFwiLFxufSk7XG5jb25zdCBnZWlzdE1vbm8gPSBsb2NhbEZvbnQoe1xuICBzcmM6IFwiLi9mb250cy9HZWlzdE1vbm9WRi53b2ZmXCIsXG4gIHZhcmlhYmxlOiBcIi0tZm9udC1nZWlzdC1tb25vXCIsXG4gIHdlaWdodDogXCIxMDAgOTAwXCIsXG59KTtcblxuZXhwb3J0IGNvbnN0IG1ldGFkYXRhID0ge1xuICB0aXRsZTogXCJTa3lMZWFyblwiLFxuICBkZXNjcmlwdGlvbjogXCJDbG91ZCBlbmhhbmNlZCBFLUxlYXJuaW5nIFBsYXRmb3JtXCIsXG4gIGljb25zOiB7XG4gICAgaWNvbjogJy9mYXZpY29uLmljbycsXG4gIH0sXG59O1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBSb290TGF5b3V0KHsgY2hpbGRyZW4gfSkge1xuICByZXR1cm4gKFxuICAgIDxodG1sIGxhbmc9XCJlblwiPlxuICAgICAgPGJvZHlcbiAgICAgICAgY2xhc3NOYW1lPXtgJHtnZWlzdFNhbnMudmFyaWFibGV9ICR7Z2Vpc3RNb25vLnZhcmlhYmxlfSBhbnRpYWxpYXNlZGB9XG4gICAgICA+XG4gICAgICAgIHtjaGlsZHJlbn1cbiAgICAgIDwvYm9keT5cbiAgICA8L2h0bWw+XG4gICk7XG59XG4iXSwibmFtZXMiOlsiZ2Vpc3RTYW5zIiwiZ2Vpc3RNb25vIiwibWV0YWRhdGEiLCJ0aXRsZSIsImRlc2NyaXB0aW9uIiwiaWNvbnMiLCJpY29uIiwiUm9vdExheW91dCIsImNoaWxkcmVuIiwiaHRtbCIsImxhbmciLCJib2R5IiwiY2xhc3NOYW1lIiwidmFyaWFibGUiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(rsc)/./src/app/layout.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ RootLayout),\n/* harmony export */   metadata: () => (/* binding */ metadata)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/font/local/target.css?{\"path\":\"src\\\\app\\\\layout.js\",\"import\":\"\",\"arguments\":[{\"src\":\"./fonts/GeistVF.woff\",\"variable\":\"--font-geist-sans\",\"weight\":\"100 900\"}],\"variableName\":\"geistSans\"} */ \"(rsc)/./node_modules/next/font/local/target.css?{\\\"path\\\":\\\"src\\\\\\\\app\\\\\\\\layout.js\\\",\\\"import\\\":\\\"\\\",\\\"arguments\\\":[{\\\"src\\\":\\\"./fonts/GeistVF.woff\\\",\\\"variable\\\":\\\"--font-geist-sans\\\",\\\"weight\\\":\\\"100 900\\\"}],\\\"variableName\\\":\\\"geistSans\\\"}\");\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! next/font/local/target.css?{\"path\":\"src\\\\app\\\\layout.js\",\"import\":\"\",\"arguments\":[{\"src\":\"./fonts/GeistMonoVF.woff\",\"variable\":\"--font-geist-mono\",\"weight\":\"100 900\"}],\"variableName\":\"geistMono\"} */ \"(rsc)/./node_modules/next/font/local/target.css?{\\\"path\\\":\\\"src\\\\\\\\app\\\\\\\\layout.js\\\",\\\"import\\\":\\\"\\\",\\\"arguments\\\":[{\\\"src\\\":\\\"./fonts/GeistMonoVF.woff\\\",\\\"variable\\\":\\\"--font-geist-mono\\\",\\\"weight\\\":\\\"100 900\\\"}],\\\"variableName\\\":\\\"geistMono\\\"}\");\n/* harmony import */ var next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _globals_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./globals.css */ \"(rsc)/./src/app/globals.css\");\n/* harmony import */ var _providers_AuthProvider__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/providers/AuthProvider */ \"(rsc)/./src/providers/AuthProvider.js\");\n\n\n\n\n\nconst metadata = {\n    title: \"SkyLearn\",\n    description: \"Cloud enhanced E-Learning Platform\",\n    icons: {\n        icon: \"/favicon.ico\"\n    }\n};\nfunction RootLayout({ children }) {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"html\", {\n        lang: \"en\",\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"body\", {\n            className: `${(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistVF_woff_variable_font_geist_sans_weight_100_900_variableName_geistSans___WEBPACK_IMPORTED_MODULE_3___default().variable)} ${(next_font_local_target_css_path_src_app_layout_js_import_arguments_src_fonts_GeistMonoVF_woff_variable_font_geist_mono_weight_100_900_variableName_geistMono___WEBPACK_IMPORTED_MODULE_4___default().variable)} antialiased`,\n            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_providers_AuthProvider__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n                children: children\n            }, void 0, false, {\n                fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\layout.js\",\n                lineNumber: 30,\n                columnNumber: 9\n            }, this)\n        }, void 0, false, {\n            fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\layout.js\",\n            lineNumber: 27,\n            columnNumber: 7\n        }, this)\n    }, void 0, false, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\layout.js\",\n        lineNumber: 26,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9zcmMvYXBwL2xheW91dC5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7OztBQUlNQTtBQUtBQztBQVJpQjtBQUM2QjtBQWE3QyxNQUFNRSxXQUFXO0lBQ3RCQyxPQUFPO0lBQ1BDLGFBQWE7SUFDYkMsT0FBTztRQUNMQyxNQUFNO0lBQ1I7QUFDRixFQUFFO0FBRWEsU0FBU0MsV0FBVyxFQUFFQyxRQUFRLEVBQUU7SUFDN0MscUJBQ0UsOERBQUNDO1FBQUtDLE1BQUs7a0JBQ1QsNEVBQUNDO1lBQ0NDLFdBQVcsQ0FBQyxFQUFFYiwyTUFBa0IsQ0FBQyxDQUFDLEVBQUVDLCtNQUFrQixDQUFDLFlBQVksQ0FBQztzQkFFcEUsNEVBQUNDLCtEQUFZQTswQkFDVk87Ozs7Ozs7Ozs7Ozs7Ozs7QUFLWCIsInNvdXJjZXMiOlsid2VicGFjazovL3NreWxlYXJuLy4vc3JjL2FwcC9sYXlvdXQuanM/NWIxOSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgbG9jYWxGb250IGZyb20gXCJuZXh0L2ZvbnQvbG9jYWxcIjtcbmltcG9ydCBcIi4vZ2xvYmFscy5jc3NcIjtcbmltcG9ydCBBdXRoUHJvdmlkZXIgZnJvbSBcIkAvcHJvdmlkZXJzL0F1dGhQcm92aWRlclwiO1xuXG5jb25zdCBnZWlzdFNhbnMgPSBsb2NhbEZvbnQoe1xuICBzcmM6IFwiLi9mb250cy9HZWlzdFZGLndvZmZcIixcbiAgdmFyaWFibGU6IFwiLS1mb250LWdlaXN0LXNhbnNcIixcbiAgd2VpZ2h0OiBcIjEwMCA5MDBcIixcbn0pO1xuY29uc3QgZ2Vpc3RNb25vID0gbG9jYWxGb250KHtcbiAgc3JjOiBcIi4vZm9udHMvR2Vpc3RNb25vVkYud29mZlwiLFxuICB2YXJpYWJsZTogXCItLWZvbnQtZ2Vpc3QtbW9ub1wiLFxuICB3ZWlnaHQ6IFwiMTAwIDkwMFwiLFxufSk7XG5cbmV4cG9ydCBjb25zdCBtZXRhZGF0YSA9IHtcbiAgdGl0bGU6IFwiU2t5TGVhcm5cIixcbiAgZGVzY3JpcHRpb246IFwiQ2xvdWQgZW5oYW5jZWQgRS1MZWFybmluZyBQbGF0Zm9ybVwiLFxuICBpY29uczoge1xuICAgIGljb246ICcvZmF2aWNvbi5pY28nLFxuICB9LFxufTtcblxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUm9vdExheW91dCh7IGNoaWxkcmVuIH0pIHtcbiAgcmV0dXJuIChcbiAgICA8aHRtbCBsYW5nPVwiZW5cIj5cbiAgICAgIDxib2R5XG4gICAgICAgIGNsYXNzTmFtZT17YCR7Z2Vpc3RTYW5zLnZhcmlhYmxlfSAke2dlaXN0TW9uby52YXJpYWJsZX0gYW50aWFsaWFzZWRgfVxuICAgICAgPlxuICAgICAgICA8QXV0aFByb3ZpZGVyPlxuICAgICAgICAgIHtjaGlsZHJlbn1cbiAgICAgICAgPC9BdXRoUHJvdmlkZXI+XG4gICAgICA8L2JvZHk+XG4gICAgPC9odG1sPlxuICApO1xufVxuIl0sIm5hbWVzIjpbImdlaXN0U2FucyIsImdlaXN0TW9ubyIsIkF1dGhQcm92aWRlciIsIm1ldGFkYXRhIiwidGl0bGUiLCJkZXNjcmlwdGlvbiIsImljb25zIiwiaWNvbiIsIlJvb3RMYXlvdXQiLCJjaGlsZHJlbiIsImh0bWwiLCJsYW5nIiwiYm9keSIsImNsYXNzTmFtZSIsInZhcmlhYmxlIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(rsc)/./src/app/layout.js\n");
 
 /***/ }),
 
@@ -229,7 +482,28 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Home)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var next_image__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/image */ \"(rsc)/./node_modules/next/dist/api/image.js\");\n\n\nfunction Home() {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: \"flex relative top-1/2 justify-center min-h-full font-[family-name:var(--font-geist-sans)]\",\n        children: \"Welcome to Skylearn\"\n    }, void 0, false, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\page.js\",\n        lineNumber: 5,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9zcmMvYXBwL3BhZ2UuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBK0I7QUFFaEIsU0FBU0M7SUFDdEIscUJBQ0UsOERBQUNDO1FBQUlDLFdBQVU7a0JBQTRGOzs7Ozs7QUFJL0ciLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9za3lsZWFybi8uL3NyYy9hcHAvcGFnZS5qcz8yYjNkIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBJbWFnZSBmcm9tIFwibmV4dC9pbWFnZVwiO1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBIb21lKCkge1xuICByZXR1cm4gKFxuICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCByZWxhdGl2ZSB0b3AtMS8yIGp1c3RpZnktY2VudGVyIG1pbi1oLWZ1bGwgZm9udC1bZmFtaWx5LW5hbWU6dmFyKC0tZm9udC1nZWlzdC1zYW5zKV1cIj5cbiAgICAgIFdlbGNvbWUgdG8gU2t5bGVhcm5cbiAgICA8L2Rpdj5cbiAgKTtcbn1cbiJdLCJuYW1lcyI6WyJJbWFnZSIsIkhvbWUiLCJkaXYiLCJjbGFzc05hbWUiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(rsc)/./src/app/page.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Home)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(rsc)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _providers_AuthProvider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/providers/AuthProvider */ \"(rsc)/./src/providers/AuthProvider.js\");\n/* harmony import */ var next_image__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/image */ \"(rsc)/./node_modules/next/dist/api/image.js\");\n\n\n\nfunction Home() {\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_providers_AuthProvider__WEBPACK_IMPORTED_MODULE_1__[\"default\"], {\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n            className: \"flex relative top-1/2 justify-center min-h-full font-[family-name:var(--font-geist-sans)]\",\n            children: \"Welcome to Skylearn\"\n        }, void 0, false, {\n            fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\page.js\",\n            lineNumber: 7,\n            columnNumber: 7\n        }, this)\n    }, void 0, false, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\app\\\\page.js\",\n        lineNumber: 6,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9zcmMvYXBwL3BhZ2UuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQW9EO0FBQ3JCO0FBRWhCLFNBQVNFO0lBQ3RCLHFCQUNFLDhEQUFDRiwrREFBWUE7a0JBQ1gsNEVBQUNHO1lBQUlDLFdBQVU7c0JBQTRGOzs7Ozs7Ozs7OztBQUtqSCIsInNvdXJjZXMiOlsid2VicGFjazovL3NreWxlYXJuLy4vc3JjL2FwcC9wYWdlLmpzPzJiM2QiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IEF1dGhQcm92aWRlciBmcm9tIFwiQC9wcm92aWRlcnMvQXV0aFByb3ZpZGVyXCI7XG5pbXBvcnQgSW1hZ2UgZnJvbSBcIm5leHQvaW1hZ2VcIjtcblxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gSG9tZSgpIHtcbiAgcmV0dXJuIChcbiAgICA8QXV0aFByb3ZpZGVyPlxuICAgICAgPGRpdiBjbGFzc05hbWU9XCJmbGV4IHJlbGF0aXZlIHRvcC0xLzIganVzdGlmeS1jZW50ZXIgbWluLWgtZnVsbCBmb250LVtmYW1pbHktbmFtZTp2YXIoLS1mb250LWdlaXN0LXNhbnMpXVwiPlxuICAgICAgICBXZWxjb21lIHRvIFNreWxlYXJuXG4gICAgICA8L2Rpdj5cbiAgICA8L0F1dGhQcm92aWRlcj5cbiAgKTtcbn1cbiJdLCJuYW1lcyI6WyJBdXRoUHJvdmlkZXIiLCJJbWFnZSIsIkhvbWUiLCJkaXYiLCJjbGFzc05hbWUiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(rsc)/./src/app/page.js\n");
+
+/***/ }),
+
+/***/ "(rsc)/./src/providers/AuthProvider.js":
+/*!***************************************!*\
+  !*** ./src/providers/AuthProvider.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   AuthContext: () => (/* binding */ e0),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var next_dist_build_webpack_loaders_next_flight_loader_module_proxy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! next/dist/build/webpack/loaders/next-flight-loader/module-proxy */ "(rsc)/./node_modules/next/dist/build/webpack/loaders/next-flight-loader/module-proxy.js");
+
+
+const e0 = (0,next_dist_build_webpack_loaders_next_flight_loader_module_proxy__WEBPACK_IMPORTED_MODULE_0__.createProxy)(String.raw`D:\skylearn\src\providers\AuthProvider.js#AuthContext`);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,next_dist_build_webpack_loaders_next_flight_loader_module_proxy__WEBPACK_IMPORTED_MODULE_0__.createProxy)(String.raw`D:\skylearn\src\providers\AuthProvider.js#default`));
+
 
 /***/ }),
 
@@ -251,7 +525,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fpage&page=%2Fpage&appPaths=%2Fpage&pagePath=private-next-app-dir%2Fpage.js&appDir=D%3A%5Cskylearn%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5Cskylearn&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=export&preferredRegion=&middlewareConfig=e30%3D!")));
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@opentelemetry","vendor-chunks/undici","vendor-chunks/@firebase","vendor-chunks/tslib","vendor-chunks/idb","vendor-chunks/@swc","vendor-chunks/firebase"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fpage&page=%2Fpage&appPaths=%2Fpage&pagePath=private-next-app-dir%2Fpage.js&appDir=D%3A%5Cskylearn%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5Cskylearn&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=export&preferredRegion=&middlewareConfig=e30%3D!")));
 module.exports = __webpack_exports__;
 
 })();
