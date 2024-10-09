@@ -86,3 +86,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.custom-grid{
+  grid-template-columns: 4fr 1fr;
+}

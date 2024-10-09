@@ -1,9 +1,14 @@
 {
   "pages": {
-    "/courses/[courseId]/livestream/page": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/courses/[courseId]/livestream/page.js"
+      "static/chunks/app/not-found.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -21,10 +26,75 @@
       "static/chunks/main-app.js",
       "static/chunks/app/loading.js"
     ],
-    "/not-found": [
+    "/courses/[courseId]/livestream/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/chunks/app/courses/[courseId]/livestream/page.js"
+    ],
+    "/courses/[courseId]/module/[...module]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/courses/[courseId]/module/[...module]/page.js"
+    ],
+    "/signup/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/signup/page.js"
+    ],
+    "/signup/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/signup/error.js"
+    ],
+    "/signup/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/signup/loading.js"
+    ],
+    "/signup/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/signup/not-found.js"
+    ],
+    "/mycourses/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/mycourses/page.js"
+    ],
+    "/mycourses/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/mycourses/error.js"
+    ],
+    "/mycourses/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/mycourses/loading.js"
+    ],
+    "/mycourses/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/mycourses/not-found.js"
+    ],
+    "/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/profile/page.js"
+    ],
+    "/profile/error": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/profile/error.js"
+    ],
+    "/profile/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/profile/loading.js"
+    ],
+    "/profile/not-found": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/profile/not-found.js"
     ]
   }
 }

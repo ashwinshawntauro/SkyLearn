@@ -1,4 +1,7 @@
 {
   "/courses/[courseId]/livestream/page": "app/courses/[courseId]/livestream/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/courses/[courseId]/module/[...module]/page": "app/courses/[courseId]/module/[...module]/page.js",
+  "/signup/page": "app/signup/page.js",
+  "/mycourses/page": "app/mycourses/page.js",
+  "/profile/page": "app/profile/page.js"
 }
