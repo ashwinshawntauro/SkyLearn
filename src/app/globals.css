@@ -3,25 +3,86 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #1e90ff;
+  --secondary-color: #87ceeb;
+  --accent-color: #ffd700;
+  --background-color: #000000;
+  --font-color: #333333;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* White background */
+    --foreground: 0 0% 3.9%; /* Dark text */
+    --card: 0 0% 100%; /* White card background */
+    --card-foreground: 0 0% 3.9%; /* Dark text on card */
+    --popover: 0 0% 100%; /* White popover background */
+    --popover-foreground: 0 0% 3.9%; /* Dark text on popover */
+    --primary: 210 100% 56%; /* Primary color: #1E90FF */
+    --primary-foreground: 0 0% 98%; /* Light text on primary */
+    --secondary: 0 90% 63%; /* Secondary color: #FF6F61 */
+    --secondary-foreground: 0 0% 9%; /* Dark text on secondary */
+    --muted: 0 0% 96.1%; /* Muted color */
+    --muted-foreground: 0 0% 45.1%; /* Muted text color */
+    --accent: 0 0% 96.1%; /* Accent color */
+    --accent-foreground: 0 0% 9%; /* Dark text on accent */
+    --destructive: 0 84.2% 60.2%; /* Destructive color */
+    --destructive-foreground: 0 0% 98%; /* Light text on destructive */
+    --border: 0 0% 89.8%; /* Border color */
+    --input: 0 0% 89.8%; /* Input field color */
+    --ring: 0 0% 3.9%; /* Ring color */
+    --chart-1: 12 76% 61%; /* Chart colors */
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem; /* Border radius */
+  }
+
+  .dark {
+    --background: 0 0% 3.9%; /* Dark background */
+    --foreground: 0 0% 98%; /* Light text */
+    --card: 0 0% 3.9%; /* Dark card background */
+    --card-foreground: 0 0% 98%; /* Light text on dark card */
+    --popover: 0 0% 3.9%; /* Dark popover background */
+    --popover-foreground: 0 0% 98%; /* Light text on dark popover */
+    --primary: 0 0% 98%; /* Light primary color */
+    --primary-foreground: 0 0% 9%; /* Dark text on light primary */
+    --secondary: 0 0% 14.9%; /* Dark secondary color */
+    --secondary-foreground: 0 0% 98%; /* Light text on dark secondary */
+    --muted: 0 0% 14.9%; /* Dark muted color */
+    --muted-foreground: 0 0% 63.9%; /* Lighter text for muted */
+    --accent: 0 0% 14.9%; /* Dark accent color */
+    --accent-foreground: 0 0% 98%; /* Light text on dark accent */
+    --destructive: 0 62.8% 30.6%; /* Dark destructive color */
+    --destructive-foreground: 0 0% 98%; /* Light text on dark destructive */
+    --border: 0 0% 14.9%; /* Dark border color */
+    --input: 0 0% 14.9%; /* Dark input color */
+    --ring: 0 0% 83.1%; /* Ring color in dark mode */
+    --chart-1: 220 70% 50%; /* Dark chart colors */
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
