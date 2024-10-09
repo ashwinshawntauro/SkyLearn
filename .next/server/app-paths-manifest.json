@@ -1,7 +1,6 @@
 {
-  "/mycourses/page": "app/mycourses/page.js",
-  "/courses/[courseId]/page": "app/courses/[courseId]/page.js",
-  "/courses/[courseId]/modules/[...modules]/page": "app/courses/[courseId]/modules/[...modules]/page.js",
-  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/verify/[certId]/page": "app/verify/[certId]/page.js",
+  "/profile/page": "app/profile/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js"
 }
