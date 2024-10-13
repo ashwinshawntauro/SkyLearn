@@ -41,9 +41,9 @@ export default function Page() {
   };
 
   return (
-    <div>
-        <Navbar></Navbar>
-      <div className="grid custom-grid justify-center p-12">
+    <div className="flex flex-col justify-center p-12">
+      <h4 className="text-center">Live Streaming</h4>
+      <div className="grid custom-grid p-2">
         <video
           className="w-full h-full p-5 rounded round-5" // Full width of the grid
           playsInline
@@ -88,24 +88,24 @@ export default function Page() {
           </Card>
         </div>
       </div>
-      <Tabs defaultValue="agenda" className="w-full">
+      <Tabs defaultValue="agenda" className="w-full p-2 bg-gray-50">
         <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="announcement">Announcement</TabsTrigger>
           <TabsTrigger value="agenda">Agenda</TabsTrigger>
           <TabsTrigger value="notes">Notes</TabsTrigger>
-          <TabsTrigger value="">Notes</TabsTrigger>
-          <TabsTrigger value="">Notes</TabsTrigger>
+          <TabsTrigger value="doubt">Raise a Doubt</TabsTrigger>
         </TabsList>
+        <TabsContent value="announcement">
+          No Announcements from tutor yet!
+        </TabsContent>
         <TabsContent value="agenda">
-            Live stream agenda will be displayed here.
+          Live stream agenda will be displayed here.
         </TabsContent>
         <TabsContent value="notes">
-            Notes related to this will be displayed here.
+          Take down notes
         </TabsContent>
-        <TabsContent value="">
-            Notes related to this will be displayed here.
-        </TabsContent>
-        <TabsContent value="">
-            Notes related to this will be displayed here.
+        <TabsContent value="doubt">
+          Ask a question from tutor
         </TabsContent>
       </Tabs>
     </div>

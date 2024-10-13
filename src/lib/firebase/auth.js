@@ -1,5 +1,6 @@
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
-import app from "./config"; // Ensure this points to your config file
+import {getFirestore,doc,setDoc} from "firebase/firestore";
+import app from "./config";
 
 const auth = getAuth(app); 
-export {auth, createUserWithEmailAndPassword, onAuthStateChanged};
+export {auth,createUserWithEmailAndPassword,onAuthStateChanged,getFirestore,doc,setDoc};

@@ -56,6 +56,94 @@ module.exports = require("next/dist/compiled/next-server/app-page.runtime.dev.js
 
 /***/ }),
 
+/***/ "crypto":
+/*!*************************!*\
+  !*** external "crypto" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("crypto");
+
+/***/ }),
+
+/***/ "dns":
+/*!**********************!*\
+  !*** external "dns" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("dns");
+
+/***/ }),
+
+/***/ "events":
+/*!*************************!*\
+  !*** external "events" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ "http":
+/*!***********************!*\
+  !*** external "http" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ "http2":
+/*!************************!*\
+  !*** external "http2" ***!
+  \************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http2");
+
+/***/ }),
+
+/***/ "net":
+/*!**********************!*\
+  !*** external "net" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("net");
+
+/***/ }),
+
+/***/ "os":
+/*!*********************!*\
+  !*** external "os" ***!
+  \*********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("os");
+
+/***/ }),
+
 /***/ "path":
 /*!***********************!*\
   !*** external "path" ***!
@@ -64,6 +152,28 @@ module.exports = require("next/dist/compiled/next-server/app-page.runtime.dev.js
 
 "use strict";
 module.exports = require("path");
+
+/***/ }),
+
+/***/ "process":
+/*!**************************!*\
+  !*** external "process" ***!
+  \**************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");
+
+/***/ }),
+
+/***/ "stream":
+/*!*************************!*\
+  !*** external "stream" ***!
+  \*************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("stream");
 
 /***/ }),
 
@@ -78,6 +188,17 @@ module.exports = require("string_decoder");
 
 /***/ }),
 
+/***/ "tls":
+/*!**********************!*\
+  !*** external "tls" ***!
+  \**********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tls");
+
+/***/ }),
+
 /***/ "url":
 /*!**********************!*\
   !*** external "url" ***!
@@ -86,6 +207,28 @@ module.exports = require("string_decoder");
 
 "use strict";
 module.exports = require("url");
+
+/***/ }),
+
+/***/ "util":
+/*!***********************!*\
+  !*** external "util" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("util");
+
+/***/ }),
+
+/***/ "zlib":
+/*!***********************!*\
+  !*** external "zlib" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("zlib");
 
 /***/ }),
 
@@ -377,7 +520,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   auth: () => (/* binding */ auth),\n/* harmony export */   createUserWithEmailAndPassword: () => (/* reexport safe */ firebase_auth__WEBPACK_IMPORTED_MODULE_0__.createUserWithEmailAndPassword),\n/* harmony export */   onAuthStateChanged: () => (/* reexport safe */ firebase_auth__WEBPACK_IMPORTED_MODULE_0__.onAuthStateChanged)\n/* harmony export */ });\n/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/auth */ \"(ssr)/./node_modules/firebase/auth/dist/index.mjs\");\n/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./config */ \"(ssr)/./src/lib/firebase/config.js\");\n\n // Ensure this points to your config file\nconst auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_0__.getAuth)(_config__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvbGliL2ZpcmViYXNlL2F1dGguanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBMkY7QUFDaEUsQ0FBQyx5Q0FBeUM7QUFFckUsTUFBTUksT0FBT0osc0RBQU9BLENBQUNHLCtDQUFHQTtBQUMwQyIsInNvdXJjZXMiOlsid2VicGFjazovL3NreWxlYXJuLy4vc3JjL2xpYi9maXJlYmFzZS9hdXRoLmpzP2M2YjMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgZ2V0QXV0aCwgY3JlYXRlVXNlcldpdGhFbWFpbEFuZFBhc3N3b3JkLCBvbkF1dGhTdGF0ZUNoYW5nZWR9IGZyb20gXCJmaXJlYmFzZS9hdXRoXCI7XHJcbmltcG9ydCBhcHAgZnJvbSBcIi4vY29uZmlnXCI7IC8vIEVuc3VyZSB0aGlzIHBvaW50cyB0byB5b3VyIGNvbmZpZyBmaWxlXHJcblxyXG5jb25zdCBhdXRoID0gZ2V0QXV0aChhcHApOyBcclxuZXhwb3J0IHthdXRoLCBjcmVhdGVVc2VyV2l0aEVtYWlsQW5kUGFzc3dvcmQsIG9uQXV0aFN0YXRlQ2hhbmdlZH07Il0sIm5hbWVzIjpbImdldEF1dGgiLCJjcmVhdGVVc2VyV2l0aEVtYWlsQW5kUGFzc3dvcmQiLCJvbkF1dGhTdGF0ZUNoYW5nZWQiLCJhcHAiLCJhdXRoIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./src/lib/firebase/auth.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   auth: () => (/* binding */ auth),\n/* harmony export */   createUserWithEmailAndPassword: () => (/* reexport safe */ firebase_auth__WEBPACK_IMPORTED_MODULE_0__.createUserWithEmailAndPassword),\n/* harmony export */   doc: () => (/* reexport safe */ firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc),\n/* harmony export */   getFirestore: () => (/* reexport safe */ firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getFirestore),\n/* harmony export */   onAuthStateChanged: () => (/* reexport safe */ firebase_auth__WEBPACK_IMPORTED_MODULE_0__.onAuthStateChanged),\n/* harmony export */   setDoc: () => (/* reexport safe */ firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.setDoc)\n/* harmony export */ });\n/* harmony import */ var firebase_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/auth */ \"(ssr)/./node_modules/firebase/auth/dist/index.mjs\");\n/* harmony import */ var firebase_firestore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/firestore */ \"(ssr)/./node_modules/firebase/firestore/dist/index.mjs\");\n/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config */ \"(ssr)/./src/lib/firebase/config.js\");\n\n\n\nconst auth = (0,firebase_auth__WEBPACK_IMPORTED_MODULE_0__.getAuth)(_config__WEBPACK_IMPORTED_MODULE_2__[\"default\"]);\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvbGliL2ZpcmViYXNlL2F1dGguanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBQTJGO0FBQ2hDO0FBQ2hDO0FBRTNCLE1BQU1PLE9BQU9QLHNEQUFPQSxDQUFDTSwrQ0FBR0E7QUFDZ0UiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9za3lsZWFybi8uL3NyYy9saWIvZmlyZWJhc2UvYXV0aC5qcz9jNmIzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGdldEF1dGgsIGNyZWF0ZVVzZXJXaXRoRW1haWxBbmRQYXNzd29yZCwgb25BdXRoU3RhdGVDaGFuZ2VkfSBmcm9tIFwiZmlyZWJhc2UvYXV0aFwiO1xyXG5pbXBvcnQge2dldEZpcmVzdG9yZSxkb2Msc2V0RG9jfSBmcm9tIFwiZmlyZWJhc2UvZmlyZXN0b3JlXCI7XHJcbmltcG9ydCBhcHAgZnJvbSBcIi4vY29uZmlnXCI7XHJcblxyXG5jb25zdCBhdXRoID0gZ2V0QXV0aChhcHApOyBcclxuZXhwb3J0IHthdXRoLGNyZWF0ZVVzZXJXaXRoRW1haWxBbmRQYXNzd29yZCxvbkF1dGhTdGF0ZUNoYW5nZWQsZ2V0RmlyZXN0b3JlLGRvYyxzZXREb2N9OyJdLCJuYW1lcyI6WyJnZXRBdXRoIiwiY3JlYXRlVXNlcldpdGhFbWFpbEFuZFBhc3N3b3JkIiwib25BdXRoU3RhdGVDaGFuZ2VkIiwiZ2V0RmlyZXN0b3JlIiwiZG9jIiwic2V0RG9jIiwiYXBwIiwiYXV0aCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(ssr)/./src/lib/firebase/auth.js\n");
 
 /***/ }),
 
@@ -388,7 +531,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/app */ \"(ssr)/./node_modules/firebase/app/dist/index.mjs\");\n/* harmony import */ var firebase_analytics__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/analytics */ \"(ssr)/./node_modules/firebase/analytics/dist/index.mjs\");\n// Import the functions you need from the SDKs you need\n\n\n// TODO: Add SDKs for Firebase products that you want to use\n// https://firebase.google.com/docs/web/setup#available-libraries\n// Your web app's Firebase configuration\n// For Firebase JS SDK v7.20.0 and later, measurementId is optional\nconst firebaseConfig = {\n    apiKey: \"AIzaSyDrzFNmxdmIfVN2bqi9mp2g6vaz71AfEFE\",\n    authDomain: \"axial-radius-436608-q6.firebaseapp.com\",\n    databaseURL: \"https://axial-radius-436608-q6-default-rtdb.firebaseio.com\",\n    projectId: \"axial-radius-436608-q6\",\n    storageBucket: \"axial-radius-436608-q6.appspot.com\",\n    messagingSenderId: \"128899871237\",\n    appId: \"1:128899871237:web:30ded11d2a1dd26627226c\",\n    measurementId: \"G-8W9YR4NBKP\"\n};\n// Initialize Firebase\nconst app = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(firebaseConfig);\n// const analytics = getAnalytics(app);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (app);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvbGliL2ZpcmViYXNlL2NvbmZpZy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQSx1REFBdUQ7QUFDVjtBQUNLO0FBQ2xELDREQUE0RDtBQUM1RCxpRUFBaUU7QUFFakUsd0NBQXdDO0FBQ3hDLG1FQUFtRTtBQUNuRSxNQUFNRSxpQkFBaUI7SUFDckJDLFFBQVE7SUFDUkMsWUFBWTtJQUNaQyxhQUFhO0lBQ2JDLFdBQVc7SUFDWEMsZUFBZTtJQUNmQyxtQkFBbUI7SUFDbkJDLE9BQU87SUFDUEMsZUFBZTtBQUNqQjtBQUVBLHNCQUFzQjtBQUN0QixNQUFNQyxNQUFNWCwyREFBYUEsQ0FBQ0U7QUFDMUIsdUNBQXVDO0FBRXZDLGlFQUFlUyxHQUFHQSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vc2t5bGVhcm4vLi9zcmMvbGliL2ZpcmViYXNlL2NvbmZpZy5qcz9kZjIwIl0sInNvdXJjZXNDb250ZW50IjpbIi8vIEltcG9ydCB0aGUgZnVuY3Rpb25zIHlvdSBuZWVkIGZyb20gdGhlIFNES3MgeW91IG5lZWRcclxuaW1wb3J0IHsgaW5pdGlhbGl6ZUFwcCB9IGZyb20gXCJmaXJlYmFzZS9hcHBcIjtcclxuaW1wb3J0IHsgZ2V0QW5hbHl0aWNzIH0gZnJvbSBcImZpcmViYXNlL2FuYWx5dGljc1wiO1xyXG4vLyBUT0RPOiBBZGQgU0RLcyBmb3IgRmlyZWJhc2UgcHJvZHVjdHMgdGhhdCB5b3Ugd2FudCB0byB1c2VcclxuLy8gaHR0cHM6Ly9maXJlYmFzZS5nb29nbGUuY29tL2RvY3Mvd2ViL3NldHVwI2F2YWlsYWJsZS1saWJyYXJpZXNcclxuXHJcbi8vIFlvdXIgd2ViIGFwcCdzIEZpcmViYXNlIGNvbmZpZ3VyYXRpb25cclxuLy8gRm9yIEZpcmViYXNlIEpTIFNESyB2Ny4yMC4wIGFuZCBsYXRlciwgbWVhc3VyZW1lbnRJZCBpcyBvcHRpb25hbFxyXG5jb25zdCBmaXJlYmFzZUNvbmZpZyA9IHtcclxuICBhcGlLZXk6IFwiQUl6YVN5RHJ6Rk5teGRtSWZWTjJicWk5bXAyZzZ2YXo3MUFmRUZFXCIsXHJcbiAgYXV0aERvbWFpbjogXCJheGlhbC1yYWRpdXMtNDM2NjA4LXE2LmZpcmViYXNlYXBwLmNvbVwiLFxyXG4gIGRhdGFiYXNlVVJMOiBcImh0dHBzOi8vYXhpYWwtcmFkaXVzLTQzNjYwOC1xNi1kZWZhdWx0LXJ0ZGIuZmlyZWJhc2Vpby5jb21cIixcclxuICBwcm9qZWN0SWQ6IFwiYXhpYWwtcmFkaXVzLTQzNjYwOC1xNlwiLFxyXG4gIHN0b3JhZ2VCdWNrZXQ6IFwiYXhpYWwtcmFkaXVzLTQzNjYwOC1xNi5hcHBzcG90LmNvbVwiLFxyXG4gIG1lc3NhZ2luZ1NlbmRlcklkOiBcIjEyODg5OTg3MTIzN1wiLFxyXG4gIGFwcElkOiBcIjE6MTI4ODk5ODcxMjM3OndlYjozMGRlZDExZDJhMWRkMjY2MjcyMjZjXCIsXHJcbiAgbWVhc3VyZW1lbnRJZDogXCJHLThXOVlSNE5CS1BcIlxyXG59O1xyXG5cclxuLy8gSW5pdGlhbGl6ZSBGaXJlYmFzZVxyXG5jb25zdCBhcHAgPSBpbml0aWFsaXplQXBwKGZpcmViYXNlQ29uZmlnKTtcclxuLy8gY29uc3QgYW5hbHl0aWNzID0gZ2V0QW5hbHl0aWNzKGFwcCk7XHJcblxyXG5leHBvcnQgZGVmYXVsdCBhcHA7Il0sIm5hbWVzIjpbImluaXRpYWxpemVBcHAiLCJnZXRBbmFseXRpY3MiLCJmaXJlYmFzZUNvbmZpZyIsImFwaUtleSIsImF1dGhEb21haW4iLCJkYXRhYmFzZVVSTCIsInByb2plY3RJZCIsInN0b3JhZ2VCdWNrZXQiLCJtZXNzYWdpbmdTZW5kZXJJZCIsImFwcElkIiwibWVhc3VyZW1lbnRJZCIsImFwcCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(ssr)/./src/lib/firebase/config.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var firebase_app__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! firebase/app */ \"(ssr)/./node_modules/firebase/app/dist/index.mjs\");\n\n// import { getAnalytics } from \"firebase/analytics\";\nconst firebaseConfig = {\n    apiKey: \"AIzaSyDrzFNmxdmIfVN2bqi9mp2g6vaz71AfEFE\",\n    authDomain: \"axial-radius-436608-q6.firebaseapp.com\",\n    databaseURL: \"https://axial-radius-436608-q6-default-rtdb.firebaseio.com\",\n    projectId: \"axial-radius-436608-q6\",\n    storageBucket: \"axial-radius-436608-q6.appspot.com\",\n    messagingSenderId: \"128899871237\",\n    appId: \"1:128899871237:web:30ded11d2a1dd26627226c\",\n    measurementId: \"G-8W9YR4NBKP\"\n};\nconst app = (0,firebase_app__WEBPACK_IMPORTED_MODULE_0__.initializeApp)(firebaseConfig);\n// const analytics = getAnalytics(app);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (app);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvbGliL2ZpcmViYXNlL2NvbmZpZy5qcyIsIm1hcHBpbmdzIjoiOzs7OztBQUE2QztBQUM3QyxxREFBcUQ7QUFDckQsTUFBTUMsaUJBQWlCO0lBQ3JCQyxRQUFRO0lBQ1JDLFlBQVk7SUFDWkMsYUFBYTtJQUNiQyxXQUFXO0lBQ1hDLGVBQWU7SUFDZkMsbUJBQW1CO0lBQ25CQyxPQUFPO0lBQ1BDLGVBQWU7QUFDakI7QUFFQSxNQUFNQyxNQUFNViwyREFBYUEsQ0FBQ0M7QUFDMUIsdUNBQXVDO0FBRXZDLGlFQUFlUyxHQUFHQSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vc2t5bGVhcm4vLi9zcmMvbGliL2ZpcmViYXNlL2NvbmZpZy5qcz9kZjIwIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGluaXRpYWxpemVBcHAgfSBmcm9tIFwiZmlyZWJhc2UvYXBwXCI7XHJcbi8vIGltcG9ydCB7IGdldEFuYWx5dGljcyB9IGZyb20gXCJmaXJlYmFzZS9hbmFseXRpY3NcIjtcclxuY29uc3QgZmlyZWJhc2VDb25maWcgPSB7XHJcbiAgYXBpS2V5OiBcIkFJemFTeURyekZObXhkbUlmVk4yYnFpOW1wMmc2dmF6NzFBZkVGRVwiLFxyXG4gIGF1dGhEb21haW46IFwiYXhpYWwtcmFkaXVzLTQzNjYwOC1xNi5maXJlYmFzZWFwcC5jb21cIixcclxuICBkYXRhYmFzZVVSTDogXCJodHRwczovL2F4aWFsLXJhZGl1cy00MzY2MDgtcTYtZGVmYXVsdC1ydGRiLmZpcmViYXNlaW8uY29tXCIsXHJcbiAgcHJvamVjdElkOiBcImF4aWFsLXJhZGl1cy00MzY2MDgtcTZcIixcclxuICBzdG9yYWdlQnVja2V0OiBcImF4aWFsLXJhZGl1cy00MzY2MDgtcTYuYXBwc3BvdC5jb21cIixcclxuICBtZXNzYWdpbmdTZW5kZXJJZDogXCIxMjg4OTk4NzEyMzdcIixcclxuICBhcHBJZDogXCIxOjEyODg5OTg3MTIzNzp3ZWI6MzBkZWQxMWQyYTFkZDI2NjI3MjI2Y1wiLFxyXG4gIG1lYXN1cmVtZW50SWQ6IFwiRy04VzlZUjROQktQXCJcclxufTtcclxuXHJcbmNvbnN0IGFwcCA9IGluaXRpYWxpemVBcHAoZmlyZWJhc2VDb25maWcpO1xyXG4vLyBjb25zdCBhbmFseXRpY3MgPSBnZXRBbmFseXRpY3MoYXBwKTtcclxuXHJcbmV4cG9ydCBkZWZhdWx0IGFwcDsiXSwibmFtZXMiOlsiaW5pdGlhbGl6ZUFwcCIsImZpcmViYXNlQ29uZmlnIiwiYXBpS2V5IiwiYXV0aERvbWFpbiIsImRhdGFiYXNlVVJMIiwicHJvamVjdElkIiwic3RvcmFnZUJ1Y2tldCIsIm1lc3NhZ2luZ1NlbmRlcklkIiwiYXBwSWQiLCJtZWFzdXJlbWVudElkIiwiYXBwIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./src/lib/firebase/config.js\n");
 
 /***/ }),
 
@@ -399,7 +542,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   AuthContext: () => (/* binding */ AuthContext),\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _lib_firebase_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/lib/firebase/auth */ \"(ssr)/./src/lib/firebase/auth.js\");\n/* __next_internal_client_entry_do_not_use__ AuthContext,default auto */ \n\n\n// Create the context\nconst Context = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createContext)({\n    user: null,\n    isLogged: false\n});\n// AuthProvider component to wrap your app and provide auth state\nconst AuthProvider = ({ children })=>{\n    const [user, setUser] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);\n    const [isLogged, setIsLogged] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);\n    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{\n        const unsubscribe = (0,_lib_firebase_auth__WEBPACK_IMPORTED_MODULE_2__.onAuthStateChanged)(_lib_firebase_auth__WEBPACK_IMPORTED_MODULE_2__.auth, (user)=>{\n            if (user) {\n                // User is logged in\n                setUser(user);\n                setIsLogged(true);\n            }\n        });\n        // Cleanup the listener on unmount\n        return ()=>unsubscribe();\n    }, []);\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(Context.Provider, {\n        value: {\n            user,\n            isLogged\n        },\n        children: children\n    }, void 0, false, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\providers\\\\AuthProvider.js\",\n        lineNumber: 31,\n        columnNumber: 5\n    }, undefined);\n};\n// Hook to use auth context in components\nconst AuthContext = ()=>(0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(Context);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AuthProvider);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvcHJvdmlkZXJzL0F1dGhQcm92aWRlci5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUV1RTtBQUNSO0FBRS9ELHFCQUFxQjtBQUNyQixNQUFNTSx3QkFBVUwsb0RBQWFBLENBQUM7SUFDMUJNLE1BQU07SUFDTkMsVUFBVTtBQUNkO0FBRUEsaUVBQWlFO0FBQ2pFLE1BQU1DLGVBQWUsQ0FBQyxFQUFFQyxRQUFRLEVBQUU7SUFDaEMsTUFBTSxDQUFDSCxNQUFNSSxRQUFRLEdBQUdSLCtDQUFRQSxDQUFDO0lBQ2pDLE1BQU0sQ0FBQ0ssVUFBVUksWUFBWSxHQUFHVCwrQ0FBUUEsQ0FBQztJQUV6Q0QsZ0RBQVNBLENBQUM7UUFDUixNQUFNVyxjQUFjUixzRUFBa0JBLENBQUNELG9EQUFJQSxFQUFFLENBQUNHO1lBQzVDLElBQUlBLE1BQU07Z0JBQ1Isb0JBQW9CO2dCQUNwQkksUUFBUUo7Z0JBQ1JLLFlBQVk7WUFDZDtRQUNGO1FBRUEsa0NBQWtDO1FBQ2xDLE9BQU8sSUFBTUM7SUFDZixHQUFHLEVBQUU7SUFFTCxxQkFDRSw4REFBQ1AsUUFBUVEsUUFBUTtRQUFDQyxPQUFPO1lBQUVSO1lBQU1DO1FBQVM7a0JBQ3ZDRTs7Ozs7O0FBR1A7QUFFQSx5Q0FBeUM7QUFDbEMsTUFBTU0sY0FBYyxJQUFNaEIsaURBQVVBLENBQUNNLFNBQVM7QUFFckQsaUVBQWVHLFlBQVlBLEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9za3lsZWFybi8uL3NyYy9wcm92aWRlcnMvQXV0aFByb3ZpZGVyLmpzPzQ0MjMiXSwic291cmNlc0NvbnRlbnQiOlsiXCJ1c2UgY2xpZW50XCI7XHJcblxyXG5pbXBvcnQgeyB1c2VDb250ZXh0LCBjcmVhdGVDb250ZXh0LCB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSBcInJlYWN0XCI7XHJcbmltcG9ydCB7IGF1dGgsIG9uQXV0aFN0YXRlQ2hhbmdlZCB9IGZyb20gXCJAL2xpYi9maXJlYmFzZS9hdXRoXCI7XHJcblxyXG4vLyBDcmVhdGUgdGhlIGNvbnRleHRcclxuY29uc3QgQ29udGV4dCA9IGNyZWF0ZUNvbnRleHQoe1xyXG4gICAgdXNlcjogbnVsbCxcclxuICAgIGlzTG9nZ2VkOiBmYWxzZSxcclxufSk7XHJcblxyXG4vLyBBdXRoUHJvdmlkZXIgY29tcG9uZW50IHRvIHdyYXAgeW91ciBhcHAgYW5kIHByb3ZpZGUgYXV0aCBzdGF0ZVxyXG5jb25zdCBBdXRoUHJvdmlkZXIgPSAoeyBjaGlsZHJlbiB9KSA9PiB7XHJcbiAgY29uc3QgW3VzZXIsIHNldFVzZXJdID0gdXNlU3RhdGUobnVsbCk7XHJcbiAgY29uc3QgW2lzTG9nZ2VkLCBzZXRJc0xvZ2dlZF0gPSB1c2VTdGF0ZShmYWxzZSk7XHJcblxyXG4gIHVzZUVmZmVjdCgoKSA9PiB7XHJcbiAgICBjb25zdCB1bnN1YnNjcmliZSA9IG9uQXV0aFN0YXRlQ2hhbmdlZChhdXRoLCAodXNlcikgPT4ge1xyXG4gICAgICBpZiAodXNlcikge1xyXG4gICAgICAgIC8vIFVzZXIgaXMgbG9nZ2VkIGluXHJcbiAgICAgICAgc2V0VXNlcih1c2VyKTtcclxuICAgICAgICBzZXRJc0xvZ2dlZCh0cnVlKTtcclxuICAgICAgfVxyXG4gICAgfSk7XHJcblxyXG4gICAgLy8gQ2xlYW51cCB0aGUgbGlzdGVuZXIgb24gdW5tb3VudFxyXG4gICAgcmV0dXJuICgpID0+IHVuc3Vic2NyaWJlKCk7XHJcbiAgfSwgW10pO1xyXG5cclxuICByZXR1cm4gKFxyXG4gICAgPENvbnRleHQuUHJvdmlkZXIgdmFsdWU9e3sgdXNlciwgaXNMb2dnZWQgfX0+XHJcbiAgICAgIHtjaGlsZHJlbn1cclxuICAgIDwvQ29udGV4dC5Qcm92aWRlcj5cclxuICApO1xyXG59O1xyXG5cclxuLy8gSG9vayB0byB1c2UgYXV0aCBjb250ZXh0IGluIGNvbXBvbmVudHNcclxuZXhwb3J0IGNvbnN0IEF1dGhDb250ZXh0ID0gKCkgPT4gdXNlQ29udGV4dChDb250ZXh0KTtcclxuXHJcbmV4cG9ydCBkZWZhdWx0IEF1dGhQcm92aWRlcjtcclxuIl0sIm5hbWVzIjpbInVzZUNvbnRleHQiLCJjcmVhdGVDb250ZXh0IiwidXNlRWZmZWN0IiwidXNlU3RhdGUiLCJhdXRoIiwib25BdXRoU3RhdGVDaGFuZ2VkIiwiQ29udGV4dCIsInVzZXIiLCJpc0xvZ2dlZCIsIkF1dGhQcm92aWRlciIsImNoaWxkcmVuIiwic2V0VXNlciIsInNldElzTG9nZ2VkIiwidW5zdWJzY3JpYmUiLCJQcm92aWRlciIsInZhbHVlIiwiQXV0aENvbnRleHQiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./src/providers/AuthProvider.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   AuthContext: () => (/* binding */ AuthContext),\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"(ssr)/./node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _lib_firebase_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/lib/firebase/auth */ \"(ssr)/./src/lib/firebase/auth.js\");\n/* __next_internal_client_entry_do_not_use__ AuthContext,default auto */ \n\n\n// Create the context\nconst Context = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createContext)({\n    user: null,\n    isLogged: false,\n    loading: true\n});\nconst AuthProvider = ({ children })=>{\n    const [user, setUser] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);\n    const [isLogged, setIsLogged] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);\n    const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(true);\n    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{\n        const unsubscribe = (0,_lib_firebase_auth__WEBPACK_IMPORTED_MODULE_2__.onAuthStateChanged)(_lib_firebase_auth__WEBPACK_IMPORTED_MODULE_2__.auth, (user)=>{\n            if (user) {\n                setLoading(false);\n                setUser(user);\n                setIsLogged(true);\n            }\n        });\n        // Cleanup the listener on unmount\n        return ()=>unsubscribe();\n    }, []);\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(Context.Provider, {\n        value: {\n            user,\n            isLogged,\n            loading\n        },\n        children: children\n    }, void 0, false, {\n        fileName: \"D:\\\\skylearn\\\\src\\\\providers\\\\AuthProvider.js\",\n        lineNumber: 32,\n        columnNumber: 5\n    }, undefined);\n};\n// Hook to use auth context in components\nconst AuthContext = ()=>(0,react__WEBPACK_IMPORTED_MODULE_1__.useContext)(Context);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AuthProvider);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9zcmMvcHJvdmlkZXJzL0F1dGhQcm92aWRlci5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUV1RTtBQUNSO0FBRS9ELHFCQUFxQjtBQUNyQixNQUFNTSx3QkFBVUwsb0RBQWFBLENBQUM7SUFDMUJNLE1BQU07SUFDTkMsVUFBVTtJQUNWQyxTQUFTO0FBQ2I7QUFFQSxNQUFNQyxlQUFlLENBQUMsRUFBRUMsUUFBUSxFQUFFO0lBQ2hDLE1BQU0sQ0FBQ0osTUFBTUssUUFBUSxHQUFHVCwrQ0FBUUEsQ0FBQztJQUNqQyxNQUFNLENBQUNLLFVBQVVLLFlBQVksR0FBR1YsK0NBQVFBLENBQUM7SUFDekMsTUFBTSxDQUFDTSxTQUFRSyxXQUFXLEdBQUdYLCtDQUFRQSxDQUFDO0lBRXRDRCxnREFBU0EsQ0FBQztRQUNSLE1BQU1hLGNBQWNWLHNFQUFrQkEsQ0FBQ0Qsb0RBQUlBLEVBQUUsQ0FBQ0c7WUFDNUMsSUFBSUEsTUFBTTtnQkFDUk8sV0FBVztnQkFDWEYsUUFBUUw7Z0JBQ1JNLFlBQVk7WUFDZDtRQUNGO1FBRUEsa0NBQWtDO1FBQ2xDLE9BQU8sSUFBTUU7SUFDZixHQUFHLEVBQUU7SUFFTCxxQkFDRSw4REFBQ1QsUUFBUVUsUUFBUTtRQUFDQyxPQUFPO1lBQUVWO1lBQU1DO1lBQVNDO1FBQU87a0JBQzlDRTs7Ozs7O0FBR1A7QUFFQSx5Q0FBeUM7QUFDbEMsTUFBTU8sY0FBYyxJQUFNbEIsaURBQVVBLENBQUNNLFNBQVM7QUFFckQsaUVBQWVJLFlBQVlBLEVBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9za3lsZWFybi8uL3NyYy9wcm92aWRlcnMvQXV0aFByb3ZpZGVyLmpzPzQ0MjMiXSwic291cmNlc0NvbnRlbnQiOlsiXCJ1c2UgY2xpZW50XCI7XHJcblxyXG5pbXBvcnQgeyB1c2VDb250ZXh0LCBjcmVhdGVDb250ZXh0LCB1c2VFZmZlY3QsIHVzZVN0YXRlIH0gZnJvbSBcInJlYWN0XCI7XHJcbmltcG9ydCB7IGF1dGgsIG9uQXV0aFN0YXRlQ2hhbmdlZCB9IGZyb20gXCJAL2xpYi9maXJlYmFzZS9hdXRoXCI7XHJcblxyXG4vLyBDcmVhdGUgdGhlIGNvbnRleHRcclxuY29uc3QgQ29udGV4dCA9IGNyZWF0ZUNvbnRleHQoe1xyXG4gICAgdXNlcjogbnVsbCxcclxuICAgIGlzTG9nZ2VkOiBmYWxzZSxcclxuICAgIGxvYWRpbmc6IHRydWVcclxufSk7XHJcblxyXG5jb25zdCBBdXRoUHJvdmlkZXIgPSAoeyBjaGlsZHJlbiB9KSA9PiB7XHJcbiAgY29uc3QgW3VzZXIsIHNldFVzZXJdID0gdXNlU3RhdGUobnVsbCk7XHJcbiAgY29uc3QgW2lzTG9nZ2VkLCBzZXRJc0xvZ2dlZF0gPSB1c2VTdGF0ZShmYWxzZSk7XHJcbiAgY29uc3QgW2xvYWRpbmcsc2V0TG9hZGluZ10gPSB1c2VTdGF0ZSh0cnVlKTtcclxuXHJcbiAgdXNlRWZmZWN0KCgpID0+IHtcclxuICAgIGNvbnN0IHVuc3Vic2NyaWJlID0gb25BdXRoU3RhdGVDaGFuZ2VkKGF1dGgsICh1c2VyKSA9PiB7XHJcbiAgICAgIGlmICh1c2VyKSB7XHJcbiAgICAgICAgc2V0TG9hZGluZyhmYWxzZSk7XHJcbiAgICAgICAgc2V0VXNlcih1c2VyKTtcclxuICAgICAgICBzZXRJc0xvZ2dlZCh0cnVlKTtcclxuICAgICAgfVxyXG4gICAgfSk7XHJcblxyXG4gICAgLy8gQ2xlYW51cCB0aGUgbGlzdGVuZXIgb24gdW5tb3VudFxyXG4gICAgcmV0dXJuICgpID0+IHVuc3Vic2NyaWJlKCk7XHJcbiAgfSwgW10pO1xyXG5cclxuICByZXR1cm4gKFxyXG4gICAgPENvbnRleHQuUHJvdmlkZXIgdmFsdWU9e3sgdXNlciwgaXNMb2dnZWQsbG9hZGluZ319PlxyXG4gICAgICB7Y2hpbGRyZW59XHJcbiAgICA8L0NvbnRleHQuUHJvdmlkZXI+XHJcbiAgKTtcclxufTtcclxuXHJcbi8vIEhvb2sgdG8gdXNlIGF1dGggY29udGV4dCBpbiBjb21wb25lbnRzXHJcbmV4cG9ydCBjb25zdCBBdXRoQ29udGV4dCA9ICgpID0+IHVzZUNvbnRleHQoQ29udGV4dCk7XHJcblxyXG5leHBvcnQgZGVmYXVsdCBBdXRoUHJvdmlkZXI7XHJcbiJdLCJuYW1lcyI6WyJ1c2VDb250ZXh0IiwiY3JlYXRlQ29udGV4dCIsInVzZUVmZmVjdCIsInVzZVN0YXRlIiwiYXV0aCIsIm9uQXV0aFN0YXRlQ2hhbmdlZCIsIkNvbnRleHQiLCJ1c2VyIiwiaXNMb2dnZWQiLCJsb2FkaW5nIiwiQXV0aFByb3ZpZGVyIiwiY2hpbGRyZW4iLCJzZXRVc2VyIiwic2V0SXNMb2dnZWQiLCJzZXRMb2FkaW5nIiwidW5zdWJzY3JpYmUiLCJQcm92aWRlciIsInZhbHVlIiwiQXV0aENvbnRleHQiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/./src/providers/AuthProvider.js\n");
 
 /***/ }),
 
@@ -504,7 +647,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc","vendor-chunks/undici","vendor-chunks/@firebase","vendor-chunks/@opentelemetry","vendor-chunks/tslib","vendor-chunks/idb","vendor-chunks/firebase"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2F_not-found%2Fpage&page=%2F_not-found%2Fpage&appPaths=&pagePath=private-next-app-dir%2Fnot-found.js&appDir=D%3A%5Cskylearn%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5Cskylearn&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc","vendor-chunks/@firebase","vendor-chunks/undici","vendor-chunks/@grpc","vendor-chunks/protobufjs","vendor-chunks/@opentelemetry","vendor-chunks/long","vendor-chunks/@protobufjs","vendor-chunks/lodash.camelcase","vendor-chunks/tslib","vendor-chunks/idb","vendor-chunks/firebase"], () => (__webpack_exec__("(rsc)/./node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2F_not-found%2Fpage&page=%2F_not-found%2Fpage&appPaths=&pagePath=private-next-app-dir%2Fnot-found.js&appDir=D%3A%5Cskylearn%5Csrc%5Capp&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&rootDir=D%3A%5Cskylearn&isDev=true&tsconfigPath=tsconfig.json&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!")));
 module.exports = __webpack_exports__;
 
 })();

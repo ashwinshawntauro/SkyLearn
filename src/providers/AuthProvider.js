@@ -7,17 +7,18 @@ import { auth, onAuthStateChanged } from "@/lib/firebase/auth";
 const Context = createContext({
     user: null,
     isLogged: false,
+    loading: true
 });
 
-// AuthProvider component to wrap your app and provide auth state
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
+  const [loading,setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is logged in
+        setLoading(false);
         setUser(user);
         setIsLogged(true);
       }
@@ -28,7 +29,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <Context.Provider value={{ user, isLogged }}>
+    <Context.Provider value={{ user, isLogged,loading}}>
       {children}
     </Context.Provider>
   );
