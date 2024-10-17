@@ -23,11 +23,13 @@ module.exports = {
 				light: '#3AB0FF', 
 				DEFAULT: '#1E90FF',
 				dark: '#1A7BAE',  
+				foreground: "#FFFFFF"
   			},
   			secondary: {
 				light: '#FF9B87',  
 				DEFAULT: '#FF6F61',
 				dark: '#C6504D', 
+				foreground: "#FFFFFF"
   			},
   			muted: {
   				DEFAULT: 'hsl(var(--muted))',

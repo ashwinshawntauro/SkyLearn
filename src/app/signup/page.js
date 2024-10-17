@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState, useEffect, useContext } from "react"; 
+import { useState, useEffect, useContext } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   auth,
@@ -11,6 +11,8 @@ import {
   getFirestore,
   doc,
   setDoc,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/providers/AuthProvider";
@@ -18,18 +20,27 @@ import { AuthContext } from "@/providers/AuthProvider";
 export default function Page() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState(null);
   const [role, setRole] = useState("student");
   const router = useRouter();
 
   const db = getFirestore();
-
+  const provider = new GoogleAuthProvider();
   const { isLogged } = AuthContext();
   useEffect(() => {
     if (isLogged) {
-      router.push('/profile');
+      router.push("/profile");
     }
   }, [isLogged, router]);
+
+  const storeData = async (user) => {
+    setDoc(doc(db, "users", user.uid), {
+      name: user.displayName,
+      email: user.email,
+      role: role,
+    });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,15 +53,28 @@ export default function Page() {
         pass
       );
       const user = userCredential.user;
-      await setDoc(doc(db, "users", user.uid), {
-        email: email,
-        role: role,
-      });
+      storeData(user);
       console.log("User registered:", email);
     } catch (error) {
       setError(error.message);
       console.error("Registration error:", error);
     }
+  };
+
+  const handleGoogle = async (event) => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        storeData(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        setError(errorCode + errorMessage);
+      });
   };
 
   return (
@@ -61,10 +85,30 @@ export default function Page() {
             Register your account
           </h2>
         </div>
-
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && <p className="text-red-500">{error}</p>}
+            <Button onClick={handleGoogle}>Sign up with Google</Button> 
+            <div>
+              <Label
+                htmlFor="name"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Name
+              </Label>
+              <div className="mt-2">
+                <Input
+                  id="name"
+                  name="name"
+                  type="string"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
             <div>
               <Label
                 htmlFor="email"
@@ -143,7 +187,7 @@ export default function Page() {
           </form>
           <p className="mt-10 text-center text-sm text-gray-500">
             Already a member?
-            <a href="#" className="font-semibold leading-6 text-primary px-1">
+            <a href="/signin" className="font-semibold leading-6 px-1">
               Sign In
             </a>
           </p>
