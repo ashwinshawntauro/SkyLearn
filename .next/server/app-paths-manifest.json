@@ -1,6 +1,1 @@
-{
-  "/signup/page": "app/signup/page.js",
-  "/page": "app/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/courses/[courseId]/livestream/page": "app/courses/[courseId]/livestream/page.js"
-}
+{}
