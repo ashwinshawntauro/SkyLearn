@@ -82,4 +82,10 @@ body {
   .stream-grid{
     grid-template-columns: 4fr 1fr;
   }
+  .main-live-grid{
+    grid-template-columns: 3fr 12fr;
+  }
+  .nav-live-grid{
+    grid-template-columns: 2fr 10fr;
+  }
 }
