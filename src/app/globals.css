@@ -79,12 +79,18 @@ body {
 }
 
 @layer base {
+  /* .border-border {
+    border: none
+  }
+  .text-foreground{
+    color: #FFFFFF
+  }
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
-  }
+    @apply text-foreground;
+  } */
 }
 
 .custom-grid{
