@@ -5,7 +5,7 @@
 :root {
   --primary-color: #1e90ff;
   --secondary-color: #87ceeb;
-  --accent-color: #ffd700;
+  --accent-color: #f0c419;
   --background-color: #000000;
   --font-color: #333333;
 }
@@ -79,20 +79,7 @@ body {
 }
 
 @layer base {
-  /* .border-border {
-    border: none
+  .stream-grid{
+    grid-template-columns: 4fr 1fr;
   }
-  .text-foreground{
-    color: #FFFFFF
-  }
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply text-foreground;
-  } */
-}
-
-.custom-grid{
-  grid-template-columns: 4fr 1fr;
 }

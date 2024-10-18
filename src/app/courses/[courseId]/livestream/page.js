@@ -11,47 +11,89 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import Janus from 'janus-gateway'; 
+// import adapter from "webrtc-adapter"
 
 export default function Page() {
   const myVideoRef = useRef();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  // const [janus, setJanus] = useState(null);
+  // const [videoroom, setVideoroom] = useState(null);
+  // const [streaming, setStreaming] = useState(false);
 
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: true,
-      })
-      .then((stream) => {
-        if (myVideoRef.current) {
-          myVideoRef.current.srcObject = stream;
-        }
-      })
-      .catch((err) => {
-        console.error("Error accessing media devices.", err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   Janus.init({ debug: "all", callback: () => {
+  //     const janusInstance = new Janus({
+  //       server: "http://<your_instance_ip>:8088/janus",
+  //       success: () => {
+  //         // Attach to the video room plugin
+  //         janusInstance.attach({
+  //           plugin: "janus.plugin.videoroom",
+  //           success: (pluginHandle) => {
+  //             setVideoroom(pluginHandle);
+  //             joinRoom();
+  //           },
+  //           onmessage: (msg, jsep) => {
+  //             console.log("Message from Janus:", msg);
+  //             if (jsep) {
+  //               videoroom.handleRemoteJsep({ jsep: jsep });
+  //             }
+  //           },
+  //           onicecandidate: (candidate) => {
+  //             console.log("ICE Candidate:", candidate);
+  //           },
+  //           onlocalstream: (stream) => {
+  //             if (myVideoRef.current) {
+  //               myVideoRef.current.srcObject = stream;
+  //             }
+  //           },
+  //           onremotestream: (stream) => {
+  //           },
+  //         });
+  //         setJanus(janusInstance);
+  //       },
+  //       error: (error) => {
+  //         console.error("Janus error:", error);
+  //       },
+  //     });
+  //   }});
+
+  //   return () => {
+  //     if (janus) {
+  //       janus.destroy();
+  //     }
+  //   };
+  // }, []);
+
+  // const joinRoom = () => {
+  //   const room = 1234; // Your room number
+  //   const register = { "request": "join", "room": room, "ptype": "publisher", "display": "Your Name" };
+  //   videoroom.send({ message: register });
+  // };
 
   const handleSendMessage = () => {
     if (input.trim() !== "") {
       setMessages((prev) => [...prev, input]);
       setInput("");
+    } else {
+      alert("Message cannot be empty!");
     }
   };
 
   return (
     <div className="flex flex-col justify-center p-12">
       <h4 className="text-center">Live Streaming</h4>
-      <div className="grid custom-grid p-2">
+      <div className="grid stream-grid p-2">
         <video
-          className="w-full h-full p-5 rounded round-5" // Full width of the grid
+          className="w-full h-full p-3 rounded-md" // Ensure rounded corners
           playsInline
           ref={myVideoRef}
           autoPlay
           muted
         />
         <div className="mt-4">
-          <Card className="w-[350px] h-[650px] flex flex-col">
+          <Card className="w-[350px] h-[645px] flex flex-col">
             <CardHeader>
               <CardTitle>Live Chat</CardTitle>
               <CardDescription>
