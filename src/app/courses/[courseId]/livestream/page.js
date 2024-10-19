@@ -23,6 +23,21 @@ export default function Page({ params }) {
   // const [videoroom, setVideoroom] = useState(null);
   // const [streaming, setStreaming] = useState(false);
 
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({
+        audio:false,
+        video: true,
+      })
+      .then((stream) => {
+        if (myVideoRef.current) {
+          myVideoRef.current.srcObject=stream
+        }
+      }).catch((err) => {
+        console.error("Error accessing media devices.", err); // Handle any errors
+      });
+  }, []);
+
   // useEffect(() => {
   //   Janus.init({ debug: "all", callback: () => {
   //     const janusInstance = new Janus({
@@ -91,19 +106,19 @@ export default function Page({ params }) {
           data-drawer-toggle="default-sidebar"
           aria-controls="default-sidebar"
           type="button"
-          class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
         >
-          <span class="sr-only">Open sidebar</span>
+          <span className="sr-only">Open sidebar</span>
           <svg
-            class="w-6 h-6"
+            className="w-6 h-6"
             aria-hidden="true"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              clip-rule="evenodd"
-              fill-rule="evenodd"
+              clipRule="evenodd"
+              fillRule="evenodd"
               d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
             ></path>
           </svg>
@@ -161,7 +176,7 @@ export default function Page({ params }) {
                       className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
                       <svg
-                        class="w-6 h-6 text-gray-800 dark:text-white"
+                        className="w-6 h-6 text-gray-800 dark:text-white"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -170,9 +185,9 @@ export default function Page({ params }) {
                         viewBox="0 0 24 24"
                       >
                         <path
-                          fill-rule="evenodd"
+                          fillRule="evenodd"
                           d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
-                          clip-rule="evenodd"
+                          clipRule="evenodd"
                         />
                       </svg>
 
@@ -196,7 +211,7 @@ export default function Page({ params }) {
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
-                      class="w-6 h-6 text-gray-800 dark:text-white"
+                      className="w-6 h-6 text-gray-800 dark:text-white"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -205,9 +220,9 @@ export default function Page({ params }) {
                       viewBox="0 0 24 24"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
 
@@ -220,7 +235,7 @@ export default function Page({ params }) {
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
-                      class="w-6 h-6 text-gray-800 dark:text-white"
+                      className="w-6 h-6 text-gray-800 dark:text-white"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -229,9 +244,9 @@ export default function Page({ params }) {
                       viewBox="0 0 24 24"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
 
@@ -255,7 +270,7 @@ export default function Page({ params }) {
                     className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                   >
                     <svg
-                      class="w-6 h-6 text-gray-800 dark:text-white"
+                      className="w-6 h-6 text-gray-800 dark:text-white"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -264,9 +279,9 @@ export default function Page({ params }) {
                       viewBox="0 0 24 24"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
 
@@ -283,17 +298,17 @@ export default function Page({ params }) {
       <div className="flex flex-col justify-center p-2">
         {/* Breadcrumb */}
         <nav
-          class="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+          className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
           aria-label="Breadcrumb"
         >
-          <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-            <li class="inline-flex items-center">
+          <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+            <li className="inline-flex items-center">
               <a
                 href="#"
-                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
               >
                 <svg
-                  class="w-3 h-3 me-2.5"
+                  className="w-3 h-3 me-2.5"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
@@ -305,9 +320,9 @@ export default function Page({ params }) {
               </a>
             </li>
             <li>
-              <div class="flex items-center">
+              <div className="flex items-center">
                 <svg
-                  class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
+                  className="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -315,24 +330,24 @@ export default function Page({ params }) {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
                 <a
                   href="#"
-                  class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+                  className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
                 >
                   Courses
                 </a>
               </div>
             </li>
             <li aria-current="page">
-              <div class="flex items-center">
+              <div className="flex items-center">
                 <svg
-                  class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
+                  className="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -340,21 +355,21 @@ export default function Page({ params }) {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
                   {params.courseId}
                 </span>
               </div>
             </li>
             <li aria-current="page">
-              <div class="flex items-center">
+              <div className="flex items-center">
                 <svg
-                  class="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
+                  className="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -362,13 +377,13 @@ export default function Page({ params }) {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
                   livestream
                 </span>
               </div>
@@ -434,7 +449,7 @@ export default function Page({ params }) {
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="announcement">
                 Announcement{" "}
-                <span class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-red-800 bg-red-200 rounded-full">
+                <span className="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-red-800 bg-red-200 rounded-full">
                   1
                 </span>
               </TabsTrigger>
