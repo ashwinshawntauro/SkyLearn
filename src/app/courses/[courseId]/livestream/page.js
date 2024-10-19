@@ -26,14 +26,15 @@ export default function Page({ params }) {
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({
-        audio:false,
+        audio: false,
         video: true,
       })
       .then((stream) => {
         if (myVideoRef.current) {
-          myVideoRef.current.srcObject=stream
+          myVideoRef.current.srcObject = stream;
         }
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.error("Error accessing media devices.", err); // Handle any errors
       });
   }, []);
@@ -125,7 +126,7 @@ export default function Page({ params }) {
         </button>
         <div className="h-screen nav-live-grid grid">
           {/* Sidebar with vertical Tabs */}
-          <aside className="bg-gray-100 p-4">
+          <aside className="bg-gray-100 p-4 flex justify-between flex-col">
             {/* Vertical Tab List */}
             <div className="flex flex-col space-y-2">
               <button
@@ -158,6 +159,25 @@ export default function Page({ params }) {
               >
                 3
               </button>
+            </div>
+            <div className="flex justify-center">
+              <svg
+                class="w-6 h-6 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="square"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
             </div>
           </aside>
 
@@ -200,96 +220,96 @@ export default function Page({ params }) {
 
             {activeTab === "module2" && (
               <div>
-              <h3 className="text-lg text-center font-semibold mb-4">
-                Module 2
-              </h3>
-              <hr></hr>
-              <ul className="space-y-2 font-medium">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
+                <h3 className="text-lg text-center font-semibold mb-4">
+                  Module 2
+                </h3>
+                <hr></hr>
+                <ul className="space-y-2 font-medium">
+                  <li>
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      <svg
+                        className="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
 
-                    <span className="ms-3">Notes 1</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
+                      <span className="ms-3">Notes 1</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      <svg
+                        className="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
 
-                    <span className="ms-3">Notes 2</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
+                      <span className="ms-3">Notes 2</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             )}
 
             {activeTab === "module3" && (
               <div>
-              <h3 className="text-lg text-center font-semibold mb-4">
-                Module 3
-              </h3>
-              <hr></hr>
-              <ul className="space-y-2 font-medium">
-                <li>
-                  <a
-                    href="#"
-                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                  >
-                    <svg
-                      className="w-6 h-6 text-gray-800 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
+                <h3 className="text-lg text-center font-semibold mb-4">
+                  Module 3
+                </h3>
+                <hr></hr>
+                <ul className="space-y-2 font-medium">
+                  <li>
+                    <a
+                      href="#"
+                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                      <svg
+                        className="w-6 h-6 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M6 2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 1 0 0-2h-2v-2h2a1 1 0 0 0 1-1V4a2 2 0 0 0-2-2h-8v16h5v2H7a1 1 0 1 1 0-2h1V2H6Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
 
-                    <span className="ms-3">Notes 1</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
+                      <span className="ms-3">Notes 1</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
             )}
           </div>
         </div>
@@ -439,8 +459,9 @@ export default function Page({ params }) {
         {/* Bottom Cards */}
         <div>
           <div className="w-full p-5 bg-gray-100 h-[80px]">
-            <h1 className="text-xl text-left">Fundamentals of Computer Science</h1>
-            
+            <h1 className="text-xl text-left">
+              Fundamentals of Computer Science
+            </h1>
           </div>
           <Tabs
             defaultValue="agenda"
@@ -463,8 +484,12 @@ export default function Page({ params }) {
             <TabsContent value="agenda" className="p-2">
               Live stream agenda will be displayed here.
             </TabsContent>
-            <TabsContent value="notes" className="p-2">Take down notes</TabsContent>
-            <TabsContent value="doubt" className="p-2">Ask a question from tutor</TabsContent>
+            <TabsContent value="notes" className="p-2">
+              Take down notes
+            </TabsContent>
+            <TabsContent value="doubt" className="p-2">
+              Ask a question from tutor
+            </TabsContent>
           </Tabs>
         </div>
       </div>
