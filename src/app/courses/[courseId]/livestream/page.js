@@ -11,17 +11,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import Janus from 'janus-gateway';
-// import adapter from "webrtc-adapter"
 
 export default function Page({ params }) {
   const myVideoRef = useRef();
   const [activeTab, setActiveTab] = useState("module1");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  // const [janus, setJanus] = useState(null);
-  // const [videoroom, setVideoroom] = useState(null);
-  // const [streaming, setStreaming] = useState(false);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -38,56 +33,6 @@ export default function Page({ params }) {
         console.error("Error accessing media devices.", err); // Handle any errors
       });
   }, []);
-
-  // useEffect(() => {
-  //   Janus.init({ debug: "all", callback: () => {
-  //     const janusInstance = new Janus({
-  //       server: "http://<your_instance_ip>:8088/janus",
-  //       success: () => {
-  //         // Attach to the video room plugin
-  //         janusInstance.attach({
-  //           plugin: "janus.plugin.videoroom",
-  //           success: (pluginHandle) => {
-  //             setVideoroom(pluginHandle);
-  //             joinRoom();
-  //           },
-  //           onmessage: (msg, jsep) => {
-  //             console.log("Message from Janus:", msg);
-  //             if (jsep) {
-  //               videoroom.handleRemoteJsep({ jsep: jsep });
-  //             }
-  //           },
-  //           onicecandidate: (candidate) => {
-  //             console.log("ICE Candidate:", candidate);
-  //           },
-  //           onlocalstream: (stream) => {
-  //             if (myVideoRef.current) {
-  //               myVideoRef.current.srcObject = stream;
-  //             }
-  //           },
-  //           onremotestream: (stream) => {
-  //           },
-  //         });
-  //         setJanus(janusInstance);
-  //       },
-  //       error: (error) => {
-  //         console.error("Janus error:", error);
-  //       },
-  //     });
-  //   }});
-
-  //   return () => {
-  //     if (janus) {
-  //       janus.destroy();
-  //     }
-  //   };
-  // }, []);
-
-  // const joinRoom = () => {
-  //   const room = 1234; // Your room number
-  //   const register = { "request": "join", "room": room, "ptype": "publisher", "display": "Your Name" };
-  //   videoroom.send({ message: register });
-  // };
 
   const handleSendMessage = () => {
     if (input.trim() !== "") {

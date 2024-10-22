@@ -32,7 +32,7 @@ export default function Page() {
   
   useEffect(() => {
     if (isLogged) {
-      router.push("/profile");
+      // router.push("/profile");
     }
   }, [isLogged, router]);
 
