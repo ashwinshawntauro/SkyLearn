@@ -13,6 +13,7 @@ import {
   setDoc,
   GoogleAuthProvider,
   signInWithPopup,
+  getIdToken,
 } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/providers/AuthProvider";
@@ -24,10 +25,11 @@ export default function Page() {
   const [error, setError] = useState(null);
   const [role, setRole] = useState("student");
   const router = useRouter();
-
+  let token = null
   const db = getFirestore();
   const provider = new GoogleAuthProvider();
   const { isLogged } = AuthContext();
+  
   useEffect(() => {
     if (isLogged) {
       router.push("/profile");
@@ -36,11 +38,24 @@ export default function Page() {
 
   const storeData = async (user) => {
     setDoc(doc(db, "users", user.uid), {
-      name: user.displayName,
+      name: user.displayName || name,
       email: user.email,
       role: role,
     });
   };
+
+  const setCookie = async (token) =>{
+    const res = await fetch('/api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token, 
+      },
+    });
+    if (!res.ok) {
+      throw new Error('Failed to set cookie');
+    }
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -53,6 +68,8 @@ export default function Page() {
         pass
       );
       const user = userCredential.user;
+      let token = await getIdToken(user);
+      setCookie(token);
       storeData(user);
       console.log("User registered:", email);
     } catch (error) {
@@ -67,6 +84,7 @@ export default function Page() {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
+        setCookie(token);
         storeData(user);
       })
       .catch((error) => {
