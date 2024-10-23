@@ -25,14 +25,14 @@ export default function Page() {
   const [error, setError] = useState(null);
   const [role, setRole] = useState("student");
   const router = useRouter();
-  let token = null
+  let token = null;
   const db = getFirestore();
   const provider = new GoogleAuthProvider();
   const { isLogged } = AuthContext();
-  
+
   useEffect(() => {
     if (isLogged) {
-      // router.push("/profile");
+      router.push("/profile");
     }
   }, [isLogged, router]);
 
@@ -44,18 +44,18 @@ export default function Page() {
     });
   };
 
-  const setCookie = async (token) =>{
-    const res = await fetch('/api', {
-      method: 'POST',
+  const setCookie = async (token) => {
+    const res = await fetch("/api", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token, 
+        "Content-Type": "application/json",
+        Authorization: token,
       },
     });
     if (!res.ok) {
-      throw new Error('Failed to set cookie');
+      throw new Error("Failed to set cookie");
     }
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -104,9 +104,9 @@ export default function Page() {
           </h2>
         </div>
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <Button onClick={handleGoogle}>Sign up with Google</Button>
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && <p className="text-red-500">{error}</p>}
-            <Button onClick={handleGoogle}>Sign up with Google</Button> 
             <div>
               <Label
                 htmlFor="name"

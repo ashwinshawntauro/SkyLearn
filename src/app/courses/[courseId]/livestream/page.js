@@ -69,7 +69,7 @@ export default function Page({ params }) {
             ></path>
           </svg>
         </button>
-        <div className="h-screen nav-live-grid grid">
+        <div className="h-full nav-live-grid grid">
           {/* Sidebar with vertical Tabs */}
           <aside className="bg-gray-100 p-4 flex justify-between flex-col">
             {/* Vertical Tab List */}
@@ -107,7 +107,7 @@ export default function Page({ params }) {
             </div>
             <div className="flex justify-center">
               <svg
-                class="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-gray-800 dark:text-white"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -358,8 +358,9 @@ export default function Page({ params }) {
         {/* Middle Card */}
         <div className="grid stream-grid p-2">
           <video
-            className="w-full h-full p-3 rounded-md" // Ensure rounded corners
+            className='w-full h-full p-3 rounded-md'
             playsInline
+            controls
             ref={myVideoRef}
             autoPlay
             muted
