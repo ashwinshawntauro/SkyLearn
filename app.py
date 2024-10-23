@@ -77,7 +77,10 @@ def generate_certificate_route():
 
     # Ensure that all required parameters are provided
     if not all([uid, candidate_name, course_name, org_name]):
-        return "Missing parameters! Please provide uid, candidate_name, course_name, and org_name.", 400
+        return (
+            "Missing parameters! Please provide uid, candidate_name, course_name, and org_name.",
+            400,
+        )
 
     # Define file paths for certificate generation
     pdf_file_path = "certificate.pdf"
@@ -92,12 +95,12 @@ def generate_certificate_route():
         org_name,
         institute_logo_path,
     )
-    
+
     ipfs_hash = upload_to_pinata(pdf_file_path, api_key, api_secret)
 
     # Remove the generated PDF file after uploading to IPFS
     os.remove(pdf_file_path)
-    
+
     # Calculate the certificate ID
     data_to_hash = f"{uid}{candidate_name}{course_name}{org_name}".encode("utf-8")
     certificate_id = hashlib.sha256(data_to_hash).hexdigest()
@@ -108,7 +111,6 @@ def generate_certificate_route():
     ).transact({"from": w3.eth.accounts[0]})
 
     return f"Certificate successfully generated with Certificate ID: {certificate_id}"
-
 
 
 @app.route("/view-certificate", methods=["GET", "POST"])
@@ -132,8 +134,6 @@ def view_certificate_route():
             # Handle the case where the certificate ID is invalid
             return "Invalid Certificate ID!"
 
-    # For GET requests, render the HTML form
-    return render_template("view_certificate_form.html")
 
 
 @app.route("/upload-certificate", methods=["GET", "POST"])
