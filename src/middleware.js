@@ -9,7 +9,7 @@ export async function middleware(request) {
     return NextResponse.redirect(new URL('/', request.url));
   }
   else if (!session && (path === '/courses' || path === '/mycourses' || path === '/profile' ||  path.startsWith('/courses'))) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/signin', request.url));
   }
   return NextResponse.next();
 }
