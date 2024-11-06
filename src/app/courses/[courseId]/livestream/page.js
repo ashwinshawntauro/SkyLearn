@@ -44,6 +44,7 @@ export default function Page({ params }) {
   };
 
   return (
+    
     <div className="grid main-live-grid">
       {/* Left Panel */}
       <div>
