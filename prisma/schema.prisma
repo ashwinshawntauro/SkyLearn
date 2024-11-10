@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ASSIGNMENT {
+  assignment_id     Int                 @id
+  title             String              @db.VarChar(100)
+  description       String?             @db.Text
+  due_date          DateTime?           @db.Date
+  COURSE_ASSIGNMENT COURSE_ASSIGNMENT[]
+  SUBMISSION        SUBMISSION[]
+}
+
+model CERTIFICATE {
+  certificate_id     Int                  @id
+  issued_date        DateTime             @db.Date
+  blockchain_hash    String?              @unique(map: "blockchain_hash") @db.VarChar(256)
+  COURSE_CERTIFICATE COURSE_CERTIFICATE[]
+  EARNED_CERTIFICATE EARNED_CERTIFICATE[]
+}
+
+model COURSE {
+  course_id          Int                 @id
+  course_name        String              @db.VarChar(100)
+  course_description String?             @db.Text
+  COURSE_ASSIGNMENT  COURSE_ASSIGNMENT[]
+  COURSE_CERTIFICATE COURSE_CERTIFICATE?
+  ENROLLMENT         ENROLLMENT[]
+  LEADERBOARD        LEADERBOARD[]
+  TEACHING           TEACHING[]
+}
+
+model COURSE_ASSIGNMENT {
+  course_id     Int
+  assignment_id Int
+  COURSE        COURSE     @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_ASSIGNMENT_ibfk_1")
+  ASSIGNMENT    ASSIGNMENT @relation(fields: [assignment_id], references: [assignment_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_ASSIGNMENT_ibfk_2")
+
+  @@id([course_id, assignment_id])
+  @@index([assignment_id], map: "assignment_id")
+}
+
+model COURSE_CERTIFICATE {
+  course_id      Int          @id
+  certificate_id Int?
+  COURSE         COURSE       @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_CERTIFICATE_ibfk_1")
+  CERTIFICATE    CERTIFICATE? @relation(fields: [certificate_id], references: [certificate_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_CERTIFICATE_ibfk_2")
+
+  @@index([certificate_id], map: "certificate_id")
+}
+
+model EARNED_CERTIFICATE {
+  student_id     Int
+  certificate_id Int
+  STUDENT        STUDENT     @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "EARNED_CERTIFICATE_ibfk_1")
+  CERTIFICATE    CERTIFICATE @relation(fields: [certificate_id], references: [certificate_id], onDelete: Cascade, onUpdate: NoAction, map: "EARNED_CERTIFICATE_ibfk_2")
+
+  @@id([student_id, certificate_id])
+  @@index([certificate_id], map: "certificate_id")
+}
+
+model ENROLLMENT {
+  student_id Int
+  course_id  Int
+  STUDENT    STUDENT @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "ENROLLMENT_ibfk_1")
+  COURSE     COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "ENROLLMENT_ibfk_2")
+
+  @@id([student_id, course_id])
+  @@index([course_id], map: "course_id")
+}
+
+model LEADERBOARD {
+  course_id  Int
+  student_id Int
+  rank       Int?
+  score      Int?
+  COURSE     COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "LEADERBOARD_ibfk_1")
+  STUDENT    STUDENT @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "LEADERBOARD_ibfk_2")
+
+  @@id([course_id, student_id])
+  @@index([student_id], map: "student_id")
+}
+
+model STUDENT {
+  student_id         Int                  @id @default(autoincrement())
+  student_name       String               @db.VarChar(100)
+  student_email      String               @unique @db.VarChar(100)
+  user_id            String               @db.VarChar(255)
+  EARNED_CERTIFICATE EARNED_CERTIFICATE[]
+  ENROLLMENT         ENROLLMENT[]
+  LEADERBOARD        LEADERBOARD[]
+  SUBMISSION         SUBMISSION[]
+}
+
+model SUBMISSION {
+  student_id      Int
+  assignment_id   Int
+  submission_date DateTime?  @db.Date
+  STUDENT         STUDENT    @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "SUBMISSION_ibfk_1")
+  ASSIGNMENT      ASSIGNMENT @relation(fields: [assignment_id], references: [assignment_id], onDelete: Cascade, onUpdate: NoAction, map: "SUBMISSION_ibfk_2")
+
+  @@id([student_id, assignment_id])
+  @@index([assignment_id], map: "assignment_id")
+}
+
+model TEACHING {
+  tutor_id  Int
+  course_id Int
+  TUTOR     TUTOR  @relation(fields: [tutor_id], references: [tutor_id], onDelete: Cascade, onUpdate: NoAction, map: "TEACHING_ibfk_1")
+  COURSE    COURSE @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "TEACHING_ibfk_2")
+
+  @@id([tutor_id, course_id])
+  @@index([course_id], map: "course_id")
+}
+
+model TUTOR {
+  tutor_id    Int        @id
+  tutor_name  String     @db.VarChar(100)
+  tutor_email String     @unique(map: "tutor_email") @db.VarChar(100)
+  department  String?    @db.VarChar(100)
+  user_id     String     @db.VarChar(255)
+  TEACHING    TEACHING[]
+}

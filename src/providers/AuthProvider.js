@@ -23,7 +23,7 @@ const AuthProvider = ({ children }) => {
     if (docSnap.exists()) {
       setRole(docSnap.data().role); 
     } else {
-      console.log("No such document!");
+      console.log("No such document!");  //@audit
     }
   }
   useEffect(() => {
