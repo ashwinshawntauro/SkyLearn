@@ -1,77 +1,76 @@
-export default function Page({ params }) {
+"use client";
+import React, { useEffect, useState } from "react";
+import { useRouter,useSearchParams } from "next/navigation"; // Corrected import for useRouter
+import Header from "@/components/courses/Header";
+import CourseDetails from "@/components/courses/CourseDetails";
+import InstructorSection from "@/components/courses/InstructorSection";
+import NavigationTabs from "@/components/courses/NavigationTabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; 
+
+function CoursePage() {
+  const router = useRouter();
+  const course_id= useSearchParams(); 
+  const [course, setCourse] = useState(null); 
+
+  useEffect(() => {
+    console.log(course_id)
+
+    if (course_id) {
+      const fetchCourseData = async () => {
+        try {
+          const res = await fetch(`/api/getCourses/${course_id}`, {
+            method: 'POST',
+          });
+          const data = await res.json();
+          setCourse(data); // Set course data
+        } catch (error) {
+          console.error('Error fetching course data:', error);
+        }
+      };
+
+      fetchCourseData();
+    }
+  }, [course_id]); 
+
+  if (!course) {
+    return <div>Loading...</div>; 
+  }
+
   return (
-    <div className="inline-flex m-2">
-      <nav
-        className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-        aria-label="Breadcrumb"
-      >
-        <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-          <li className="inline-flex items-center">
-            <a
-              href="#"
-              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
-            >
-              <svg
-                className="w-3 h-3 me-2.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
-              </svg>
-              Home
-            </a>
-          </li>
-          <li>
-            <div className="flex items-center">
-              <svg
-                className="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 "
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 9 4-4-4-4"
-                />
-              </svg>
-              <a
-                href="#"
-                className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
-              >
-                Courses
-              </a>
-            </div>
-          </li>
-          <li aria-current="page">
-            <div className="flex items-center">
-              <svg
-                className="rtl:rotate-180  w-3 h-3 mx-1 text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 6 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 9 4-4-4-4"
-                />
-              </svg>
-              <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
-              {params.courseId}
-              </span>
-            </div>
-          </li>
-        </ol>
+    <div className="bg-gray-50 min-h-screen">
+      <Header course={course.course_name} />
+      <nav className="bg-gray-200 p-4">
       </nav>
+
+      <div className="container-fluid mx-auto grid course-grid gap-6 p-4 ">
+        <Tabs
+          defaultValue="Overview"
+          className="w-full p-2 bg-gray-100 h-auto"
+        >
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="Curriculum">Curriculum</TabsTrigger>
+            <TabsTrigger value="discussion">Discussion</TabsTrigger>
+            <TabsTrigger value="review">Review</TabsTrigger>
+            <TabsTrigger value="instructors">Instructors</TabsTrigger>
+          </TabsList>
+          <TabsContent value="announcement" className="p-2">
+            No Announcements from tutor yet!
+          </TabsContent>
+          <TabsContent value="discussion" className="p-2">
+            Live stream agenda will be displayed here.
+          </TabsContent>
+          <TabsContent value="review" className="p-2">
+            Take down notes
+          </TabsContent>
+          <TabsContent value="instructors" className="p-2">
+            <InstructorSection className="md:w-2/3 w-full" />
+          </TabsContent>
+        </Tabs>
+
+        <CourseDetails course={course} className="md:w-1/3 w-full" />
+      </div>
     </div>
   );
 }
+
+export default CoursePage;

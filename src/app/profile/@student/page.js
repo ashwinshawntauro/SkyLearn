@@ -2,16 +2,38 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/providers/AuthProvider";
+import { auth, signOut } from "@/lib/firebase/auth";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // For redirecting to the login page after sign out
 
 export default function Dashboard() {
-   const {userName, email, role} = AuthContext()
+  const { userName, email, role } = AuthContext();
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Track the logged-in status
+  const router = useRouter(); // For navigation
+
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      console.log("User logged out");
+      setIsLoggedIn(false); 
+    //   deleteCookie('session'); @remind Deleting cookie
+      router.push("/signup");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  if (!isLoggedIn) {
+    return <div>Log In</div>;
+  }
+
   return (
     <div className="container mx-auto p-4">
       <header className="flex justify-between items-center py-4 border-b">
         <h1 className="text-lg font-bold">My Profile</h1>
         <button className="lg:hidden p-2 border rounded">☰</button>
         <nav className="hidden lg:flex space-x-4">
-          <Button className="bg-red-600 hover:bg-red-500">Logout</Button>
+          <Button onClick={logout} className="bg-red-600 hover:bg-red-500">Logout</Button>
         </nav>
       </header>
 

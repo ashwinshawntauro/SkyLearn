@@ -88,4 +88,7 @@ body {
   .nav-live-grid{
     grid-template-columns: 2fr 10fr;
   }
+  .course-grid{
+    grid-template-columns: 6fr 3fr;
+  }
 }
