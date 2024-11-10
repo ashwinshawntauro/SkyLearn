@@ -1,5 +1,4 @@
-import AuthProvider from "@/providers/AuthProvider";
-import Image from "next/image";
+import AuthProvider from "../providers/AuthProvider"
 
 export default function Home() {
   return (

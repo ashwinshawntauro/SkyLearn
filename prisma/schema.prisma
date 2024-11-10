@@ -111,7 +111,6 @@ model SUBMISSION {
 model TEACHING {
   tutor_id  Int
   course_id Int
-  TUTOR     TUTOR  @relation(fields: [tutor_id], references: [tutor_id], onDelete: Cascade, onUpdate: NoAction, map: "TEACHING_ibfk_1")
   COURSE    COURSE @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "TEACHING_ibfk_2")
 
   @@id([tutor_id, course_id])
@@ -119,10 +118,9 @@ model TEACHING {
 }
 
 model TUTOR {
-  tutor_id    Int        @id
-  tutor_name  String     @db.VarChar(100)
-  tutor_email String     @unique(map: "tutor_email") @db.VarChar(100)
-  department  String?    @db.VarChar(100)
-  user_id     String     @db.VarChar(255)
-  TEACHING    TEACHING[]
+  tutor_id    Int     @id @default(autoincrement())
+  tutor_name  String  @db.VarChar(100)
+  tutor_email String  @unique(map: "tutor_email") @db.VarChar(100)
+  department  String? @db.VarChar(100)
+  user_id     String  @db.VarChar(255)
 }

@@ -1,6 +1,6 @@
 
 export default function page() {
-    const handleSubmit = async (event) =>{
+    const handleSubmit = async (event) =>{ //@remind Firebase forgot password connection
         
     }
   return (

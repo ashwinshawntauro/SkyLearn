@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const POST = async (req) => {
-  const { name, email, role,id} = await req.json();
+  const { name, email, role,id,department} = await req.json();
 
   try {
     let newUser;
@@ -22,6 +22,7 @@ export const POST = async (req) => {
           user_id:id,
           tutor_name:name,
           tutor_email:email,
+          department:department
         },
       });
       return NextResponse.json(newUser);
