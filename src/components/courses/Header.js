@@ -4,8 +4,8 @@ function Header({course}) {
   return (
     <header className="bg-indigo-600 text-white py-8 px-8">
       <div className="container mx-auto">
-        <h1 className="text-4xl font-bold mb-2">{course}</h1>
-        <p className="mb-2">VTU e-Learning</p>
+        <h1 className="text-4xl font-bold mb-2">{course.course_name}</h1>
+        <p className="mb-2">{course.course_description}</p>
         <div className="flex justify-center space-x-4">
           <p className="font-light text-sm">54 Students Enrolled</p>
           <div className="flex items-center">
