@@ -91,6 +91,7 @@ export default function Page() {
       const userId = user.uid
       storeData(name, email, role, userId,department);
       setCookie(token);
+      router.push("/profile");
     } catch (error) {
       setError(error.message);
       console.error("Registration error:", error);
@@ -106,6 +107,7 @@ export default function Page() {
         const user = result.user;
         setCookie(token);
         storeData(user.displayName, user.email, role, user.uid);
+        router.push("/profile");
       })
       .catch((error) => {
         const errorCode = error.code;
