@@ -1,6 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import AuthProvider from "@/providers/AuthProvider";
+import AuthProvider from "../providers/AuthProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -13,6 +13,8 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+
+
 export const metadata = {
   title: "SkyLearn",
   description: "Cloud enhanced E-Learning Platform",
@@ -21,7 +23,7 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children}) {
   return (
     <html lang="en">
       <body

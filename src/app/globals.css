@@ -5,7 +5,7 @@
 :root {
   --primary-color: #1e90ff;
   --secondary-color: #87ceeb;
-  --accent-color: #ffd700;
+  --accent-color: #f0c419;
   --background-color: #000000;
   --font-color: #333333;
 }
@@ -79,10 +79,16 @@ body {
 }
 
 @layer base {
-  * {
-    @apply border-border;
+  .stream-grid{
+    grid-template-columns: 4fr 1fr;
   }
-  body {
-    @apply bg-background text-foreground;
+  .main-live-grid{
+    grid-template-columns: 3fr 12fr;
+  }
+  .nav-live-grid{
+    grid-template-columns: 2fr 10fr;
+  }
+  .course-grid{
+    grid-template-columns: 6fr 3fr;
   }
 }
