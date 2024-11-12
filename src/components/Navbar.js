@@ -34,7 +34,7 @@ function Navbar() {
                 />
                 {isLogged && (
                     <div className="flex items-center space-x-4">
-                        <span className="inline-flex font-semibold items-center bg-white text-black p-1.5 px-2 rounded-lg shadow border border-gray-100 whitespace-nowrap">
+                        <span className="inline-flex font-semibold text-sm items-center bg-white text-black p-1.5 px-2 rounded-lg shadow border border-gray-100 whitespace-nowrap">
                             Credits: 0
                         </span>
                         <button className="text-black p-2 rounded-lg">
