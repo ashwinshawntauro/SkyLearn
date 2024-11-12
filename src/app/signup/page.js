@@ -35,8 +35,6 @@ export default function Page() {
   const [role, setRole] = useState("student");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  let token = null;
-  const db = getFirestore();
   const provider = new GoogleAuthProvider();
   const { isLogged } = AuthContext();
 
@@ -94,7 +92,7 @@ export default function Page() {
       }, 6000);
       const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
       const user = userCredential.user;
-      let token = await getIdToken(user);
+      // let token = await getIdToken(user);
       const userId = user.uid
       // router.replace("/");
       storeData(name, email, role, userId, department);
@@ -115,7 +113,7 @@ export default function Page() {
           setIsLoading(false);
         }, 6000);
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+        // const token = credential.accessToken;
         const user = result.user;
         // setCookie(token);
         storeData(user.displayName, user.email, role, user.uid);
