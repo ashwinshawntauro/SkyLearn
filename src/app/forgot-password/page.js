@@ -6,7 +6,7 @@ export default function page() {
   return (
     <div className="w-1/3 mx-auto my-20 bg-white p-8 rounded-sm shadow shadow-slate-300 overflow">
         <h1 className="text-xl font-medium">Reset password</h1>
-        <p className="text-slate-500">Enter your email Id to reset the password</p>
+        <span className="text-slate-500">Enter your email Id to reset the password</span>
 
         <form action="" className="my-10">
             <div className="flex flex-col space-y-5">

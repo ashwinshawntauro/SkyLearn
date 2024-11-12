@@ -16,7 +16,7 @@ function InstructorSection() {
               <p className="text-gray-500 text-sm">0.0 Rating | 0 Students | 1 Courses</p>
             </div>
           </div>
-          <p className="text-sm mt-2">About instructor VTU e-Learning.</p>
+          <span className="text-sm mt-2">About instructor VTU e-Learning.</span>
         </div>
 
         <div className="border-b pb-6">
@@ -27,9 +27,9 @@ function InstructorSection() {
               <p className="text-gray-500 text-sm">0.0 Rating | 0 Students | 59 Courses</p>
             </div>
           </div>
-          <p className="text-sm mt-2">
+          <span className="text-sm mt-2">
             Prof. Sunil S. Kale has been with the Department of Mechanical Engineering since 1983. He has developed and taught multiple courses and has research interests in various fields.
-          </p>
+          </span>
         </div>
       </div>
     </section>
