@@ -17,7 +17,7 @@ export default function Dashboard() {
       console.log("User logged out");
       setIsLoggedIn(false); 
     //   deleteCookie('session'); @remind Deleting cookie
-      router.push("/signup");
+      router.replace("/signup");
     } catch (error) {
       console.error("Error logging out:", error);
     }

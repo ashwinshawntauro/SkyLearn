@@ -91,4 +91,18 @@ body {
   .course-grid{
     grid-template-columns: 6fr 3fr;
   }
+  .loader {
+    border: 3px solid transparent;
+    border-top-color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 0.6s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 }
