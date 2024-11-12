@@ -204,7 +204,7 @@ export default function Page() {
                   </div>
                 </div>
                 <div>
-                  <button
+                  <Button
                     type="submit"
                     className="w-full flex items-center justify-center py-2 px-4 bg-primary text-white rounded disabled:opacity-50"
                     disabled={isLoading}
@@ -215,7 +215,7 @@ export default function Page() {
                     ) : (
                       "Register as Student"
                     )}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </TabsContent>
@@ -293,7 +293,7 @@ export default function Page() {
                   </div>
                 </div>
                 <div>
-                  <button
+                  <Button
                     type="submit"
                     className="w-full flex items-center justify-center py-2 px-4 bg-primary text-white rounded disabled:opacity-50"
                     disabled={isLoading}
@@ -304,7 +304,7 @@ export default function Page() {
                     ) : (
                       "Register as Tutor"
                     )}
-                  </button>
+                  </Button>
                 </div>
               </form>
             </TabsContent>

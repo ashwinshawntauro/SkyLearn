@@ -19,6 +19,7 @@ export default function SignInPage() {
   const [pass, setPass] = useState("");
   const [role, setRole] = useState("student");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const provider = new GoogleAuthProvider();
   const { isLogged } = AuthContext();
@@ -29,11 +30,15 @@ export default function SignInPage() {
     }
   }, [isLogged, router]);
 
-  const handleSignIn = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
 
     try {
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 6000);
       const userCredential = await signInWithEmailAndPassword(auth, email, pass);
       router.replace("/");
     } catch (error) {
@@ -43,6 +48,10 @@ export default function SignInPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 6000);
     signInWithPopup(auth, provider)
       .then(() => {
         router.push("/");
@@ -83,7 +92,7 @@ export default function SignInPage() {
                   <span>Continue with Google</span>
                 </button>
               </div>
-              <form className="space-y-4" onSubmit={handleSignIn}>
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 {error && <p className="text-red-500">{error}</p>}
                 <h6 className="text-center font-semibold my-2">OR</h6>
                 <div>
@@ -112,12 +121,23 @@ export default function SignInPage() {
                     className="w-full mt-2"
                   />
                 </div>
-                <Button type="submit" className="w-full">SIGN IN</Button>
+                <Button
+                  type="submit"
+                  className="w-full flex items-center justify-center py-2 px-4 bg-primary text-white rounded disabled:opacity-50"
+                  disabled={isLoading}
+                  onClick={handleSubmit}
+                >
+                  {isLoading ? (
+                    <span className="loader" />
+                  ) : (
+                    "Register as Student"
+                  )}
+                </Button>
               </form>
             </TabsContent>
 
             <TabsContent value="teacher">
-              <form className="space-y-4" onSubmit={handleSignIn}>
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 {error && <p className="text-red-500">{error}</p>}
                 <div>
                   <Label htmlFor="email" className="text-sm font-medium text-gray-900">
@@ -145,7 +165,18 @@ export default function SignInPage() {
                     className="w-full mt-2"
                   />
                 </div>
-                <Button type="submit" className="w-full">SIGN IN</Button>
+                <Button
+                  type="submit"
+                  className="w-full flex items-center justify-center py-2 px-4 bg-primary text-white rounded disabled:opacity-50"
+                  disabled={isLoading}
+                  onClick={handleSubmit}
+                >
+                  {isLoading ? (
+                    <span className="loader" />
+                  ) : (
+                    "Register as Tutor"
+                  )}
+                </Button>
               </form>
             </TabsContent>
           </Tabs>

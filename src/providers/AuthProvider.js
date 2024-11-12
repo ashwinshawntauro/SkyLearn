@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, createContext, useEffect, useState } from "react";
-import { auth, onAuthStateChanged } from "@/lib/firebase/auth";
+import { auth, onAuthStateChanged,signOut} from "@/lib/firebase/auth";
 
 // Create the context
 const Context = createContext({
@@ -36,6 +36,18 @@ const AuthProvider = ({ children }) => {
       console.error("Error in getUser:", error.message);
     }
   };
+  const logout = async () => {
+    try {
+      await signOut(auth); // Sign out the user
+      setIsLogged(false); // Update isLogged state to false
+      setUserName(null);  // Clear user-specific data
+      setEmail(null);
+      setRole(null);
+      console.log("User logged out");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -51,7 +63,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <Context.Provider value={{ userName, email, isLogged, loading, role }}>
+    <Context.Provider value={{ userName, email, isLogged, loading, role,logout}}>
       {children}
     </Context.Provider>
   );
