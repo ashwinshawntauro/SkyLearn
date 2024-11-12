@@ -7,7 +7,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Authorization header is missing' }, { status: 400 });
   }
   const response = NextResponse.json({
-    status: 'Cookie registered'
+    status: 200
   });
   response.cookies.set('session', authorizationHeader, {
     httpOnly: true,  
