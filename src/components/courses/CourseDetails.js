@@ -22,9 +22,8 @@ function CourseDetails({ course }) {
       if (res.status === 200) {
         const data = await res.json();
         const enrolledCourses = data.getEnroll || [];
-        // Check if the courseId is in the list of enrolled courses
         const courseExists = enrolledCourses.some(course => course.course_id === courseId);
-        setIsPurchased(courseExists); // Set state if the course is purchased
+        setIsPurchased(courseExists); 
       } else {
         console.error('Failed to fetch enrollments:', res.status);
       }
@@ -35,7 +34,7 @@ function CourseDetails({ course }) {
 
   useEffect(() => {
     if (userId) {
-      getEnroll(userId); // Fetch enrollment data when userId is available
+      getEnroll(userId); 
     }
   }, [userId]);
 
@@ -60,9 +59,9 @@ function CourseDetails({ course }) {
       <div className="mt-6">
         <h2 className="text-4xl font-bold text-primary">&#8377;{course.course_price}</h2>
         <ul className="list-none my-4 space-y-2 text-sm">
-          <li>Course Duration: <span className="font-medium">8h 56m 9s</span></li>
+          <li>Course Duration: <span className="font-medium">{course.course_duration}</span></li>
           <li>Course Level: <span className="font-medium">{course.difficulty}</span></li>
-          <li>Students Enrolled: <span className="font-medium">54</span></li>
+          <li>Students Enrolled: <span className="font-medium">{course.course_enrolments}</span></li>
           <li>Language: <span className="font-medium">English</span></li>
         </ul>
 
