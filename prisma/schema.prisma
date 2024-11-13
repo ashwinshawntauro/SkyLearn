@@ -31,6 +31,8 @@ model COURSE {
   difficulty          COURSE_difficulty
   course_price        Decimal             @db.Decimal(10, 2)
   enrollment_deadline DateTime?           @db.Date
+  course_duration     String?             @db.Text
+  course_enrolments   Int?
   COURSE_ASSIGNMENT   COURSE_ASSIGNMENT[]
   COURSE_CERTIFICATE  COURSE_CERTIFICATE?
   ENROLLMENT          ENROLLMENT[]
@@ -94,6 +96,7 @@ model STUDENT {
   student_name       String               @db.VarChar(100)
   student_email      String               @unique @db.VarChar(100)
   user_id            String               @db.VarChar(255)
+  address            String?              @db.VarChar(255)
   EARNED_CERTIFICATE EARNED_CERTIFICATE[]
   ENROLLMENT         ENROLLMENT[]
   LEADERBOARD        LEADERBOARD[]
@@ -126,6 +129,7 @@ model TUTOR {
   tutor_email String  @unique(map: "tutor_email") @db.VarChar(100)
   department  String? @db.VarChar(100)
   user_id     String  @db.VarChar(255)
+  address     String? @db.VarChar(255)
 }
 
 enum COURSE_difficulty {

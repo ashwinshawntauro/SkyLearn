@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import Header from "@/components/courses/Header";
 import CourseDetails from "@/components/courses/CourseDetails";
 import InstructorSection from "@/components/courses/InstructorSection";
-import NavigationTabs from "@/components/courses/NavigationTabs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
 

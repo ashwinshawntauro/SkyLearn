@@ -6,7 +6,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'ui-avatars.com',
-        pathname: '/api/**', // matches the path pattern for avatars
+        pathname: '/api/**', 
       },
     ],
   },
