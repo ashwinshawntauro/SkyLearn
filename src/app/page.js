@@ -87,7 +87,7 @@ export default function Home() {
                   {courses.map((course, index) => (
                     <Card key={course.id || `${course.course_id}-${index}`} className="bg-white shadow-md rounded-lg p-1">
                       <CardHeader>
-                        <CardTitle className="text-primary text-md">{course.course_name}</CardTitle>
+                        <CardTitle className="text-primary text-md font-bold">{course.course_name}</CardTitle>
                         <CardDescription>
                           <span className="text-xl font-bold text-black">${course.course_price}</span>
                         </CardDescription>
@@ -95,12 +95,12 @@ export default function Home() {
                       <CardContent>
                         <p className="text-sm text-gray-500">By: {course.instructor}</p>
                         <p className="text-sm text-gray-500">Level: {course.difficulty}</p>
-                        <p className="text-sm text-red-600">
-                          Enrol By: {new Date(course.enrollment_deadline).toLocaleDateString("en-IN")}
+                        <p className="text-sm text-red-600 py-2 font-semibold text-center">
+                          Deadline: {new Date(course.enrollment_deadline).toLocaleDateString("en-IN")}
                         </p>
                       </CardContent>
                       <CardFooter>
-                        <Link href={`/courses/${encodeURIComponent(course.course_id)}`} passHref>
+                        <Link href={`/courses/${encodeURIComponent(course.course_id)}`} passHref  className="w-full">
                           <Button className="w-full">View Course</Button>
                         </Link>
                       </CardFooter>

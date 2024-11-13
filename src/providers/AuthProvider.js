@@ -9,6 +9,7 @@ const Context = createContext({
   isLogged: false,
   loading: true,
   role: null,
+  userId:null,
   email: null,
 });
 
@@ -18,6 +19,7 @@ const AuthProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState(null);
+  const [userId,setId] = useState(null)
 
   const getUser = async (userEmail) => {
     try {
@@ -26,6 +28,7 @@ const AuthProvider = ({ children }) => {
       });
       if (resp.ok) {
         const data = await resp.json();
+        setId(data.id)
         setRole(data.role);
         setEmail(data.email);
         setUserName(data.name);
@@ -38,11 +41,12 @@ const AuthProvider = ({ children }) => {
   };
   const logout = async () => {
     try {
-      await signOut(auth); // Sign out the user
-      setIsLogged(false); // Update isLogged state to false
-      setUserName(null);  // Clear user-specific data
+      await signOut(auth); 
+      setIsLogged(false);
+      setUserName(null);  
       setEmail(null);
       setRole(null);
+      setId(null)
       console.log("User logged out");
     } catch (error) {
       console.error("Error logging out:", error);
@@ -63,7 +67,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <Context.Provider value={{ userName, email, isLogged, loading, role,logout}}>
+    <Context.Provider value={{ userName, email, isLogged, loading, role,logout,userId}}>
       {children}
     </Context.Provider>
   );
