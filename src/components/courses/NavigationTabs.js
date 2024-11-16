@@ -16,7 +16,7 @@ import {
 
 function NavigationTabs({ course }) {
   const router = useRouter();
-  const { userId } = AuthContext();
+  const { userId,userName } = AuthContext();
   const courseId = course.course_id;
 
   const [isPurchased, setIsPurchased] = useState(false);
@@ -26,13 +26,11 @@ function NavigationTabs({ course }) {
     try {
       const genAI = new GoogleGenerativeAI("AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0");
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `You are an expert tutor on ${course.course_name}. A student asked: "${userQuestion}".
+      const prompt = `My name is ${userName}.You are an expert tutor on ${course.course_name}.Your Course desciption is ${course.course_description}. A student asked: "${userQuestion}".
         Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
         Break down complex ideas into easily understandable parts and make sure the student can grasp the main ideas.`;
       const result = await model.generateContent(prompt);
-      console.log(result.response.text());
       setAiResponse(result?result.response.text():"No response received");
-      // console.log(aiResponse)
     } catch (error) {
       console.error("Error with Gemini API:", error);
     }

@@ -47,14 +47,11 @@ function CoursePage() {
       <div className="container-fluid mx-auto grid grid-cols-9 gap-3 p-4">
         <div className="col-span-6">
           <Header course={course} className="container mx-auto" />
-          {/* Left side (Tabs) taking 6fr */}
           <div>
             <NavigationTabs course={course}/>
           </div>
         </div>
 
-
-        {/* Right side (Course Details) taking 3fr and full height */}
         <div className="col-span-3 flex flex-col h-full">
           <CourseDetails course={course} className="md:w-full w-full flex-grow" />
         </div>
