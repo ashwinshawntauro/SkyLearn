@@ -24,6 +24,7 @@ function CoursePage() {
           const data = await res.json();
           setCourse(data);
         } catch (error) {
+
           console.error("Error fetching course data:", error);
           setCourse(null);
         } finally {
