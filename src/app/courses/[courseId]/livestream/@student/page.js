@@ -134,15 +134,15 @@ export default function Page({ params }) {
                 <h3 className="text-lg text-center font-semibold mb-4">
                   Module 1
                 </h3>
-                <hr></hr>
+                <hr className="mb-2"></hr>
                 <ul className="space-y-2 font-medium">
                   <li>
                     <a
                       href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 group"
                     >
                       <svg
-                        className="w-6 h-6 text-gray-800 dark:text-white"
+                        className="w-6 h-6 text-gray-800"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -304,7 +304,7 @@ export default function Page({ params }) {
                 </svg>
                 <a
                   href="#"
-                  className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
+                  className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
                 >
                   Courses
                 </a>
@@ -327,7 +327,7 @@ export default function Page({ params }) {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2">
                   {params.courseId}
                 </span>
               </div>
@@ -349,7 +349,7 @@ export default function Page({ params }) {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2">
                   livestream
                 </span>
               </div>
