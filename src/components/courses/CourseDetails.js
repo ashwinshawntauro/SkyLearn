@@ -4,45 +4,7 @@ import { Button } from "../ui/button";
 import { useEffect, useState } from 'react';
 
 function CourseDetails({ course }) {
-  const router = useRouter();
-  const courseId = course.course_id;
-  const courseAmt = course.course_price;
-  const courseName = course.course_name;
-  const courseDesc = course.course_description;
-  const { userId} = AuthContext();
-
-  const [isPurchased, setIsPurchased] = useState(false);
-
-  // Fetch enrolled courses for the student
-  const getEnroll = async (studentId) => {
-    try {
-      const res = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(studentId)}`, {
-        method: 'GET',
-      });
-      if (res.status === 200) {
-        const data = await res.json();
-        const enrolledCourses = data.getEnroll || [];
-        const courseExists = enrolledCourses.some(course => course.course_id === courseId);
-        setIsPurchased(courseExists); 
-      } else {
-        console.error('Failed to fetch enrollments:', res.status);
-      }
-    } catch (error) {
-      console.error('Error fetching enrollments:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (userId) {
-      getEnroll(userId); 
-    }
-  }, [userId]);
-
-  const handleEnroll = () => {
-    const url = `/cart?courseId=${courseId}&courseName=${courseName}&courseDesc=${courseDesc}&userId=${userId}&courseAmt=${courseAmt}`;
-    router.push(url);
-  };
-
+  console.log(course)
   return (
     <aside className="bg-white p-6 rounded-lg shadow-md">
       <div className="rounded overflow-hidden">
@@ -98,7 +60,7 @@ function CourseDetails({ course }) {
       <div className="mt-6">
         <h3 className="text-md font-semibold">This Course Includes:</h3>
         <ul className="list-disc ml-5 space-y-2 mt-2 text-sm">
-          <li>8h 56m 9s Video Lectures</li>
+          <li>{course.course_duration} Video Lectures</li>
           <li>Quizzes</li>
           <li>Assignments</li>
           <li>Downloadable Resources</li>
