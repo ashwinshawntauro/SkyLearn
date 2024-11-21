@@ -5,4 +5,4 @@ import app from "./config";
 
 const auth = getAuth(app); 
 const db = getFirestore(app)
-export {auth,createUserWithEmailAndPassword,onAuthStateChanged,getFirestore,doc,db,setDoc,getDoc,GoogleAuthProvider,signOut,signInWithPopup,signInWithEmailAndPassword,getIdToken};
+export {auth,createUserWithEmailAndPassword,onAuthStateChanged,getFirestore,doc,db,setDoc,getDoc,GoogleAuthProvider,signOut,signInWithPopup,signInWithEmailAndPassword,getIdToken,sendPasswordResetEmail};
