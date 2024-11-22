@@ -150,15 +150,14 @@ model QUIZ {
 }
 
 model QUIZ_RESULTS {
-  result_id    Int       @id @default(autoincrement())
-  user_id      Int?
-  course_id    Int?
-  total_score  Int?
-  time_taken   Int?
-  is_passed    Boolean?
-  completed_at DateTime? @default(now()) @db.Timestamp(0)
-  COURSE       COURSE?   @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "QUIZ_RESULTS_ibfk_1")
+  result_id   Int      @id @default(autoincrement())
+  user_id     Int?
+  course_id   Int?
+  total_score Int?
+  is_passed   Boolean?
+  COURSE      COURSE?  @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "QUIZ_RESULTS_ibfk_1")
 
+  @@unique([user_id, course_id], map: "user_id")
   @@index([course_id], map: "course_id")
 }
 

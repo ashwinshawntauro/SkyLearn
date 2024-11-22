@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { AuthContext } from "@/providers/AuthProvider";
 
 const QuizApp = () => {
   const course_id = useParams();
-
+  const {userId} = AuthContext()
   const [questions, setQuestions] = useState([]); // Store fetched questions
-  const [stage, setStage] = useState("home"); // Stages: home, quiz, results
+  const [stage, setStage] = useState(); // Stages: home, quiz, results
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]); // Initialize after questions load
   const [timer, setTimer] = useState(0); // 10 minutes in seconds
@@ -38,34 +39,45 @@ const QuizApp = () => {
     if (course_id) {
       const fetchCourseData = async () => {
         try {
-          const res = await fetch(
-            `/api/getQuizes/?courseId=${course_id.courseId}/quiz`,
-            {
-              method: "POST",
-            }
-          );
+          const res = await fetch(`/api/getQuizStatus?courseId=${course_id.courseId}&userId=${userId}`);
           if (res.ok) {
             const data = await res.json();
-            const formattedQuestions = data.map((q) => ({
-              question: q.question_text,
-              options: [q.choice_1, q.choice_2, q.choice_3, q.choice_4],
-              correct: q.correct_choice - 1, // Assuming correct_choice is 1-indexed
-            }));
-            setQuestions(formattedQuestions);
-            setAnswers(Array(formattedQuestions.length).fill(null)); // Initialize answers
-            setTimer(formattedQuestions.length * 60); // Timer is based on the number of questions (minutes)
+            if (data.quiz_attempted) {
+              setStage("attempted"); // Set stage to prevent retaking
+            } else {
+              setStage("home"); // Set stage to prevent retaking
+
+              const resp = await fetch(`/api/getQuizes/?courseId=${course_id.courseId}/quiz`, {
+                method: "POST",
+              });
+              if (resp.ok) {
+                const quizData = await resp.json(); // Correct variable name to avoid conflicts
+                const formattedQuestions = quizData.map((q) => ({
+                  question: q.question_text,
+                  options: [q.choice_1, q.choice_2, q.choice_3, q.choice_4],
+                  correct: q.correct_choice - 1, // Assuming correct_choice is 1-indexed
+                }));
+                setQuestions(formattedQuestions);
+                setAnswers(Array(formattedQuestions.length).fill(null)); // Initialize answers
+                setTimer(formattedQuestions.length * 60); // Timer is based on the number of questions (minutes)
+              } else {
+                console.error("Failed to fetch questions");
+              }
+            }
           } else {
-            console.error("Failed to fetch questions");
+            console.error("Failed to fetch quiz status");
           }
         } catch (error) {
-          console.error("Error fetching questions:", error);
+          console.error("Error fetching course data:", error);
         } finally {
           setLoading(false);
         }
       };
+  
       fetchCourseData();
     }
-  }, [course_id]);
+  }, [course_id,userId]);
+  
 
   // Handle fullscreen and window switching
   useEffect(() => {
@@ -113,18 +125,54 @@ const QuizApp = () => {
     }
   }, [timer, stage]);
 
-  const calculateAndEndQuiz = () => {
+  
+
+  const calculateAndEndQuiz = async () => {
     const calculatedScore = answers.reduce(
       (total, answer, index) =>
         total + (answer === questions[index]?.correct ? 1 : 0),
       0
     );
+  
     setScore(calculatedScore);
     setStage("results");
+  
+    // Exit fullscreen if active
     if (document.fullscreenElement) {
       document.exitFullscreen();
     }
+  
+    // API call to submit results
+    const quizResult = {
+      user_id: userId, // Replace with authenticated user's ID
+      course_id: parseInt(course_id.courseId, 10), // Convert the string to an integer
+      total_score: calculatedScore,
+      is_passed: calculatedScore >= Math.ceil(questions.length * 0.6) // Example: 60% pass mark
+    };
+  
+    try {
+      const res = await fetch('/api/quizResults', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quizResult),
+      });
+  
+      if (!res.ok) {
+        throw new Error('Failed to submit quiz results');
+      }
+  
+      const data = await res.json();
+      console.log('Quiz result submitted successfully:', data);
+    } catch (error) {
+      console.error('Error submitting quiz results:', error);
+      alert('There was an issue submitting your results. Please try again.');
+    }
   };
+  
+
+  
 
   const startQuiz = () => {
     if (questions.length === 0) {
@@ -146,7 +194,7 @@ const QuizApp = () => {
  
 
   if (loading) {
-    return <p className="text-center text-lg">Loading questions...</p>;
+    return <p className="text-center text-lg">Loading...</p>;
   }
 
   if (stage === "home") {
@@ -240,6 +288,15 @@ const QuizApp = () => {
       </div>
     );
   }
+  if (stage === "attempted") {
+    return (
+      <div className="flex flex-col items-center space-y-4 mt-10">
+        <h1 className="text-3xl font-bold">Quiz Already Attempted</h1>
+        <p className="text-lg">You have already submitted this quiz. Retaking is not allowed.</p>
+      </div>
+    );
+  }
+  
 
   if (stage === "results") {
     return (

@@ -63,6 +63,27 @@ function NavigationTabs({ course }) {
       getEnroll(userId);
     }
   }, [userId]);
+
+
+  const [leaderboardData, setLeaderboardData] = useState([]);
+
+const fetchLeaderboardData = async () => {
+  try {
+    const res = await fetch(`/api/getLeaderboard?course_id=${courseId}`);
+    if (res.ok) {
+      const data = await res.json();
+      setLeaderboardData(data.leaderboardInfo ||[]);
+      console.log(leaderboardData)
+    }
+  } catch (error) {
+    console.error('Error fetching leaderboard data:', error);
+  }
+};
+
+useEffect(() => {
+  fetchLeaderboardData();
+}, [courseId]);
+
   return (
     <div>
       {isPurchased ? (
@@ -131,26 +152,26 @@ function NavigationTabs({ course }) {
           </TabsContent>
 
           <TabsContent value="leaderboard" className="p-2">
-            <Table className="w-full px-4 border bg-white">
-              <TableCaption>{course.course_name} Leaderboard</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Rank</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Points</TableHead>
-                  <TableHead className="text-right">Streak</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">1</TableCell>
-                  <TableCell>Student X</TableCell>
-                  <TableCell>30</TableCell>
-                  <TableCell className="text-right">2</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TabsContent>
+      <Table className="w-full px-4 border bg-white">
+        <TableCaption>{course.course_name} Leaderboard</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Rank</TableHead>
+            <TableHead>Student Name</TableHead>
+            <TableHead>Points</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {leaderboardData.map((entry, index) => (
+            <TableRow key={entry.student_id}>
+      <TableCell className="font-medium">{index + 1}</TableCell>
+      <TableCell>{entry.STUDENT?.student_name || `Student ${entry.student_id}`}</TableCell> {/* Display student_name or fallback to student_id */}
+              <TableCell>{entry.score}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TabsContent>
 
           <TabsContent value="askAi" className="p-2">
             <h3>Ask Gemini</h3>
