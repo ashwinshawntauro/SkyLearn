@@ -25,7 +25,7 @@ model CERTIFICATE {
 }
 
 model COURSE {
-  course_id           Int                 @id
+  course_id           Int                 @id @default(autoincrement())
   course_name         String              @db.VarChar(100)
   course_description  String?             @db.Text
   difficulty          COURSE_difficulty
@@ -45,7 +45,7 @@ model COURSE {
 model COURSE_ASSIGNMENT {
   course_id     Int
   assignment_id Int
-  COURSE        COURSE     @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_ASSIGNMENT_ibfk_1")
+  COURSE        COURSE     @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "COURSE_ASSIGNMENT_ibfk_1")
   ASSIGNMENT    ASSIGNMENT @relation(fields: [assignment_id], references: [assignment_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_ASSIGNMENT_ibfk_2")
 
   @@id([course_id, assignment_id])
@@ -55,7 +55,7 @@ model COURSE_ASSIGNMENT {
 model COURSE_CERTIFICATE {
   course_id      Int          @id
   certificate_id Int?
-  COURSE         COURSE       @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_CERTIFICATE_ibfk_1")
+  COURSE         COURSE       @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "COURSE_CERTIFICATE_ibfk_1")
   CERTIFICATE    CERTIFICATE? @relation(fields: [certificate_id], references: [certificate_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_CERTIFICATE_ibfk_2")
 
   @@index([certificate_id], map: "certificate_id")
@@ -75,7 +75,7 @@ model ENROLLMENT {
   student_id Int
   course_id  Int
   STUDENT    STUDENT @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "ENROLLMENT_ibfk_1")
-  COURSE     COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "ENROLLMENT_ibfk_2")
+  COURSE     COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "ENROLLMENT_ibfk_2")
 
   @@id([student_id, course_id])
   @@index([course_id], map: "course_id")
@@ -86,7 +86,7 @@ model LEADERBOARD {
   student_id Int
   rank       Int?
   score      Int?
-  COURSE     COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "LEADERBOARD_ibfk_1")
+  COURSE     COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "LEADERBOARD_ibfk_1")
   STUDENT    STUDENT @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "LEADERBOARD_ibfk_2")
 
   @@id([course_id, student_id])
@@ -119,7 +119,7 @@ model SUBMISSION {
 model TEACHING {
   tutor_id  Int
   course_id Int
-  COURSE    COURSE @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "TEACHING_ibfk_2")
+  COURSE    COURSE @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "TEACHING_ibfk_2")
 
   @@id([tutor_id, course_id])
   @@index([course_id], map: "course_id")
@@ -144,22 +144,21 @@ model QUIZ {
   choice_3        String? @db.VarChar(255)
   choice_4        String? @db.VarChar(255)
   correct_choice  Int
-  COURSE          COURSE? @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "QUIZ_ibfk_1")
+  COURSE          COURSE? @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "QUIZ_ibfk_1")
 
   @@unique([course_id, question_number], map: "course_id")
 }
 
 model QUIZ_RESULTS {
-  result_id    Int       @id @default(autoincrement())
-  user_id      Int?
-  course_id    Int?
-  total_score  Int?
-  time_taken   Int?
-  is_passed    Boolean?
-  completed_at DateTime? @default(now()) @db.Timestamp(0)
-  COURSE       COURSE?   @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "QUIZ_RESULTS_ibfk_1")
+  result_id   Int      @id @default(autoincrement())
+  user_id     Int?
+  course_id   Int?
+  total_score Int?
+  is_passed   Boolean?
+  COURSE      COURSE?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "QUIZ_RESULTS_ibfk_1")
 
-  @@index([course_id], map: "course_id")
+  @@unique([user_id, course_id], map: "user_id")
+  @@index([course_id], map: "QUIZ_RESULTS_ibfk_1")
 }
 
 enum COURSE_difficulty {
