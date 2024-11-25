@@ -38,7 +38,7 @@ export default function Dashboard() {
       <div className="container mx-auto">
         <header className="flex justify-between items-center py-4 border-b">
           <h1 className="text-lg font-bold">My Profile</h1>
-          <button className="lg:hidden p-2 border rounded">☰</button>
+          <Button className="lg:hidden p-2 border rounded">☰</Button>
           <nav className="hidden lg:flex space-x-4">
             <Button onClick={logout} className="bg-red-600 hover:bg-red-500">Logout</Button>
           </nav>
