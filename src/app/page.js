@@ -89,7 +89,7 @@ export default function Home() {
                       <CardHeader>
                         <CardTitle className="text-primary text-md font-bold">{course.course_name}</CardTitle>
                         <CardDescription>
-                          <span className="text-xl font-bold text-black">${course.course_price}</span>
+                          <span className="text-xl font-bold text-black">₹{course.course_price}</span>
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
