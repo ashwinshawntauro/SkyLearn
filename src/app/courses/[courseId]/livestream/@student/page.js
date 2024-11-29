@@ -23,9 +23,7 @@ export default function Page({ params }) {
   useEffect(() => {
     if (room) {
       console.log("Room name from URL: ", room);
-      // initConnection();
     }
-    return async () => disconnectFromBroadcast();
   }, [room]);
 
   // Initialize the connection
@@ -454,17 +452,14 @@ export default function Page({ params }) {
         </nav>
         {/* Middle Card */}
         <div className="grid stream-grid p-2">
-          <div>
-            <Button id="video" className="absolute z-10 px-7" onClick={initConnection}>Join</Button>
-            <video
-              className='w-full h-full p-3 rounded-md'
-              playsInline
-              controls
-              ref={videoRef}
-              autoPlay
-              muted
-            />
-          </div>
+          <video
+            className='w-full h-full p-3 rounded-md'
+            playsInline
+            controls
+            ref={videoRef}
+            autoPlay
+            muted
+          />
 
           <div className="mt-4">
             <Card className="w-[350px] h-[500px] flex flex-col">
@@ -502,6 +497,9 @@ export default function Page({ params }) {
               </CardFooter>
             </Card>
           </div>
+        </div>
+        <div className="flex-col pb-2 ml-2">
+          <Button id="video" className="z-10 px-7 mx-2" onClick={initConnection}>Start Class</Button>
         </div>
         {/* Bottom Cards */}
         <div>
