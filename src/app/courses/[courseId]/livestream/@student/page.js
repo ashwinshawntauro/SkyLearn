@@ -13,26 +13,125 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Page({ params }) {
-  const myVideoRef = useRef();
+  const videoRef = useRef();
+  const [peer, setPeer] = useState(null);
   const [activeTab, setActiveTab] = useState("module1");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const room = params.courseId;
 
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: true,
-      })
-      .then((stream) => {
-        if (myVideoRef.current) {
-          myVideoRef.current.srcObject = stream;
-        }
-      })
-      .catch((err) => {
-        console.error("Error accessing media devices.", err); // Handle any errors
+    if (room) {
+      console.log("Room name from URL: ", room);
+      // initConnection();
+    }
+    return async () => disconnectFromBroadcast();
+  }, [room]);
+
+  // Initialize the connection
+  const initConnection = async () => {
+    if (!room) {
+      alert("Class is missing in the URL!");
+      return;
+    }
+
+    try {
+      const newPeer = createPeerConnection();
+      setPeer(newPeer);
+      await setupPeerConnection(newPeer, room);
+    } catch (error) {
+      console.error("Initialization error:", error);
+      alert("Failed to connect to the broadcast: " + error.message);
+    }
+  };
+
+  // Disconnect and clean up resources
+  const disconnectFromBroadcast = () => {
+    if (videoRef.current?.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
+    if (peer) {
+      peer.close();
+      setPeer(null);
+    }
+    alert("Disconnected from broadcast");
+  };
+
+  // Create a new WebRTC PeerConnection
+  const createPeerConnection = () => {
+    const newPeer = new RTCPeerConnection({
+      iceServers: [
+        { urls: "stun:stun.stunprotocol.org" },
+        {
+          urls: "turn:35.208.76.68:3478",
+          username: "test",
+          credential: "test123",
+        },
+      ],
+    });
+
+    newPeer.onicecandidate = (event) => {
+      if (event.candidate) {
+        console.log("ICE Candidate:", event.candidate);
+      }
+    };
+
+    newPeer.ontrack = (event) => {
+      if (event.streams && event.streams.length > 0) {
+        videoRef.current.srcObject = event.streams[0];
+        videoRef.current
+          .play()
+          .catch((err) => console.error("Error playing video:", err));
+      }
+    };
+
+    newPeer.onconnectionstatechange = () => {
+      console.log("Connection State:", newPeer.connectionState);
+      if (["disconnected", "failed"].includes(newPeer.connectionState)) {
+        disconnectFromBroadcast();
+      }
+    };
+
+    return newPeer;
+  };
+
+  // Set up WebRTC peer connection
+  const setupPeerConnection = async (peer, roomName) => {
+    try {
+      const offer = await peer.createOffer({
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: true,
       });
-  }, []);
+      await peer.setLocalDescription(offer);
+
+      const response = await fetch("http://35.208.76.68:5000/consumer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          sdp: peer.localDescription,
+          room: roomName,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Response from signaling server:", data);
+        const remoteDescription = new RTCSessionDescription(data.sdp);
+        await peer.setRemoteDescription(remoteDescription);
+        console.log("Remote description set successfully.");
+      }
+      else {
+        console.error("Failed to fetch from Next.js API route");
+        alert('No class found !')
+      }
+    } catch (error) {
+      console.error("Setup error:", error);
+      throw error;
+    }
+  };
 
   const handleSendMessage = () => {
     if (input.trim() !== "") {
@@ -44,7 +143,7 @@ export default function Page({ params }) {
   };
 
   return (
-    
+
     <div className="grid main-live-grid">
       {/* Left Panel */}
       <div>
@@ -77,31 +176,28 @@ export default function Page({ params }) {
             <div className="flex flex-col space-y-2">
               <button
                 onClick={() => setActiveTab("module1")}
-                className={`w-full text-left py-2 px-4 rounded-lg ${
-                  activeTab === "module1"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200 text-gray-700"
-                }`}
+                className={`w-full text-left py-2 px-4 rounded-lg ${activeTab === "module1"
+                  ? "bg-blue-500 text-white"
+                  : "hover:bg-gray-200 text-gray-700"
+                  }`}
               >
                 1
               </button>
               <button
                 onClick={() => setActiveTab("module2")}
-                className={`w-full text-left py-2 px-4 rounded-lg ${
-                  activeTab === "module2"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200 text-gray-700"
-                }`}
+                className={`w-full text-left py-2 px-4 rounded-lg ${activeTab === "module2"
+                  ? "bg-blue-500 text-white"
+                  : "hover:bg-gray-200 text-gray-700"
+                  }`}
               >
                 2
               </button>
               <button
                 onClick={() => setActiveTab("module3")}
-                className={`w-full text-left py-2 px-4 rounded-lg ${
-                  activeTab === "module3"
-                    ? "bg-blue-500 text-white"
-                    : "hover:bg-gray-200 text-gray-700"
-                }`}
+                className={`w-full text-left py-2 px-4 rounded-lg ${activeTab === "module3"
+                  ? "bg-blue-500 text-white"
+                  : "hover:bg-gray-200 text-gray-700"
+                  }`}
               >
                 3
               </button>
@@ -358,14 +454,18 @@ export default function Page({ params }) {
         </nav>
         {/* Middle Card */}
         <div className="grid stream-grid p-2">
-          <video
-            className='w-full h-full p-3 rounded-md'
-            playsInline
-            controls
-            ref={myVideoRef}
-            autoPlay
-            muted
-          />
+          <div>
+            <Button id="video" className="absolute z-10 px-7" onClick={initConnection}>Join</Button>
+            <video
+              className='w-full h-full p-3 rounded-md'
+              playsInline
+              controls
+              ref={videoRef}
+              autoPlay
+              muted
+            />
+          </div>
+
           <div className="mt-4">
             <Card className="w-[350px] h-[500px] flex flex-col">
               <CardHeader>
