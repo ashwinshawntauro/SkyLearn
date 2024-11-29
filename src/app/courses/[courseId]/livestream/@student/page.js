@@ -20,11 +20,6 @@ export default function Page({ params }) {
   const [input, setInput] = useState("");
   const room = params.courseId;
 
-  useEffect(() => {
-    if (room) {
-      console.log("Room name from URL: ", room);
-    }
-  }, [room]);
 
   // Initialize the connection
   const initConnection = async () => {
@@ -358,7 +353,7 @@ export default function Page({ params }) {
       <div className="flex flex-col justify-center p-2">
         {/* Breadcrumb */}
         <nav
-          className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+          className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
           aria-label="Breadcrumb"
         >
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">

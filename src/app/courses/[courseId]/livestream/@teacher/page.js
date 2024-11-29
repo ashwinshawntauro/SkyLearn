@@ -13,18 +13,15 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Page({ params }) {
-    const videoRef = useRef();
+    const videoRef = useRef(null);
     const [peer, setPeer] = useState(null);
     const [activeTab, setActiveTab] = useState('module1');
     const [messages, setMessages] = useState([]);
     const [stream, setStream] = useState(null);
     const [input, setInput] = useState('');
     const room = params.courseId;
-    useEffect(() => {
-        if (room) {
-            console.log('Room name from URL: ', room);
-        }
-    }, [room]);
+    const [startClass, setStartClass] = useState(false);
+    const [screenShare, setScreenShare] = useState(false);
 
     // Initialize the connection
     const initConnection = async () => {
@@ -37,6 +34,7 @@ export default function Page({ params }) {
             const newPeer = createPeerConnection();
             setPeer(newPeer);
             await setupPeerConnection(newPeer, room);
+            setStartClass(true);
         } catch (error) {
             console.error('Initialization error:', error);
             alert('Failed to connect to the broadcast: ' + error.message);
@@ -82,9 +80,7 @@ export default function Page({ params }) {
         newPeer.ontrack = (event) => {
             if (event.streams && event.streams.length > 0) {
                 videoRef.current.srcObject = event.streams[0];
-                videoRef.current
-                    .play()
-                    .catch((err) => console.error('Error playing video:', err));
+                videoRef.current.play().catch((err) => console.error('Error playing video:', err));
             }
         };
 
@@ -102,14 +98,32 @@ export default function Page({ params }) {
     // Set up WebRTC peer connection
     const setupPeerConnection = async (peer, roomName) => {
         try {
-            const localStream = await navigator.mediaDevices.getUserMedia({
-                audio: true,
-                video: true,
-            })
+            let localStream;
+            console.log(screenShare)
+            if (screenShare) {
+                localStream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: false,
+                });
+                setStream(localStream);
+            if (videoRef.current) {
+                videoRef.current.srcObject = localStream;
+            }
+
+            // Add the local stream to the peer connection
+            localStream.getTracks().forEach((track) => peer.addTrack(track, localStream));
+            } else {
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    audio: true,
+                    video: true,
+                });
+            }
+
             setStream(localStream);
             if (videoRef.current) {
                 videoRef.current.srcObject = localStream;
             }
+
             // Add the local stream to the peer connection
             localStream.getTracks().forEach((track) => peer.addTrack(track, localStream));
 
@@ -144,11 +158,15 @@ export default function Page({ params }) {
             throw error;
         }
     };
+
+    // Stop the broadcast
     const stopBroadcast = async () => {
         if (videoRef.current?.srcObject) {
             const tracks = videoRef.current.srcObject.getTracks();
             tracks.forEach((track) => track.stop());  // Stop each track (audio and video)
             videoRef.current.srcObject = null;  // Clear the video reference
+            setStartClass(false); // Set the start class to false after the class is stopped
+            setScreenShare(false);
         }
 
         if (stream) {
@@ -176,6 +194,12 @@ export default function Page({ params }) {
         }
     };
 
+    // Handle switching between screen share and media share
+    const toggleScreenShare = () => {
+        setScreenShare(!screenShare);
+        initConnection();
+    };
+
     const handleSendMessage = () => {
         if (input.trim() !== "") {
             setMessages((prev) => [...prev, input]);
@@ -184,6 +208,7 @@ export default function Page({ params }) {
             alert("Message cannot be empty!");
         }
     };
+
 
     return (
 
@@ -403,7 +428,7 @@ export default function Page({ params }) {
             <div className="flex flex-col justify-center p-2">
                 {/* Breadcrumb */}
                 <nav
-                    className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+                    className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
                     aria-label="Breadcrumb"
                 >
                     <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -543,8 +568,24 @@ export default function Page({ params }) {
                     </div>
                 </div>
                 <div className="flex-col pb-2 ml-2">
-                    <Button id="video" className="z-10 px-7 mx-2" onClick={initConnection}>Start Class</Button>
-                    <Button id="video" className="z-10 px-7 mx-2 bg-red-500 hover:bg-red-400" onClick={stopBroadcast}>Stop Class</Button>
+                    <Button id="video" className="z-10 px-7 mx-2 bg-red-500 hover:bg-red-400" onClick={stopBroadcast} disabled={!startClass}>Stop Class</Button>
+                    {!screenShare ? (
+                        <Button
+                            id="video"
+                            className="z-10 px-7 mx-2"
+                            onClick={toggleScreenShare}
+                        >
+                            Turn on Camera
+                        </Button>
+                    ) : (
+                        <Button
+                            id="video"
+                            className="z-10 px-7 mx-2"
+                            onClick={toggleScreenShare}
+                        >
+                            Share Screen
+                        </Button>
+                    )}
                 </div>
                 {/* Bottom Cards */}
                 <div>
