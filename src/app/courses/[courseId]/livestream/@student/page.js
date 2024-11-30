@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
 
 export default function Page({ params }) {
   const videoRef = useRef();
@@ -145,7 +146,7 @@ export default function Page({ params }) {
           data-drawer-toggle="default-sidebar"
           aria-controls="default-sidebar"
           type="button"
-          className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
         >
           <span className="sr-only">Open sidebar</span>
           <svg
@@ -170,7 +171,7 @@ export default function Page({ params }) {
               <button
                 onClick={() => setActiveTab("module1")}
                 className={`w-full text-left py-2 px-4 rounded-lg ${activeTab === "module1"
-                  ? "bg-blue-500 text-white"
+                  ? "bg-primary text-white"
                   : "hover:bg-gray-200 text-gray-700"
                   }`}
               >
@@ -179,7 +180,7 @@ export default function Page({ params }) {
               <button
                 onClick={() => setActiveTab("module2")}
                 className={`w-full text-left py-2 px-4 rounded-lg ${activeTab === "module2"
-                  ? "bg-blue-500 text-white"
+                  ? "bg-primary text-white"
                   : "hover:bg-gray-200 text-gray-700"
                   }`}
               >
@@ -188,7 +189,7 @@ export default function Page({ params }) {
               <button
                 onClick={() => setActiveTab("module3")}
                 className={`w-full text-left py-2 px-4 rounded-lg ${activeTab === "module3"
-                  ? "bg-blue-500 text-white"
+                  ? "bg-primary text-white"
                   : "hover:bg-gray-200 text-gray-700"
                   }`}
               >
@@ -197,7 +198,7 @@ export default function Page({ params }) {
             </div>
             <div className="flex justify-center">
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-gray-800"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -263,10 +264,10 @@ export default function Page({ params }) {
                   <li>
                     <a
                       href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                     >
                       <svg
-                        className="w-6 h-6 text-gray-800 dark:text-white"
+                        className="w-6 h-6 text-gray-80"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -287,10 +288,10 @@ export default function Page({ params }) {
                   <li>
                     <a
                       href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
                       <svg
-                        className="w-6 h-6 text-gray-800 dark:text-white"
+                        className="w-6 h-6 text-gray-800"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -322,10 +323,10 @@ export default function Page({ params }) {
                   <li>
                     <a
                       href="#"
-                      className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-700 group"
                     >
                       <svg
-                        className="w-6 h-6 text-gray-800 dark:text-white"
+                        className="w-6 h-6 text-gray-800 "
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -358,9 +359,9 @@ export default function Page({ params }) {
         >
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li className="inline-flex items-center">
-              <a
-                href="#"
-                className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+              <Link
+                href="/"
+                className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
               >
                 <svg
                   className="w-3 h-3 me-2.5"
@@ -372,7 +373,7 @@ export default function Page({ params }) {
                   <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                 </svg>
                 Home
-              </a>
+              </Link>
             </li>
             <li>
               <div className="flex items-center">
@@ -391,12 +392,12 @@ export default function Page({ params }) {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <a
-                  href="#"
+                <Link
+                  href={`/courses/${params.courseId}`}
                   className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
                 >
                   Courses
-                </a>
+                </Link>
               </div>
             </li>
             <li aria-current="page">
@@ -448,7 +449,7 @@ export default function Page({ params }) {
         {/* Middle Card */}
         <div className="grid stream-grid p-2">
           <video
-            className='w-full h-full p-3 rounded-md'
+            className='w-full aspect-video p-3 rounded-md'
             playsInline
             controls
             ref={videoRef}
@@ -457,7 +458,7 @@ export default function Page({ params }) {
           />
 
           <div className="mt-4">
-            <Card className="w-[350px] h-[500px] flex flex-col">
+            <Card className="w-[350px] h-[360px] flex flex-col">
               <CardHeader>
                 <CardTitle>Live Chat</CardTitle>
                 <CardDescription>
@@ -498,7 +499,7 @@ export default function Page({ params }) {
         </div>
         {/* Bottom Cards */}
         <div>
-          <div className="w-full p-5 bg-gray-100 h-[80px]">
+          <div className="w-full p-5 bg-gray-100 h-[80px] rounded-md">
             <h1 className="text-xl text-left">
               Fundamentals of Computer Science
             </h1>

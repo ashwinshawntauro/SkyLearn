@@ -14,14 +14,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Page({ params }) {
     const videoRef = useRef(null);
+    const cameraRef = useRef(null);
     const [peer, setPeer] = useState(null);
     const [activeTab, setActiveTab] = useState('module1');
     const [messages, setMessages] = useState([]);
-    const [stream, setStream] = useState(null);
+    const [screenStream, setScreenStream] = useState(null);
+    const [cameraStream, setCameraStream] = useState(null);
     const [input, setInput] = useState('');
     const room = params.courseId;
     const [startClass, setStartClass] = useState(false);
-    const [screenShare, setScreenShare] = useState(false);
+    const [streamMode, setStreamMode] = useState('camera'); // 'camera', 'screen', or 'both'
 
     // Initialize the connection
     const initConnection = async () => {
@@ -43,18 +45,27 @@ export default function Page({ params }) {
 
     // Disconnect and clean up resources
     const disconnectFromBroadcast = () => {
-        if (videoRef.current?.srcObject) {
-            videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-            videoRef.current.srcObject = null;
-        }
+        [videoRef, cameraRef].forEach(ref => {
+            if (ref.current?.srcObject) {
+                ref.current.srcObject.getTracks().forEach((track) => track.stop());
+                ref.current.srcObject = null;
+            }
+        });
+
         if (peer) {
             peer.close();
             setPeer(null);
         }
-        if (stream) {
-            stream.getTracks().forEach((track) => track.stop());
-            setStream(null);
-        }
+
+        [screenStream, cameraStream].forEach(stream => {
+            if (stream) {
+                stream.getTracks().forEach((track) => track.stop());
+            }
+        });
+
+        setScreenStream(null);
+        setCameraStream(null);
+
         alert('Disconnected from broadcast');
     };
 
@@ -79,8 +90,17 @@ export default function Page({ params }) {
 
         newPeer.ontrack = (event) => {
             if (event.streams && event.streams.length > 0) {
-                videoRef.current.srcObject = event.streams[0];
-                videoRef.current.play().catch((err) => console.error('Error playing video:', err));
+                const stream = event.streams[0];
+
+                // Determine which video element to use based on track kind
+                const videoElement = stream.getVideoTracks()[0].label.includes('screen')
+                    ? videoRef.current
+                    : cameraRef.current;
+
+                if (videoElement) {
+                    videoElement.srcObject = stream;
+                    videoElement.play().catch((err) => console.error('Error playing video:', err));
+                }
             }
         };
 
@@ -98,37 +118,41 @@ export default function Page({ params }) {
     // Set up WebRTC peer connection
     const setupPeerConnection = async (peer, roomName) => {
         try {
-            let localStream;
-            console.log(screenShare)
-            if (screenShare) {
-                localStream = await navigator.mediaDevices.getDisplayMedia({
-                    video: true,
-                    audio: false,
-                });
-                setStream(localStream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = localStream;
-            }
 
-            // Add the local stream to the peer connection
-            localStream.getTracks().forEach((track) => peer.addTrack(track, localStream));
-            } else {
-                localStream = await navigator.mediaDevices.getUserMedia({
-                    audio: true,
-                    video: true,
-                });
-            }
+            peer.getSenders().forEach(sender => peer.removeTrack(sender));
 
-            setStream(localStream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = localStream;
-            }
+            const screenStream = await navigator.mediaDevices.getDisplayMedia({
+                video: { displaySurface: 'monitor' },
+                audio: false,
+            });
+            screenStream.getVideoTracks()[0].contentHint = 'detail';
 
-            // Add the local stream to the peer connection
-            localStream.getTracks().forEach((track) => peer.addTrack(track, localStream));
+            const cameraStream = await navigator.mediaDevices.getUserMedia({
+                video: { width: 320, height: 240 },
+                audio: true,
+            });
+
+            // Set local streams
+            setScreenStream(screenStream);
+            setCameraStream(cameraStream);
+
+            // Update video refs
+            if (videoRef.current) videoRef.current.srcObject = screenStream;
+            if (cameraRef.current) cameraRef.current.srcObject = cameraStream;
+
+            // Add tracks to peer connection
+            screenStream.getTracks().forEach(track => {
+                const modifiedTrack = track.clone();
+                modifiedTrack.contentHint = 'detail';
+                peer.addTrack(modifiedTrack, screenStream);
+            });
+
+            cameraStream.getTracks().forEach(track => {
+                peer.addTrack(track, cameraStream);
+            });
 
             const offer = await peer.createOffer({
-                offerToReceiveAudio: false,
+                offerToReceiveAudio: true,
                 offerToReceiveVideo: true,
             });
             await peer.setLocalDescription(offer);
@@ -161,25 +185,29 @@ export default function Page({ params }) {
 
     // Stop the broadcast
     const stopBroadcast = async () => {
-        if (videoRef.current?.srcObject) {
-            const tracks = videoRef.current.srcObject.getTracks();
-            tracks.forEach((track) => track.stop());  // Stop each track (audio and video)
-            videoRef.current.srcObject = null;  // Clear the video reference
-            setStartClass(false); // Set the start class to false after the class is stopped
-            setScreenShare(false);
-        }
+        // Stop all streams
+        [screenStream, cameraStream].forEach(stream => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
 
-        if (stream) {
-            // Stop any media tracks if the local stream exists
-            stream.getTracks().forEach((track) => track.stop());
-            setStream(null);  // Clear the stream state
-        }
+        // Clear references
+        if (videoRef.current) videoRef.current.srcObject = null;
+        if (cameraRef.current) cameraRef.current.srcObject = null;
 
+        // Close peer connection
         if (peer) {
-            peer.close();  // Close the peer connection
-            setPeer(null);  // Reset the peer state
+            peer.close();
+            setPeer(null);
         }
 
+        // Reset states
+        setScreenStream(null);
+        setCameraStream(null);
+        setStartClass(false);
+
+        // Notify server
         const response = await fetch('http://35.208.76.68:5000/stop-broadcast', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -194,10 +222,15 @@ export default function Page({ params }) {
         }
     };
 
-    // Handle switching between screen share and media share
-    const toggleScreenShare = () => {
-        setScreenShare(!screenShare);
-        initConnection();
+    // Toggle stream modes
+    const toggleStreamMode = async () => {
+        if (!peer) {
+            await initConnection();
+            return;
+        }
+
+        // Restart connection with updated tracks
+        await setupPeerConnection(peer, room);
     };
 
     const handleSendMessage = () => {
@@ -523,7 +556,7 @@ export default function Page({ params }) {
                 {/* Middle Card */}
                 <div className="grid stream-grid p-2">
                     <video
-                        className='w-full h-full p-3 rounded-md'
+                        className='w-full p-3 rounded-md aspect-video'
                         playsInline
                         controls
                         ref={videoRef}
@@ -531,7 +564,7 @@ export default function Page({ params }) {
                         muted
                     />
                     <div className="mt-4">
-                        <Card className="w-[350px] h-[500px] flex flex-col">
+                        <Card className="w-[350px] h-[360px] flex flex-col">
                             <CardHeader>
                                 <CardTitle>Live Chat</CardTitle>
                                 <CardDescription>
@@ -568,24 +601,28 @@ export default function Page({ params }) {
                     </div>
                 </div>
                 <div className="flex-col pb-2 ml-2">
-                    <Button id="video" className="z-10 px-7 mx-2 bg-red-500 hover:bg-red-400" onClick={stopBroadcast} disabled={!startClass}>Stop Class</Button>
-                    {!screenShare ? (
-                        <Button
-                            id="video"
-                            className="z-10 px-7 mx-2"
-                            onClick={toggleScreenShare}
-                        >
-                            Turn on Camera
-                        </Button>
-                    ) : (
-                        <Button
-                            id="video"
-                            className="z-10 px-7 mx-2"
-                            onClick={toggleScreenShare}
-                        >
-                            Share Screen
-                        </Button>
-                    )}
+                <Button
+                        id="video"
+                        className="z-10 px-7 mx-2"
+                        onClick={initConnection}
+                    >
+                        Start Class
+                    </Button>
+                    <Button
+                        id="video"
+                        className="z-10 px-7 mx-2 bg-red-500 hover:bg-red-400"
+                        onClick={stopBroadcast}
+                        disabled={!startClass}
+                    >
+                        Stop Class
+                    </Button>
+                    <Button
+                        id="video"
+                        className="z-10 px-7 mx-2"
+                        onClick={toggleStreamMode}
+                    >
+                        Toggle Stream Mode
+                    </Button>
                 </div>
                 {/* Bottom Cards */}
                 <div>
