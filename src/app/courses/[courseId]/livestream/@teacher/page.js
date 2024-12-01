@@ -14,62 +14,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Page({ params }) {
     const videoRef = useRef(null);
-    const cameraRef = useRef(null);
     const [peer, setPeer] = useState(null);
     const [activeTab, setActiveTab] = useState('module1');
     const [messages, setMessages] = useState([]);
-    const [screenStream, setScreenStream] = useState(null);
-    const [cameraStream, setCameraStream] = useState(null);
+    const [streamType, setStreamType] = useState('camera');
+    const [localStream, setLocalStream] = useState(null);
+    const [isStreaming, setIsStreaming] = useState(false);
     const [input, setInput] = useState('');
     const room = params.courseId;
-    const [startClass, setStartClass] = useState(false);
-    const [streamMode, setStreamMode] = useState('camera'); // 'camera', 'screen', or 'both'
 
-    // Initialize the connection
-    const initConnection = async () => {
-        if (!room) {
-            alert('Class is missing in the URL!');
-            return;
-        }
-
-        try {
-            const newPeer = createPeerConnection();
-            setPeer(newPeer);
-            await setupPeerConnection(newPeer, room);
-            setStartClass(true);
-        } catch (error) {
-            console.error('Initialization error:', error);
-            alert('Failed to connect to the broadcast: ' + error.message);
-        }
-    };
-
-    // Disconnect and clean up resources
-    const disconnectFromBroadcast = () => {
-        [videoRef, cameraRef].forEach(ref => {
-            if (ref.current?.srcObject) {
-                ref.current.srcObject.getTracks().forEach((track) => track.stop());
-                ref.current.srcObject = null;
-            }
-        });
-
-        if (peer) {
-            peer.close();
-            setPeer(null);
-        }
-
-        [screenStream, cameraStream].forEach(stream => {
-            if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
-            }
-        });
-
-        setScreenStream(null);
-        setCameraStream(null);
-
-        alert('Disconnected from broadcast');
-    };
-
-    // Create a new WebRTC PeerConnection
+    // Create WebRTC Peer Connection
     const createPeerConnection = () => {
         const newPeer = new RTCPeerConnection({
             iceServers: [
@@ -85,154 +39,181 @@ export default function Page({ params }) {
         newPeer.onicecandidate = (event) => {
             if (event.candidate) {
                 console.log('ICE Candidate:', event.candidate);
+                // Send ICE candidate to signaling server if needed
             }
         };
 
         newPeer.ontrack = (event) => {
             if (event.streams && event.streams.length > 0) {
                 const stream = event.streams[0];
-
-                // Determine which video element to use based on track kind
-                const videoElement = stream.getVideoTracks()[0].label.includes('screen')
-                    ? videoRef.current
-                    : cameraRef.current;
-
-                if (videoElement) {
-                    videoElement.srcObject = stream;
-                    videoElement.play().catch((err) => console.error('Error playing video:', err));
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                    videoRef.current.play().catch((err) => console.error('Error playing video:', err));
                 }
-            }
-        };
-
-        newPeer.onconnectionstatechange = () => {
-            console.log('Connection State:', newPeer.connectionState);
-            if (['disconnected', 'failed'].includes(newPeer.connectionState)) {
-                alert('Connection lost!');
-                disconnectFromBroadcast();
             }
         };
 
         return newPeer;
     };
 
-    // Set up WebRTC peer connection
-    const setupPeerConnection = async (peer, roomName) => {
+    // Get Media Stream
+    const getMediaStream = async (type) => {
         try {
+            let stream;
 
-            peer.getSenders().forEach(sender => peer.removeTrack(sender));
+            if (type === 'camera') {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 1280, height: 720 },
+                    audio: true
+                });
+            } else {
+                stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { displaySurface: 'monitor' },
+                    audio: false
+                });
+            }
 
-            const screenStream = await navigator.mediaDevices.getDisplayMedia({
-                video: { displaySurface: 'monitor' },
-                audio: false,
-            });
-            screenStream.getVideoTracks()[0].contentHint = 'detail';
+            return stream;
+        } catch (error) {
+            console.error('Error getting media stream:', error);
+            alert('Failed to access media stream');
+            return null;
+        }
+    };
 
-            const cameraStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 320, height: 240 },
-                audio: true,
-            });
+    // Start Streaming
+    const startStreaming = async () => {
+        try {
+            // Create peer connection
+            const newPeer = createPeerConnection();
+            setPeer(newPeer);
 
-            // Set local streams
-            setScreenStream(screenStream);
-            setCameraStream(cameraStream);
+            // Get initial stream (camera by default)
+            const stream = await getMediaStream('camera');
+            if (!stream) return;
 
-            // Update video refs
-            if (videoRef.current) videoRef.current.srcObject = screenStream;
-            if (cameraRef.current) cameraRef.current.srcObject = cameraStream;
+            setLocalStream(stream);
 
             // Add tracks to peer connection
-            screenStream.getTracks().forEach(track => {
-                const modifiedTrack = track.clone();
-                modifiedTrack.contentHint = 'detail';
-                peer.addTrack(modifiedTrack, screenStream);
+            stream.getTracks().forEach(track => {
+                newPeer.addTrack(track, stream);
             });
 
-            cameraStream.getTracks().forEach(track => {
-                peer.addTrack(track, cameraStream);
-            });
-
-            const offer = await peer.createOffer({
+            // Create and send offer
+            const offer = await newPeer.createOffer({
                 offerToReceiveAudio: true,
-                offerToReceiveVideo: true,
+                offerToReceiveVideo: true
             });
-            await peer.setLocalDescription(offer);
+            await newPeer.setLocalDescription(offer);
 
+            // Send offer to signaling server
             const response = await fetch('http://35.208.76.68:5000/broadcast', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    room: roomName,
-                    sdp: peer.localDescription,
+                    room: room,
+                    sdp: newPeer.localDescription,
+                    streamType: 'camera'
                 }),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Response from signaling server:', data);
                 const remoteDescription = new RTCSessionDescription(data.sdp);
-                await peer.setRemoteDescription(remoteDescription);
-                console.log('Remote description set successfully.');
+                await newPeer.setRemoteDescription(remoteDescription);
+
+                // Update UI state
+                setIsStreaming(true);
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                }
             } else {
-                console.error('Failed to fetch from signaling server');
+                throw new Error('Failed to start streaming');
             }
         } catch (error) {
-            console.error('Setup error:', error);
-            throw error;
+            console.error('Streaming error:', error);
+            alert('Failed to start streaming');
         }
     };
 
-    // Stop the broadcast
-    const stopBroadcast = async () => {
-        // Stop all streams
-        [screenStream, cameraStream].forEach(stream => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
-        });
-
-        // Clear references
-        if (videoRef.current) videoRef.current.srcObject = null;
-        if (cameraRef.current) cameraRef.current.srcObject = null;
-
-        // Close peer connection
-        if (peer) {
-            peer.close();
-            setPeer(null);
-        }
-
-        // Reset states
-        setScreenStream(null);
-        setCameraStream(null);
-        setStartClass(false);
-
-        // Notify server
-        const response = await fetch('http://35.208.76.68:5000/stop-broadcast', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ room: room }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            alert(data.message);
-        } else {
-            console.error('Failed to fetch from signaling server');
-        }
-    };
-
-    // Toggle stream modes
-    const toggleStreamMode = async () => {
+    // Switch Stream
+    const switchStream = async () => {
         if (!peer) {
-            await initConnection();
+            alert("Start streaming first");
             return;
         }
+    
+        try {
+            // Stop the current stream
+            if (localStream) {
+                localStream.getTracks().forEach((track) => track.stop());
+            }
+    
+            // Determine the new stream type and fetch the corresponding stream
+            const newStreamType = streamType === "camera" ? "screen" : "camera";
+            const newStream = await getMediaStream(newStreamType);
+            if (!newStream) return;
+    
+            // Replace the video track in the peer connection
+            const videoTrack = newStream.getVideoTracks()[0];
+            const sender = peer.getSenders().find((s) => s.track?.kind === "video");
+    
+            if (sender && videoTrack) {
+                await sender.replaceTrack(videoTrack);
+            } else {
+                console.error("No video sender found or new video track is missing");
+                return;
+            }
+    
+            setLocalStream(newStream);
+            setStreamType(newStreamType);
+    
+            // Update the local video element to reflect the new stream
+            if (videoRef.current) {
+                videoRef.current.srcObject = newStream;
+            }
+        } catch (error) {
+            console.error("Stream switching error:", error);
+            alert("Failed to switch stream");
+        }
+    };
+    
+    // Stop Streaming
+    const stopStreaming = async () => {
+        try {
+            // Stop local stream tracks
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                setLocalStream(null);
+            }
 
-        // Restart connection with updated tracks
-        await setupPeerConnection(peer, room);
+            // Close peer connection
+            if (peer) {
+                peer.close();
+                setPeer(null);
+            }
+
+            // Notify server
+            const response = await fetch('http://35.208.76.68:5000/stop-broadcast', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ room: room }),
+            });
+
+            if (response.ok) {
+                setIsStreaming(false);
+                if (videoRef.current) {
+                    videoRef.current.srcObject = null;
+                }
+            }
+        } catch (error) {
+            console.error('Stop streaming error:', error);
+        }
     };
 
+    // Message handling
     const handleSendMessage = () => {
         if (input.trim() !== "") {
             setMessages((prev) => [...prev, input]);
@@ -241,7 +222,6 @@ export default function Page({ params }) {
             alert("Message cannot be empty!");
         }
     };
-
 
     return (
 
@@ -556,12 +536,11 @@ export default function Page({ params }) {
                 {/* Middle Card */}
                 <div className="grid stream-grid p-2">
                     <video
-                        className='w-full p-3 rounded-md aspect-video'
+                        className='w-full p-3'
                         playsInline
                         controls
                         ref={videoRef}
                         autoPlay
-                        muted
                     />
                     <div className="mt-4">
                         <Card className="w-[350px] h-[360px] flex flex-col">
@@ -601,27 +580,26 @@ export default function Page({ params }) {
                     </div>
                 </div>
                 <div className="flex-col pb-2 ml-2">
-                <Button
-                        id="video"
+                    <Button
                         className="z-10 px-7 mx-2"
-                        onClick={initConnection}
+                        onClick={startStreaming}
+                        disabled={isStreaming}
                     >
                         Start Class
                     </Button>
                     <Button
-                        id="video"
                         className="z-10 px-7 mx-2 bg-red-500 hover:bg-red-400"
-                        onClick={stopBroadcast}
-                        disabled={!startClass}
+                        onClick={stopStreaming}
+                        disabled={!isStreaming}
                     >
                         Stop Class
                     </Button>
                     <Button
-                        id="video"
                         className="z-10 px-7 mx-2"
-                        onClick={toggleStreamMode}
+                        onClick={switchStream}
+                        disabled={!isStreaming}
                     >
-                        Toggle Stream Mode
+                        Switch to {streamType === 'camera' ? 'Screen' : 'Camera'}
                     </Button>
                 </div>
                 {/* Bottom Cards */}

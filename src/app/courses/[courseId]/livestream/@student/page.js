@@ -449,12 +449,11 @@ export default function Page({ params }) {
         {/* Middle Card */}
         <div className="grid stream-grid p-2">
           <video
-            className='w-full aspect-video p-3 rounded-md'
+            className='w-full p-3'
             playsInline
             controls
             ref={videoRef}
             autoPlay
-            muted
           />
 
           <div className="mt-4">
@@ -495,7 +494,7 @@ export default function Page({ params }) {
           </div>
         </div>
         <div className="flex-col pb-2 ml-2">
-          <Button id="video" className="z-10 px-7 mx-2" onClick={initConnection}>Start Class</Button>
+          <Button id="video" className="z-10 px-7 mx-2" onClick={initConnection}>Join Class</Button>
         </div>
         {/* Bottom Cards */}
         <div>

@@ -99,10 +99,10 @@ useEffect(() => {
             <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
               <div className="">
                 <div className="mb-2">
-                  <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
+                  <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
                     Live
                   </span>
-                  <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Module 1</span>
+                  <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded border border-blue-400">Module 1</span>
                 </div>
                 <div className="text-black font-bold text-xl mb-2">Intro to this Subject</div>
                 <p className="text-grey-darker text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</p>
