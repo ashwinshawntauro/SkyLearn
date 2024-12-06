@@ -25,21 +25,23 @@ model CERTIFICATE {
 }
 
 model COURSE {
-  course_id           Int                 @id @default(autoincrement())
-  course_name         String              @db.VarChar(100)
-  course_description  String?             @db.Text
-  difficulty          COURSE_difficulty
-  course_price        Decimal             @db.Decimal(10, 2)
-  enrollment_deadline DateTime?           @db.Date
-  course_duration     String?             @db.Text
-  course_enrolments   Int?
-  COURSE_ASSIGNMENT   COURSE_ASSIGNMENT[]
-  COURSE_CERTIFICATE  COURSE_CERTIFICATE?
-  ENROLLMENT          ENROLLMENT[]
-  LEADERBOARD         LEADERBOARD[]
-  QUIZ                QUIZ[]
-  QUIZ_RESULTS        QUIZ_RESULTS[]
-  TEACHING            TEACHING[]
+  course_id               Int                 @id @default(autoincrement())
+  course_name             String              @db.VarChar(100)
+  course_description      String?             @db.Text
+  difficulty              COURSE_difficulty
+  course_price            Decimal             @db.Decimal(10, 2)
+  enrollment_deadline     DateTime?           @db.Date
+  course_duration         String?             @db.Text
+  course_enrolments       Int?
+  googleClassroomId       String?             @unique(map: "googleClassroomId") @db.VarChar(255)
+  googleClassroomJoinLink String?             @db.VarChar(255)
+  COURSE_ASSIGNMENT       COURSE_ASSIGNMENT[]
+  COURSE_CERTIFICATE      COURSE_CERTIFICATE?
+  ENROLLMENT              ENROLLMENT[]
+  LEADERBOARD             LEADERBOARD[]
+  QUIZ                    QUIZ[]
+  QUIZ_RESULTS            QUIZ_RESULTS[]
+  TEACHING                TEACHING[]
 }
 
 model COURSE_ASSIGNMENT {

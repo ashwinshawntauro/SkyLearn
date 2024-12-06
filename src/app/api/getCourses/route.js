@@ -15,7 +15,9 @@ export async function GET() {
                 course_enrolments: true,
                 difficulty: true,
                 course_duration:true,
-                enrollment_deadline: true
+                enrollment_deadline: true,
+                googleClassroomId:true,
+                googleClassroomJoinLink:true
             }
         });
 

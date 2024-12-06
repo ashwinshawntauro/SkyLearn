@@ -11,6 +11,7 @@ const Context = createContext({
   role: null,
   userId:null,
   email: null,
+  accessToken:null
 });
 
 const AuthProvider = ({ children }) => {
@@ -20,6 +21,7 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState(null);
   const [userId,setId] = useState(null)
+  const [accessToken,setAccess] = useState(null)
 
   const getUser = async (userEmail) => {
     try {
@@ -56,6 +58,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        setAccess(user.getIdToken())
         setIsLogged(true);
         getUser(user.email);
       } else {
@@ -67,7 +70,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <Context.Provider value={{ userName, email, isLogged, loading, role,logout,userId}}>
+    <Context.Provider value={{ userName, email, isLogged, loading, role,logout,userId,accessToken}}>
       {children}
     </Context.Provider>
   );

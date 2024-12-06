@@ -30,6 +30,7 @@
     "crypto": "^1.0.1",
     "firebase": "^10.14.1",
     "firebase-admin": "^12.7.0",
+    "googleapis": "^144.0.0",
     "janus-gateway": "^1.2.4",
     "js-cookie": "^3.0.5",
     "kurento-client": "^7.1.0",
