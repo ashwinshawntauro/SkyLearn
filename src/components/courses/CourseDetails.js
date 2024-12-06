@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import { AuthContext } from "@/providers/AuthProvider";
 import { Button } from "../ui/button";
 import { useEffect, useState } from 'react';
+import { Skeleton } from "@/components/ui/skeleton"
 
 function CourseDetails({ course }) {
   const router = useRouter();
@@ -11,7 +12,7 @@ function CourseDetails({ course }) {
   const courseDesc = course.course_description;
   const { userId} = AuthContext();
 
-  const [isPurchased, setIsPurchased] = useState(false);
+  const [isPurchased, setIsPurchased] = useState(null);
 
   // Fetch enrolled courses for the student
   const getEnroll = async (studentId) => {
@@ -72,14 +73,17 @@ function CourseDetails({ course }) {
             </svg>
             Course Purchased
           </Button>
-        ) : (
+        ) : isPurchased==false ? (
           <Button onClick={handleEnroll} className="w-full flex justify-center bg-blue-600 font-bold text-white p-2 rounded-lg group hover:bg-blue-500">
             <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
               <path fillRule="evenodd" d="M5.024 3.783A1 1 0 0 1 6 3h12a1 1 0 0 1 .976.783L20.802 12h-4.244a1.99 1.99 0 0 0-1.824 1.205 2.978 2.978 0 0 1-5.468 0A1.991 1.991 0 0 0 7.442 12H3.198l1.826-8.217ZM3 14v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5h-4.43a4.978 4.978 0 0 1-9.14 0H3Z" clipRule="evenodd" />
             </svg>
             Enroll in this Course
           </Button>
-        )}
+        ):(
+          <Skeleton className="w-full h-[36px] rounded-lg" />
+        )
+        }
 
         <Button className="w-full flex justify-center mt-2 border bg-blue-600 p-2 rounded-lg group hover:bg-blue-500">
           <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">

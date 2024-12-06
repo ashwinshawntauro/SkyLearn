@@ -14,13 +14,15 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "../ui/button";
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName } = AuthContext();
   const courseId = course.course_id;
 
-  const [isPurchased, setIsPurchased] = useState(false);
+  const [isPurchased, setIsPurchased] = useState(null);
   const [aiResponse, setAiResponse] = useState("");
   const [userQuestion, setUserQuestion] = useState("");
   const gemini = async (userQuestion) => {
@@ -67,21 +69,21 @@ function NavigationTabs({ course }) {
 
   const [leaderboardData, setLeaderboardData] = useState([]);
 
-const fetchLeaderboardData = async () => {
-  try {
-    const res = await fetch(`/api/getLeaderboard?course_id=${courseId}`);
-    if (res.ok) {
-      const data = await res.json();
-      setLeaderboardData(data.leaderboardInfo ||[]);
+  const fetchLeaderboardData = async () => {
+    try {
+      const res = await fetch(`/api/getLeaderboard?course_id=${courseId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setLeaderboardData(data.leaderboardInfo || []);
+      }
+    } catch (error) {
+      console.error('Error fetching leaderboard data:', error);
     }
-  } catch (error) {
-    console.error('Error fetching leaderboard data:', error);
-  }
-};
+  };
 
-useEffect(() => {
-  fetchLeaderboardData();
-}, [courseId]);
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, [courseId]);
 
   return (
     <div>
@@ -114,7 +116,7 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <Button onClick={(e)=>router.push(`${courseId}/livestream`)} className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light">
+              <Button onClick={(e) => router.push(`${courseId}/livestream`)} className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light">
                 Join Class
               </Button>
             </div>
@@ -151,26 +153,26 @@ useEffect(() => {
           </TabsContent>
 
           <TabsContent value="leaderboard" className="p-2">
-      <Table className="w-full px-4 border bg-white">
-        <TableCaption>{course.course_name} Leaderboard</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Rank</TableHead>
-            <TableHead>Student Name</TableHead>
-            <TableHead>Points</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {leaderboardData.map((entry, index) => (
-            <TableRow key={entry.student_id}>
-      <TableCell className="font-medium">{index + 1}</TableCell>
-      <TableCell>{entry.STUDENT?.student_name || `Student ${entry.student_id}`}</TableCell> {/* Display student_name or fallback to student_id */}
-              <TableCell>{entry.score}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TabsContent>
+            <Table className="w-full px-4 border bg-white">
+              <TableCaption>{course.course_name} Leaderboard</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Rank</TableHead>
+                  <TableHead>Student Name</TableHead>
+                  <TableHead>Points</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {leaderboardData.map((entry, index) => (
+                  <TableRow key={entry.student_id}>
+                    <TableCell className="font-medium">{index + 1}</TableCell>
+                    <TableCell>{entry.STUDENT?.student_name || `Student ${entry.student_id}`}</TableCell> {/* Display student_name or fallback to student_id */}
+                    <TableCell>{entry.score}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TabsContent>
 
           <TabsContent value="askAi" className="p-2">
             <h3>Ask Gemini</h3>
@@ -211,8 +213,7 @@ useEffect(() => {
           </TabsContent>
 
         </Tabs>
-      ) :
-        (
+      ) : isPurchased==false ? (
           <Tabs defaultValue="instructors" className="w-full p-2 bg-gray-100 h-auto">
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
@@ -233,7 +234,10 @@ useEffect(() => {
               <InstructorSection className="md:w-2/3 w-full" />
             </TabsContent>
           </Tabs>
-        )}
+        ): (
+          <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />
+        )
+      }
     </div>
   );
 }
