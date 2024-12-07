@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import InstructorSection from "@/components/courses/InstructorSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AuthContext } from "@/providers/AuthProvider";
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   Table,
   TableBody,
@@ -12,20 +12,24 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import { Button } from "../ui/button";
 
 function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName } = AuthContext();
   const courseId = course.course_id;
+  const [loading, setLoading] = useState(true); // Loading state for questions
 
   const [isPurchased, setIsPurchased] = useState(false);
+  const [quizStatus, setQuizStatus] = useState(false);
   const [aiResponse, setAiResponse] = useState("");
   const [userQuestion, setUserQuestion] = useState("");
   const gemini = async (userQuestion) => {
     try {
-      const genAI = new GoogleGenerativeAI("AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0");
+      const genAI = new GoogleGenerativeAI(
+        "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
+      );
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const prompt = `My name is ${userName}.You are an expert tutor on ${course.course_name}.Your Course desciption is ${course.course_description}. A student asked: "${userQuestion}".
         Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
@@ -43,19 +47,24 @@ function NavigationTabs({ course }) {
   };
   const getEnroll = async (studentId) => {
     try {
-      const res = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(studentId)}`, {
-        method: 'GET',
-      });
+      const res = await fetch(
+        `/api/getEnroll?student_id=${encodeURIComponent(studentId)}`,
+        {
+          method: "GET",
+        }
+      );
       if (res.status === 200) {
         const data = await res.json();
         const enrolledCourses = data.getEnroll || [];
-        const courseExists = enrolledCourses.some(course => course.course_id === courseId);
+        const courseExists = enrolledCourses.some(
+          (course) => course.course_id === courseId
+        );
         setIsPurchased(courseExists);
       } else {
-        console.error('Failed to fetch enrollments:', res.status);
+        console.error("Failed to fetch enrollments:", res.status);
       }
     } catch (error) {
-      console.error('Error fetching enrollments:', error);
+      console.error("Error fetching enrollments:", error);
     }
   };
   useEffect(() => {
@@ -64,29 +73,59 @@ function NavigationTabs({ course }) {
     }
   }, [userId]);
 
-
   const [leaderboardData, setLeaderboardData] = useState([]);
 
-const fetchLeaderboardData = async () => {
-  try {
-    const res = await fetch(`/api/getLeaderboard?course_id=${courseId}`);
-    if (res.ok) {
-      const data = await res.json();
-      setLeaderboardData(data.leaderboardInfo ||[]);
+  const fetchLeaderboardData = async () => {
+    try {
+      const res = await fetch(`/api/getLeaderboard?course_id=${courseId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setLeaderboardData(data.leaderboardInfo || []);
+      }
+    } catch (error) {
+      console.error("Error fetching leaderboard data:", error);
     }
-  } catch (error) {
-    console.error('Error fetching leaderboard data:', error);
-  }
-};
+  };
 
-useEffect(() => {
-  fetchLeaderboardData();
-}, [courseId]);
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, [courseId]);
+
+  useEffect(() => {
+    if (courseId) {
+      const fetchQuizData = async () => {
+        try {
+          const res = await fetch(
+            `/api/getQuizStatus?courseId=${courseId}&userId=${userId}`
+          );
+          if (res.ok) {
+            const data = await res.json();
+            if (data.quiz_attempted) {
+              setQuizStatus(true); // Set stage to prevent retaking
+            } else {
+              setQuizStatus(false); // Set stage to prevent retaking
+            }
+          } else {
+            console.error("Failed to fetch quiz status");
+          }
+        } catch (error) {
+          console.error("Error fetching course data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchQuizData();
+    }
+  }, [courseId, userId]);
 
   return (
     <div>
       {isPurchased ? (
-        <Tabs defaultValue="livestreams" className="w-full p-2 bg-gray-100 h-auto">
+        <Tabs
+          defaultValue="livestreams"
+          className="w-full p-2 bg-gray-100 h-auto"
+        >
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="livestreams">Livestreams</TabsTrigger>
             <TabsTrigger value="notes">Notes</TabsTrigger>
@@ -95,26 +134,42 @@ useEffect(() => {
             <TabsTrigger value="askAi">Ask AI</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="livestreams" className="p-2 max-w-full lg:flex flex-col gap-3">
+          <TabsContent
+            value="livestreams"
+            className="p-2 max-w-full lg:flex flex-col gap-3"
+          >
             <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
               <div className="">
                 <div className="mb-2">
                   <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
                     Live
                   </span>
-                  <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded border border-blue-400">Module 1</span>
+                  <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded border border-blue-400">
+                    Module 1
+                  </span>
                 </div>
-                <div className="text-black font-bold text-xl mb-2">Intro to this Subject</div>
-                <p className="text-grey-darker text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</p>
+                <div className="text-black font-bold text-xl mb-2">
+                  Intro to this Subject
+                </div>
+                <p className="text-grey-darker text-base">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Voluptatibus quia, nulla! Maiores et perferendis eaque,
+                  exercitationem praesentium nihil.
+                </p>
                 <div className="flex items-center">
                   {/* <img className="w-10 h-10 rounded-full mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="Avatar of Jonathan Reinink"> */}
                   <div className="text-sm my-4">
-                    <p className="text-primary leading-none">Jonathan Reinink</p>
+                    <p className="text-primary leading-none">
+                      Jonathan Reinink
+                    </p>
                     <p className="text-gray-500">Aug 18</p>
                   </div>
                 </div>
               </div>
-              <Button onClick={(e)=>router.push(`${courseId}/livestream`)} className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light">
+              <Button
+                onClick={(e) => router.push(`${courseId}/livestream`)}
+                className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+              >
                 Join Class
               </Button>
             </div>
@@ -124,14 +179,24 @@ useEffect(() => {
                   {/* <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
                     Live
                   </span> */}
-                  <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Module 1</span>
+                  <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                    Module 1
+                  </span>
                 </div>
-                <div className="text-black font-bold text-xl mb-2">Intro to this Subject</div>
-                <p className="text-grey-darker text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</p>
+                <div className="text-black font-bold text-xl mb-2">
+                  Intro to this Subject
+                </div>
+                <p className="text-grey-darker text-base">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Voluptatibus quia, nulla! Maiores et perferendis eaque,
+                  exercitationem praesentium nihil.
+                </p>
                 <div className="flex items-center">
                   {/* <img className="w-10 h-10 rounded-full mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="Avatar of Jonathan Reinink"> */}
                   <div className="text-sm my-4">
-                    <p className="text-primary leading-none">Jonathan Reinink</p>
+                    <p className="text-primary leading-none">
+                      Jonathan Reinink
+                    </p>
                     <p className="text-gray-500">Aug 18</p>
                   </div>
                 </div>
@@ -147,34 +212,65 @@ useEffect(() => {
           </TabsContent>
 
           <TabsContent value="quizzes" className="p-2">
-            Quizzes
+            <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
+              <div>
+                <div className="mb-2">
+                  {quizStatus || (
+                    <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                      Live
+                    </span>
+                  )}
+                  <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded border border-blue-400">
+                    Module 1
+                  </span>
+                </div>
+                <div className="text-black font-bold text-xl mb-2">Quiz</div>
+                <p className="text-grey-darker text-base">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Voluptatibus quia, nulla! Maiores et perferendis eaque,
+                  exercitationem praesentium nihil.
+                </p>
+              </div>
+              <Button
+                onClick={() => router.push(`/courses/${courseId}/quiz`)}
+                className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+              >
+                {quizStatus ? "Already Attempted" : "Attempt Quiz"}
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="leaderboard" className="p-2">
-      <Table className="w-full px-4 border bg-white">
-        <TableCaption>{course.course_name} Leaderboard</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Rank</TableHead>
-            <TableHead>Student Name</TableHead>
-            <TableHead>Points</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {leaderboardData.map((entry, index) => (
-            <TableRow key={entry.student_id}>
-      <TableCell className="font-medium">{index + 1}</TableCell>
-      <TableCell>{entry.STUDENT?.student_name || `Student ${entry.student_id}`}</TableCell> {/* Display student_name or fallback to student_id */}
-              <TableCell>{entry.score}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TabsContent>
+            <Table className="w-full px-4 border bg-white">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Rank</TableHead>
+                  <TableHead>Student Name</TableHead>
+                  <TableHead>Points</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {leaderboardData.map((entry, index) => (
+                  <TableRow key={entry.student_id}>
+                    <TableCell className="font-medium">{index + 1}</TableCell>
+                    <TableCell>
+                      {entry.STUDENT?.student_name ||
+                        `Student ${entry.student_id}`}
+                    </TableCell>{" "}
+                    {/* Display student_name or fallback to student_id */}
+                    <TableCell>{entry.score}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TabsContent>
 
           <TabsContent value="askAi" className="p-2">
             <h3>Ask Gemini</h3>
-            <form onSubmit={handleQuestionSubmit} className="flex flex-col space-y-4">
+            <form
+              onSubmit={handleQuestionSubmit}
+              className="flex flex-col space-y-4"
+            >
               <textarea
                 value={userQuestion}
                 onChange={(e) => setUserQuestion(e.target.value)}
@@ -182,7 +278,10 @@ useEffect(() => {
                 className="w-full p-2 border rounded-md resize-none"
                 rows="4"
               />
-              <button type="submit" className="px-4 py-2 bg-primary text-white rounded-md">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-primary text-white rounded-md"
+              >
                 Ask
               </button>
             </form>
@@ -192,14 +291,18 @@ useEffect(() => {
 
                 {/* Apply custom formatting */}
                 <div className="space-y-3 leading-relaxed text-gray-800">
-                  {aiResponse.split('\n').map((line, index) => (
+                  {aiResponse.split("\n").map((line, index) => (
                     <div key={index} className="mb-2">
                       {/* Check if line starts with ** for bold headers */}
                       {line.startsWith("**") ? (
-                        <p className="font-bold text-blue-600">{line.replace(/\*\*/g, '')}</p>
+                        <p className="font-bold text-blue-600">
+                          {line.replace(/\*\*/g, "")}
+                        </p>
                       ) : line.startsWith("* ") ? (
                         // Format as list item if line starts with '* ' (bullet point with a space after)
-                        <li className="list-disc list-inside ml-4">{line.replace("* ", "")}</li>
+                        <li className="list-disc list-inside ml-4">
+                          {line.replace("* ", "")}
+                        </li>
                       ) : (
                         <p>{line}</p>
                       )}
@@ -209,31 +312,32 @@ useEffect(() => {
               </div>
             )}
           </TabsContent>
-
         </Tabs>
-      ) :
-        (
-          <Tabs defaultValue="instructors" className="w-full p-2 bg-gray-100 h-auto">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-              <TabsTrigger value="discussion">Discussion</TabsTrigger>
-              <TabsTrigger value="review">Review</TabsTrigger>
-              <TabsTrigger value="instructors">Instructors</TabsTrigger>
-            </TabsList>
-            <TabsContent value="curriculum" className="p-2">
-              Course Curriculum is displayed here!
-            </TabsContent>
-            <TabsContent value="discussion" className="p-2">
-              Live stream agenda will be displayed here.
-            </TabsContent>
-            <TabsContent value="review" className="p-2">
-              Take down notes
-            </TabsContent>
-            <TabsContent value="instructors" className="p-2">
-              <InstructorSection className="md:w-2/3 w-full" />
-            </TabsContent>
-          </Tabs>
-        )}
+      ) : (
+        <Tabs
+          defaultValue="instructors"
+          className="w-full p-2 bg-gray-100 h-auto"
+        >
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
+            <TabsTrigger value="discussion">Discussion</TabsTrigger>
+            <TabsTrigger value="review">Review</TabsTrigger>
+            <TabsTrigger value="instructors">Instructors</TabsTrigger>
+          </TabsList>
+          <TabsContent value="curriculum" className="p-2">
+            Course Curriculum is displayed here!
+          </TabsContent>
+          <TabsContent value="discussion" className="p-2">
+            Live stream agenda will be displayed here.
+          </TabsContent>
+          <TabsContent value="review" className="p-2">
+            Take down notes
+          </TabsContent>
+          <TabsContent value="instructors" className="p-2">
+            <InstructorSection className="md:w-2/3 w-full" />
+          </TabsContent>
+        </Tabs>
+      )}
     </div>
   );
 }

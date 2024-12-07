@@ -62,8 +62,8 @@ export default function Home() {
             <hr />
             <nav className="space-y-3 my-4 flex justify-between flex-col">
               <a href="/" className="block p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">Home</a>
-              <a href="/mycourses" className="block p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">My Course</a>
-              <a href="/learning-progress" className="block p-2 rounded-md hover:bg-primary-light transition-colors hover:text-white duration-300">Learning Progress</a>
+              <a href="/mycourses" className="block p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">My Courses</a>
+              {/* <a href="/learning-progress" className="block p-2 rounded-md hover:bg-primary-light transition-colors hover:text-white duration-300">Learning Progress</a> */}
               <a href="/" className="block p-2 rounded-md hover:bg-primary-light transition-colors hover:text-white duration-300">Contact Us</a>
               {!isLogged &&
                 <div>

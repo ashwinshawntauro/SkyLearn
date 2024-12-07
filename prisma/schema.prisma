@@ -25,21 +25,25 @@ model CERTIFICATE {
 }
 
 model COURSE {
-  course_id           Int                 @id @default(autoincrement())
-  course_name         String              @db.VarChar(100)
-  course_description  String?             @db.Text
-  difficulty          COURSE_difficulty
-  course_price        Decimal             @db.Decimal(10, 2)
-  enrollment_deadline DateTime?           @db.Date
-  course_duration     String?             @db.Text
-  course_enrolments   Int?
-  COURSE_ASSIGNMENT   COURSE_ASSIGNMENT[]
-  COURSE_CERTIFICATE  COURSE_CERTIFICATE?
-  ENROLLMENT          ENROLLMENT[]
-  LEADERBOARD         LEADERBOARD[]
-  QUIZ                QUIZ[]
-  QUIZ_RESULTS        QUIZ_RESULTS[]
-  TEACHING            TEACHING[]
+  course_id               Int                 @id @default(autoincrement())
+  course_name             String              @db.VarChar(100)
+  course_description      String?             @db.Text
+  difficulty              COURSE_difficulty
+  course_price            Decimal             @db.Decimal(10, 2)
+  enrollment_deadline     DateTime?           @db.Date
+  course_duration         String?             @db.Text
+  course_enrolments       Int?
+  googleClassroomId       String?             @unique(map: "googleClassroomId") @db.VarChar(255)
+  googleClassroomJoinLink String?             @db.VarChar(255)
+  COURSE_ASSIGNMENT       COURSE_ASSIGNMENT[]
+  COURSE_CERTIFICATE      COURSE_CERTIFICATE?
+  ENROLLMENT              ENROLLMENT[]
+  LEADERBOARD             LEADERBOARD[]
+  QUIZ                    QUIZ[]
+  QUIZ_RESULTS            QUIZ_RESULTS[]
+  STUDENTCLASSES          STUDENTCLASSES[]
+  TEACHING                TEACHING[]
+  livestreams             livestreams[]
 }
 
 model COURSE_ASSIGNMENT {
@@ -72,10 +76,11 @@ model EARNED_CERTIFICATE {
 }
 
 model ENROLLMENT {
-  student_id Int
-  course_id  Int
-  STUDENT    STUDENT @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "ENROLLMENT_ibfk_1")
-  COURSE     COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "ENROLLMENT_ibfk_2")
+  student_id        Int
+  course_id         Int
+  course_completion Boolean? @default(false)
+  STUDENT           STUDENT  @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "ENROLLMENT_ibfk_1")
+  COURSE            COURSE   @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "ENROLLMENT_ibfk_2")
 
   @@id([student_id, course_id])
   @@index([course_id], map: "course_id")
@@ -102,6 +107,7 @@ model STUDENT {
   EARNED_CERTIFICATE EARNED_CERTIFICATE[]
   ENROLLMENT         ENROLLMENT[]
   LEADERBOARD        LEADERBOARD[]
+  STUDENTCLASSES     STUDENTCLASSES[]
   SUBMISSION         SUBMISSION[]
 }
 
@@ -126,12 +132,13 @@ model TEACHING {
 }
 
 model TUTOR {
-  tutor_id    Int     @id @default(autoincrement())
-  tutor_name  String  @db.VarChar(100)
-  tutor_email String  @unique(map: "tutor_email") @db.VarChar(100)
-  department  String? @db.VarChar(100)
-  user_id     String  @db.VarChar(255)
-  address     String? @db.VarChar(255)
+  tutor_id    Int           @id @default(autoincrement())
+  tutor_name  String        @db.VarChar(100)
+  tutor_email String        @unique(map: "tutor_email") @db.VarChar(100)
+  department  String?       @db.VarChar(100)
+  user_id     String        @db.VarChar(255)
+  address     String?       @db.VarChar(255)
+  livestreams livestreams[]
 }
 
 model QUIZ {
@@ -161,8 +168,50 @@ model QUIZ_RESULTS {
   @@index([course_id], map: "QUIZ_RESULTS_ibfk_1")
 }
 
+model STUDENTCLASSES {
+  id                Int                   @id @default(autoincrement())
+  student_id        Int
+  course_id         Int
+  livestreaming_id  Int
+  attended_duration Int
+  status            STUDENTCLASSES_status
+  attendance_date   DateTime?             @default(now()) @db.DateTime(0)
+  STUDENT           STUDENT               @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_1")
+  COURSE            COURSE                @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_2")
+  livestreams       livestreams           @relation(fields: [livestreaming_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_3")
+
+  @@index([course_id], map: "course_id")
+  @@index([livestreaming_id], map: "livestreaming_id")
+  @@index([student_id], map: "student_id")
+}
+
+model livestreams {
+  id             Int                @id @default(autoincrement())
+  duration       Int?
+  status         livestreams_status @default(inactive)
+  course_id      Int
+  tutor_id       Int
+  STUDENTCLASSES STUDENTCLASSES[]
+  COURSE         COURSE             @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_1")
+  TUTOR          TUTOR              @relation(fields: [tutor_id], references: [tutor_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_2")
+
+  @@index([course_id], map: "course_id")
+  @@index([tutor_id], map: "tutor_id")
+}
+
 enum COURSE_difficulty {
   basic
   intermediate
   advanced
+}
+
+enum livestreams_status {
+  inactive
+  active
+  ended
+}
+
+enum STUDENTCLASSES_status {
+  Present
+  Absent
 }
