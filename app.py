@@ -64,6 +64,7 @@ def generate_certificate_route():
     if request.method == "POST":
         # Get form data from the POST request
         uid = request.form.get("uid")
+        course_id = request.form.get("course_id")
         candidate_name = request.form.get("candidate_name")
         course_name = request.form.get("course_name")
         org_name = request.form.get("org_name")
@@ -71,25 +72,26 @@ def generate_certificate_route():
     elif request.method == "GET":
         # Get data from query parameters for GET request
         uid = request.args.get("uid")
+        course_id = request.args.get("course_id")
         candidate_name = request.args.get("candidate_name")
         course_name = request.args.get("course_name")
         org_name = request.args.get("org_name")
 
     # Ensure that all required parameters are provided
-    if not all([uid, candidate_name, course_name, org_name]):
+    if not all([uid,course_id, candidate_name, course_name, org_name]):
         return (
             "Missing parameters! Please provide uid, candidate_name, course_name, and org_name.",
             400,
         )
 
     # Define file paths for certificate generation
-    pdf_file_path = f"{uid}.pdf"
-    institute_logo_path = "../assets/logo.jpg"
-
-  
+    
     # Calculate the certificate ID
     data_to_hash = f"{uid}{candidate_name}{course_name}{org_name}".encode("utf-8")
     certificate_id = hashlib.sha256(data_to_hash).hexdigest()
+    pdf_file_path = f"{candidate_name}-{course_name}.pdf"
+    institute_logo_path = "../assets/logo.jpg"
+  
     # Call the certificate generation function
     generate_certificate(
         pdf_file_path,
@@ -101,18 +103,47 @@ def generate_certificate_route():
         certificate_id,
     )
 
+    # Upload to Pinata
     ipfs_hash = upload_to_pinata(pdf_file_path, api_key, api_secret)
 
-  
+    if ipfs_hash is None:
+        return "Error uploading certificate to IPFS", 500
+
     # Remove the generated PDF file after uploading to IPFS
     os.remove(pdf_file_path)
 
-    # Smart Contract Call
+    # Smart Contract Call to store certificate data on blockchain
     contract.functions.generateCertificate(
         certificate_id, uid, candidate_name, course_name, org_name, ipfs_hash
     ).transact({"from": w3.eth.accounts[0]})
 
-    return f"Certificate successfully generated with Certificate ID: {certificate_id}"
+    # Make an API call to store the certificate record (send data to your API)
+    api_url = "http://localhost:3000/api/storeCertificate"  # Replace with the actual URL of your API
+
+    uid = int(uid)
+    course_id = int(course_id)
+
+    data = {
+        "student_id": uid,
+        "course_id": course_id,
+        "certificate_id": certificate_id,
+        "certificate_url": f"https://peach-passive-porpoise-942.mypinata.cloud/ipfs/{ipfs_hash}",
+    }
+    print(data)
+
+    # Headers (optional, if needed for content type)
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    # Send POST request
+    response = requests.post(api_url, data=json.dumps(data), headers=headers)
+
+    # Handle the response from the API
+    if response.status_code == 201:
+        return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
+    else:
+        return f"Error calling the API: {response.status_code} - {response.text}"
 
 
 @app.route("/view-certificate", methods=["GET", "POST"])

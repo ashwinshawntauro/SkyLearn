@@ -80,10 +80,12 @@ def generate_certificate(output_path, uid, candidate_name, course_name, org_name
     c.drawCentredString(width / 2, cert_id_y, f"Certificate ID: {cert_id}")
 
     # Generate QR Code for IPFS URL
-    ipfs_url = f"https://api/{cert_id}"
+    ipfs_url = f"http://localhost:3000/api/storeCertificate?certificate_id={cert_id}"
     qr = qrcode.make(ipfs_url)
     qr_path = "qr_code.png"
     qr.save(qr_path)
+    
+    print(ipfs_url)
 
     # Embed QR Code in the bottom-right corner
     qr_size = 1.3 * inch  # Adjust size as needed
