@@ -42,6 +42,7 @@ model COURSE {
   QUIZ                    QUIZ[]
   QUIZ_RESULTS            QUIZ_RESULTS[]
   TEACHING                TEACHING[]
+  livestreams             livestreams[]
 }
 
 model COURSE_ASSIGNMENT {
@@ -128,12 +129,13 @@ model TEACHING {
 }
 
 model TUTOR {
-  tutor_id    Int     @id @default(autoincrement())
-  tutor_name  String  @db.VarChar(100)
-  tutor_email String  @unique(map: "tutor_email") @db.VarChar(100)
-  department  String? @db.VarChar(100)
-  user_id     String  @db.VarChar(255)
-  address     String? @db.VarChar(255)
+  tutor_id    Int           @id @default(autoincrement())
+  tutor_name  String        @db.VarChar(100)
+  tutor_email String        @unique(map: "tutor_email") @db.VarChar(100)
+  department  String?       @db.VarChar(100)
+  user_id     String        @db.VarChar(255)
+  address     String?       @db.VarChar(255)
+  livestreams livestreams[]
 }
 
 model QUIZ {
@@ -163,8 +165,27 @@ model QUIZ_RESULTS {
   @@index([course_id], map: "QUIZ_RESULTS_ibfk_1")
 }
 
+model livestreams {
+  id        Int                @id @default(autoincrement())
+  duration  Int?
+  status    livestreams_status @default(inactive)
+  course_id Int
+  tutor_id  Int
+  COURSE    COURSE             @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_1")
+  TUTOR     TUTOR              @relation(fields: [tutor_id], references: [tutor_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_2")
+
+  @@index([course_id], map: "course_id")
+  @@index([tutor_id], map: "tutor_id")
+}
+
 enum COURSE_difficulty {
   basic
   intermediate
   advanced
+}
+
+enum livestreams_status {
+  inactive
+  active
+  ended
 }

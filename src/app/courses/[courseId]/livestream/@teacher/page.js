@@ -11,15 +11,21 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Navbar from "@/components/Navbar";
+import { AuthContext } from "@/providers/AuthProvider";
 
 export default function Page({ params }) {
     const videoRef = useRef(null);
     const [peer, setPeer] = useState(null);
-    const [activeTab, setActiveTab] = useState('module1');
     const [messages, setMessages] = useState([]);
     const [streamType, setStreamType] = useState('camera');
     const [localStream, setLocalStream] = useState(null);
     const [isStreaming, setIsStreaming] = useState(false);
+    const { userId } = AuthContext();
+    let startTime = null;
+    let stopTime = null;
+    let duration = null;
+    const [start, setStart] = useState(startTime)
     const [input, setInput] = useState('');
     const room = params.courseId;
 
@@ -38,7 +44,7 @@ export default function Page({ params }) {
 
         newPeer.onicecandidate = (event) => {
             if (event.candidate) {
-                console.log('ICE Candidate:', event.candidate);
+                // console.log('ICE Candidate:', event.candidate);
                 // Send ICE candidate to signaling server if needed
             }
         };
@@ -69,7 +75,7 @@ export default function Page({ params }) {
             } else {
                 stream = await navigator.mediaDevices.getDisplayMedia({
                     video: { displaySurface: 'monitor' },
-                    audio: false
+                    audio: true
                 });
             }
 
@@ -81,32 +87,28 @@ export default function Page({ params }) {
         }
     };
 
-    // Start Streaming
     const startStreaming = async () => {
+        startTime = new Date().getTime();
+        setStart(startTime)
         try {
-            // Create peer connection
             const newPeer = createPeerConnection();
             setPeer(newPeer);
 
-            // Get initial stream (camera by default)
             const stream = await getMediaStream('camera');
             if (!stream) return;
 
             setLocalStream(stream);
 
-            // Add tracks to peer connection
             stream.getTracks().forEach(track => {
                 newPeer.addTrack(track, stream);
             });
 
-            // Create and send offer
             const offer = await newPeer.createOffer({
                 offerToReceiveAudio: true,
                 offerToReceiveVideo: true
             });
             await newPeer.setLocalDescription(offer);
 
-            // Send offer to signaling server
             const response = await fetch('http://35.208.76.68:5000/broadcast', {
                 method: 'POST',
                 headers: {
@@ -124,7 +126,6 @@ export default function Page({ params }) {
                 const remoteDescription = new RTCSessionDescription(data.sdp);
                 await newPeer.setRemoteDescription(remoteDescription);
 
-                // Update UI state
                 setIsStreaming(true);
                 if (videoRef.current) {
                     videoRef.current.srcObject = stream;
@@ -146,17 +147,14 @@ export default function Page({ params }) {
         }
 
         try {
-            // Stop the current stream
             if (localStream) {
                 localStream.getTracks().forEach((track) => track.stop());
             }
 
-            // Determine the new stream type and fetch the corresponding stream
             const newStreamType = streamType === "camera" ? "screen" : "camera";
             const newStream = await getMediaStream(newStreamType);
             if (!newStream) return;
 
-            // Replace the video track in the peer connection
             const videoTrack = newStream.getVideoTracks()[0];
             const sender = peer.getSenders().find((s) => s.track?.kind === "video");
 
@@ -166,11 +164,8 @@ export default function Page({ params }) {
                 console.error("No video sender found or new video track is missing");
                 return;
             }
-
             setLocalStream(newStream);
             setStreamType(newStreamType);
-
-            // Update the local video element to reflect the new stream
             if (videoRef.current) {
                 videoRef.current.srcObject = newStream;
             }
@@ -182,20 +177,22 @@ export default function Page({ params }) {
 
     // Stop Streaming
     const stopStreaming = async () => {
+        stopTime = new Date().getTime();
+        duration = (stopTime - start) / 1000
         try {
-            // Stop local stream tracks
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
                 setLocalStream(null);
             }
-
-            // Close peer connection
             if (peer) {
                 peer.close();
                 setPeer(null);
             }
-
-            // Notify server
+            const sendTime = await fetch('/api/setDuration', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ duration: duration, status: 'ended', course_id: room, tutor_id: userId }),
+            })
             const response = await fetch('http://35.208.76.68:5000/stop-broadcast', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -213,7 +210,6 @@ export default function Page({ params }) {
         }
     };
 
-    // Message handling
     const handleSendMessage = () => {
         if (input.trim() !== "") {
             setMessages((prev) => [...prev, input]);
@@ -224,14 +220,14 @@ export default function Page({ params }) {
     };
 
     return (
-
         <div className="grid">
+            <Navbar />
             <div className="flex flex-col justify-center p-2">
                 {/* Middle Card */}
                 <div className="grid stream-grid p-2">
                     <div>
                         <nav
-                            className="flex px-5 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
+                            className="flex px-5 mx-3 py-3 text-gray-700 border border-gray-200 rounded-lg bg-gray-50"
                             aria-label="Breadcrumb"
                         >
                             <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -332,8 +328,8 @@ export default function Page({ params }) {
                         />
                     </div>
 
-                    <div className="mt-4">
-                        <Card className="w-[350px] h-[360px] flex flex-col">
+                    <div>
+                        <Card className="w-[350px] h-full flex flex-col rounded-sm">
                             <CardHeader>
                                 <CardTitle>Live Chat</CardTitle>
                                 <CardDescription>
@@ -349,7 +345,7 @@ export default function Page({ params }) {
                                     messages.map((msg, index) => (
                                         <div
                                             key={index}
-                                            className="p-2 mb-2 bg-gray-100 rounded-md text-sm"
+                                            className="p-2 mb-2 bg-gray-100 rounded text-sm"
                                         >
                                             {msg}
                                         </div>
@@ -369,23 +365,23 @@ export default function Page({ params }) {
                         </Card>
                     </div>
                 </div>
-                <div className="flex-col pb-2 ml-2">
+                <div className="flex pb-2 ml-5 gap-2">
                     <Button
-                        className="z-10 px-7 mx-2"
+                        className=""
                         onClick={startStreaming}
                         disabled={isStreaming}
                     >
                         Start Class
                     </Button>
                     <Button
-                        className="z-10 px-7 mx-2 bg-red-500 hover:bg-red-400"
+                        className=" bg-red-500 hover:bg-red-400"
                         onClick={stopStreaming}
                         disabled={!isStreaming}
                     >
                         Stop Class
                     </Button>
                     <Button
-                        className="z-10 px-7 mx-2"
+                        className=""
                         onClick={switchStream}
                         disabled={!isStreaming}
                     >
@@ -393,7 +389,7 @@ export default function Page({ params }) {
                     </Button>
                     <Button
                         className="bg-purple-600 hover:bg-purple-950"
-                        onClick={() => window.open("https://onlineboard.eu/new","_blank")}
+                        onClick={() => window.open("https://excalidraw.com/", "_blank")}
                     >
                         Open Whiteboard
                     </Button>
