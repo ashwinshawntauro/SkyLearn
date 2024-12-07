@@ -109,7 +109,6 @@ function NavigationTabs({ course }) {
                 <div className="text-black font-bold text-xl mb-2">Intro to this Subject</div>
                 <p className="text-grey-darker text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</p>
                 <div className="flex items-center">
-                  {/* <img className="w-10 h-10 rounded-full mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="Avatar of Jonathan Reinink"> */}
                   <div className="text-sm my-4">
                     <p className="text-primary leading-none">Jonathan Reinink</p>
                     <p className="text-gray-500">Aug 18</p>
@@ -123,24 +122,17 @@ function NavigationTabs({ course }) {
             <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
               <div className="">
                 <div className="mb-2">
-                  {/* <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
-                    Live
-                  </span> */}
                   <span className="bg-blue-100 text-blue-800 text-sm me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Module 1</span>
                 </div>
                 <div className="text-black font-bold text-xl mb-2">Intro to this Subject</div>
                 <p className="text-grey-darker text-base">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</p>
                 <div className="flex items-center">
-                  {/* <img className="w-10 h-10 rounded-full mr-4" src="https://pbs.twimg.com/profile_images/885868801232961537/b1F6H4KC_400x400.jpg" alt="Avatar of Jonathan Reinink"> */}
                   <div className="text-sm my-4">
                     <p className="text-primary leading-none">Jonathan Reinink</p>
                     <p className="text-gray-500">Aug 18</p>
                   </div>
                 </div>
               </div>
-              {/* <Button disabled className="flex items-center disabled:bg-slate-400 mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light">
-                Join Class
-              </Button> */}
             </div>
           </TabsContent>
 
@@ -191,16 +183,12 @@ function NavigationTabs({ course }) {
             {aiResponse && (
               <div className="mt-4 p-4 bg-gray-200 rounded-md">
                 <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
-
-                {/* Apply custom formatting */}
                 <div className="space-y-3 leading-relaxed text-gray-800">
                   {aiResponse.split('\n').map((line, index) => (
                     <div key={index} className="mb-2">
-                      {/* Check if line starts with ** for bold headers */}
                       {line.startsWith("**") ? (
                         <p className="font-bold text-blue-600">{line.replace(/\*\*/g, '')}</p>
                       ) : line.startsWith("* ") ? (
-                        // Format as list item if line starts with '* ' (bullet point with a space after)
                         <li className="list-disc list-inside ml-4">{line.replace("* ", "")}</li>
                       ) : (
                         <p>{line}</p>

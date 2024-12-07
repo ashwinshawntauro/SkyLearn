@@ -1,7 +1,5 @@
 import { google } from "googleapis";
 import { NextResponse } from "next/server";
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
 
 export async function POST(req) {
     try {
@@ -14,7 +12,6 @@ export async function POST(req) {
             room,
         } = await req.json();
 
-        // Validate access token and course name
         if (!accessToken || !name) {
             return NextResponse.json(
                 { error: "Access token and course name are required" },
@@ -22,20 +19,13 @@ export async function POST(req) {
             );
         }
 
-        // Create OAuth2 client
         const oauth2Client = new google.auth.OAuth2(
             process.env.CLIENT_ID,
             process.env.CLIENT_SECRET,
             process.env.REDIRECT_URI
         );
-
-        // Set the access token
         oauth2Client.setCredentials({ access_token: accessToken });
-
-        // Initialize Google Classroom API
         const classroom = google.classroom({ version: "v1", auth: oauth2Client });
-
-        // Course data
         const courseData = {
             name,
             section: section || "Default Section",
@@ -45,18 +35,15 @@ export async function POST(req) {
             ownerId: "me",
         };
 
-        // API request to create the course
         const response = await classroom.courses.create({
             requestBody: courseData,
         });
 
-        // Return success response
         return NextResponse.json(response.data, { status: 200 });
 
     } catch (error) {
         console.error("Error creating Google Classroom course:", error);
 
-        // Handle API error response
         if (error.response) {
             console.error("Google API error details:", error.response.data);
             return NextResponse.json(

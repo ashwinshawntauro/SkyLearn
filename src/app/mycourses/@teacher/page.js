@@ -1,15 +1,29 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { AuthContext } from "@/providers/AuthProvider";
 
 export default function TeacherDashboard() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [accessToken, setAccessToken] = useState("");
+  const { userId } = AuthContext();
   const [newCourse, setNewCourse] = useState({
+    tutorId: userId,
     CourseName: "",
     CourseDesc: "",
     course_price: "",
@@ -19,9 +33,9 @@ export default function TeacherDashboard() {
   });
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchCourses = async (userId) => {
       try {
-        const res = await fetch("/api/getCourses");
+        const res = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
         const data = await res.json();
         setCourses(data);
       } catch (error) {
@@ -30,8 +44,9 @@ export default function TeacherDashboard() {
         setLoading(false);
       }
     };
-
-    fetchCourses();
+    
+    fetchCourses(userId);
+    
   }, []);
 
   useEffect(() => {
@@ -95,7 +110,6 @@ export default function TeacherDashboard() {
       }
       const data = await response.json();
       const googleClassroomJoinLink = `https://classroom.google.com/c/${data.id}`;
-      // console.log(googleClassroomJoinLink)
       updateClassroom(course, data.id, googleClassroomJoinLink);
       alert("Course created in Google Classroom:", data);
     } catch (error) {
@@ -162,7 +176,6 @@ export default function TeacherDashboard() {
       if (response.ok) {
         alert("Course Deleted");
       } else {
-        // Optionally handle non-200 status codes
         const errorData = await response.json();
         alert(`Error: ${errorData.error}`);
       }
@@ -194,26 +207,45 @@ export default function TeacherDashboard() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-gray-500 font-semibold">{course.course_description}</p>
-                <p className="text-sm text-gray-500">Price: ${course.course_price}</p>
+                <p className="text-sm text-gray-500">Price: ₹{course.course_price}</p>
                 <p className="text-sm text-gray-500">Difficulty: {course.difficulty}</p>
                 <p className="text-sm text-red-600">Deadline: {new Date(course.enrollment_deadline).toLocaleDateString()}</p>
+
+              </CardContent>
+              <CardFooter className="mt-2 flex gap-2">
                 {course.googleClassroomId ? (
                   <Button
-                    className="mt-2 mx-2"
+                    className="w-1/2"
                     onClick={() => window.open(`https://classroom.google.com/c/${course.googleClassroomId}`, "_blank")}
                   >
                     Go to Google Classroom
                   </Button>
                 ) : (
                   <Button
-                    className="mt-2 mx-2"
+                    className="w-1/2"
                     onClick={() => handleCreateClassroom(course)}
                   >
                     Create Google Classroom
                   </Button>
                 )}
-                <Button className="mt-2 mx-2 bg-red-600 hover:bg-red-500" onClick={() => deleteCourse(course.course_id)}>Delete Course</Button>
-              </CardContent>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button className="w-1/2 bg-red-600 hover:bg-red-500">Delete Course</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this course?
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>No</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => deleteCourse(course.course_id)} className="bg-red-600 hover:bg-red-500">Yes</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </CardFooter>
             </Card>
           ))}
         </div>
@@ -294,11 +326,11 @@ export default function TeacherDashboard() {
                     className="w-full p-2 border rounded"
                   />
                 </div>
-                <div className="flex justify-end space-x-2">
-                  <Button type="button" onClick={() => setShowModal(false)} className="bg-gray-300 text-black">
+                <div className="flex justify-center space-x-2">
+                  <Button type="button" onClick={() => setShowModal(false)} className="bg-gray-300 w-1/2 text-black">
                     Cancel
                   </Button>
-                  <Button type="submit" className="bg-blue-600 text-white">
+                  <Button type="submit" className="bg-primary w-1/2 text-white">
                     Create
                   </Button>
                 </div>

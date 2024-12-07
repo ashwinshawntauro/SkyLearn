@@ -15,15 +15,6 @@ function Header({ course }) {
             <span>(0 Ratings)</span>
           </div>
         </div>
-        {/* Buttons for Brochure Download and Enroll */}
-        <div className="flex justify-center space-x-4">
-          <button className="bg-black hover:bg-blue-400 text-white py-2 px-4 rounded-lg flex justify-center">
-            <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01" />
-            </svg>
-            <p className='px-1'>Download Brochure</p>
-          </button>
-        </div>
       </div>
     </header>
   );
