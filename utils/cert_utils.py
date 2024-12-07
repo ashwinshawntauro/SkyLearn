@@ -2,63 +2,104 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 import pdfplumber
+import string
+import qrcode
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.pdfgen import canvas
+import os
 
-def generate_certificate(output_path, uid, candidate_name, course_name, org_name, institute_logo_path):
-    # Create a PDF document
-    doc = SimpleDocTemplate(output_path, pagesize=letter)
+def generate_certificate(output_path, uid, candidate_name, course_name, org_name, institute_logo_path,cert_id):
+    width, height = A4
+    c = canvas.Canvas(output_path, pagesize=A4)
 
-    # Create a list to hold the elements of the PDF
-    elements = []
+    # Set up border
+    border_margin = 30
+    c.setStrokeColor(colors.HexColor("#003366"))  # Elegant blue color
+    c.setLineWidth(3)
+    c.rect(
+        border_margin,
+        border_margin,
+        width - 2 * border_margin,
+        height - 2 * border_margin
+    )
 
-    # Add institute logo and institute name
+    # Add logo
     if institute_logo_path:
-        logo = Image(institute_logo_path, width=150, height=150)
-        elements.append(logo)
+        try:
+            logo_width, logo_height = 1.5 * inch, 1.5 * inch
+            logo_x = (width - logo_width) / 2
+            logo_y = height - 2 * inch
+            c.drawImage(institute_logo_path, logo_x, logo_y, logo_width, logo_height, preserveAspectRatio=True, mask='auto')
+        except Exception as e:
+            print(f"Error loading logo: {e}")
 
-    # Add institute name
-    institute_style = ParagraphStyle(
-        "InstituteStyle",
-        parent=getSampleStyleSheet()["Title"],
-        fontName="Helvetica-Bold",
-        fontSize=15,
-        spaceAfter=40,
-    )
-    institute = Paragraph(org_name, institute_style)
-    elements.extend([institute, Spacer(1, 12)])
+    # Organization Name
+    c.setFont("Times-Bold", 24)
+    c.setFillColor(colors.HexColor("#003366"))
+    org_y = height - 3 * inch
+    c.drawCentredString(width / 2, org_y, org_name)
 
-    # Add title
-    title_style = ParagraphStyle(
-        "TitleStyle",
-        parent=getSampleStyleSheet()["Title"],
-        fontName="Helvetica-Bold",
-        fontSize=25,
-        spaceAfter=20,
-    )
-    title1 = Paragraph("Certificate of Completion", title_style)
-    elements.extend([title1, Spacer(1, 6)])
+    # Certificate Title
+    c.setFont("Times-Bold", 30)
+    c.setFillColor(colors.black)
+    title_y = org_y - 0.75 * inch
+    c.drawCentredString(width / 2, title_y, "Certificate of Completion")
 
-    # Add recipient name, UID, and course name with increased line space
-    recipient_style = ParagraphStyle(
-        "RecipientStyle",
-        parent=getSampleStyleSheet()["BodyText"],
-        fontSize=14,
-        spaceAfter=6,
-        leading=18,
-        alignment=1
-    )
+    # Recipient's Name
+    c.setFont("Helvetica-Bold", 22)
+    name_y = title_y - inch
+    c.drawCentredString(width / 2, name_y, candidate_name)
 
-    recipient_text = f"This is to certify that<br/><br/>\
-                     <font color='red'> {candidate_name} </font><br/>\
-                     with UID <br/> \
-                    <font color='red'> {uid} </font> <br/><br/>\
-                     has successfully completed the course:<br/>\
-                     <font color='blue'> {course_name} </font>"
+    # Course Details
+    c.setFont("Helvetica", 16)
+    course_y = name_y - 0.5 * inch
+    c.drawCentredString(width / 2, course_y, f"has successfully completed the course:")
 
-    recipient = Paragraph(recipient_text, recipient_style)
-    elements.extend([recipient, Spacer(1, 12)])
+    c.setFont("Times-BoldItalic", 18)
+    course_name_y = course_y - 0.4 * inch
+    c.drawCentredString(width / 2, course_name_y, course_name)
 
-    # Build the PDF document
-    doc.build(elements)
+    # UID Section
+    c.setFont("Helvetica", 12)
+    uid_y = course_name_y - 0.75 * inch
+    c.drawCentredString(width / 2, uid_y, f"UID: {uid}")
+
+    # Blockchain Signature Section
+    signature_y = uid_y - 1.5 * inch
+    c.setFont("Helvetica-Bold", 14)
+    c.setFillColor(colors.HexColor("#003366"))
+    c.drawCentredString(width / 2, signature_y, "Blockchain Authenticated")
+    c.line(width / 2 - 150, signature_y - 10, width / 2 + 150, signature_y - 10)
+
+    # Certificate ID
+    cert_id_y = signature_y - 1 * inch
+    c.setFont("Helvetica", 12)
+    c.setFillColor(colors.black)
+    c.drawCentredString(width / 2, cert_id_y, f"Certificate ID: {cert_id}")
+
+    # Generate QR Code for IPFS URL
+    ipfs_url = f"https://api/{cert_id}"
+    qr = qrcode.make(ipfs_url)
+    qr_path = "qr_code.png"
+    qr.save(qr_path)
+
+    # Embed QR Code in the bottom-right corner
+    qr_size = 1.3 * inch  # Adjust size as needed
+    qr_x = width - border_margin - qr_size -3 # Positioned to the right
+    qr_y = border_margin+3  # Positioned at the bottom
+    c.drawImage(qr_path, qr_x, qr_y, qr_size, qr_size, preserveAspectRatio=True, mask='auto')
+
+    # Add instruction text above the QR code
+    qr_text_y = qr_y + qr_size -5
+    c.setFont("Helvetica", 10)
+    c.drawRightString(qr_x + qr_size - 10, qr_text_y, "Scan to verify ")
+
+    # Save PDF
+    c.save()
+    os.remove(qr_path)
+
 
     print(f"Certificate generated and saved at: {output_path}")
 
@@ -69,12 +110,16 @@ def extract_certificate(pdf_path):
         text = ""
         for page in pdf.pages:
             text += page.extract_text()
+
+        # Split text into lines
         lines = text.splitlines()
 
-        org_name = lines[0]
-        candidate_name = lines[3]
-        uid = lines[5]
-        course_name = lines[-1]
-
-        return (uid, candidate_name, course_name, org_name)
-    
+        # Extract values based on the layout in the certificate
+        try:
+            org_name = lines[0]  # The organization name is on line 3
+            candidate_name = lines[2]  # The recipient's name is on line 5
+            course_name = lines[4]  # The course name is on line 7
+            uid = lines[5]  # UID is on line 8
+        except IndexError:
+            return None  # If the certificate format is incorrect or lines are missing
+        return (uid[5:], candidate_name, course_name, org_name)

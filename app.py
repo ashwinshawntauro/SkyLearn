@@ -83,9 +83,13 @@ def generate_certificate_route():
         )
 
     # Define file paths for certificate generation
-    pdf_file_path = "certificate.pdf"
+    pdf_file_path = f"{uid}.pdf"
     institute_logo_path = "../assets/logo.jpg"
 
+  
+    # Calculate the certificate ID
+    data_to_hash = f"{uid}{candidate_name}{course_name}{org_name}".encode("utf-8")
+    certificate_id = hashlib.sha256(data_to_hash).hexdigest()
     # Call the certificate generation function
     generate_certificate(
         pdf_file_path,
@@ -94,16 +98,14 @@ def generate_certificate_route():
         course_name,
         org_name,
         institute_logo_path,
+        certificate_id,
     )
 
     ipfs_hash = upload_to_pinata(pdf_file_path, api_key, api_secret)
 
+  
     # Remove the generated PDF file after uploading to IPFS
     os.remove(pdf_file_path)
-
-    # Calculate the certificate ID
-    data_to_hash = f"{uid}{candidate_name}{course_name}{org_name}".encode("utf-8")
-    certificate_id = hashlib.sha256(data_to_hash).hexdigest()
 
     # Smart Contract Call
     contract.functions.generateCertificate(
