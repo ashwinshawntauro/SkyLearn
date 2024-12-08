@@ -19,7 +19,7 @@ function Navbar() {
 
     return (
         <div>
-            <header className="flex items-center justify-between p-2 bg-white shadow max-h-[50px]">
+            <header className="flex items-center justify-between p-2 bg-zinc-100 shadow max-h-[50px]">
                 <Button className="text-black bg-white hover:text-white group" onClick={(e) => router.replace('/')}>
                     <svg className="w-6 h-6 text-gray-800 group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                         <path fillRule="evenodd" d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" clipRule="evenodd" />
@@ -29,16 +29,16 @@ function Navbar() {
 
                 <Input
                     type="text"
-                    placeholder="Press ⌘ + F to search"
-                    className="p-2 border rounded-md w-full mx-2"
+                    placeholder="Search for Courses"
+                    className="p-2 border rounded-md w-full mx-2 bg-white"
                 />
                 {isLogged && (
                     <div className="flex items-center space-x-4">
                         <span className="inline-flex font-semibold text-sm items-center bg-white text-black p-1.5 px-2 rounded-lg shadow border border-gray-100 whitespace-nowrap">
-                            Credits: 0
+                            Tokens: 0
                         </span>
 
-                        <Button className="text-black p-2 rounded-lg bg-transparent shadow-none hover:bg-transparent text-primary">
+                        <Button className=" p-2 rounded-lg bg-transparent shadow-none hover:bg-transparent text-primary">
                             <DropdownMenu>
                                 <DropdownMenuTrigger><svg
                                 className="w-6 h-6 text-black hover:text-primary"
@@ -64,7 +64,7 @@ function Navbar() {
                                 <Avatar className="w-8 h-8 cursor-pointer">
                                     {userName && <AvatarImage className="rounded-full" src={`https://ui-avatars.com/api/?name=${userName}&background=1e90ff&color=FFFFFF`} />}
                                     <AvatarFallback className="bg-gray-200 text-gray-600 rounded-full flex items-center justify-center">
-                                        <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <svg className="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                         </svg>
                                     </AvatarFallback>
@@ -76,25 +76,25 @@ function Navbar() {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={(e) => router.replace('/profile')}>
-                                    <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <svg className="w-12 h-12 text-white fill-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                     </svg>
                                     Profile
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={(e) => router.replace('/mycourses')}>
-                                    <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <svg className="w-6 h-6 text-white fill-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 9h3m-3 3h3m-3 3h3m-6 1c-.306-.613-.933-1-1.618-1H7.618c-.685 0-1.312.387-1.618 1M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" />
                                     </svg>
                                     My Courses
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <svg className="w-6 h-6 text-blue-500 fill-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" strokeLinecap="square" strokeLinejoin="round" strokeWidth="2" d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                     </svg>
                                     Settings
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={logout}>
-                                    <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <svg className="w-6 h-6 text-blue-500 fill-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
                                     </svg>
                                     Logout
