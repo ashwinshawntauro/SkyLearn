@@ -38,7 +38,7 @@ function Navbar() {
                             Credits: 0
                         </span>
 
-                        <Button className="text-black p-2 rounded-lg bg-transparent shadow-none hover:bg-transparent text-primary">
+                        <Button className="p-2 rounded-lg bg-transparent shadow-none hover:bg-transparent text-primary">
                             <DropdownMenu>
                                 <DropdownMenuTrigger><svg
                                 className="w-6 h-6 text-black hover:text-primary"

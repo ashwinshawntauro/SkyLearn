@@ -13,6 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import { AuthContext } from "@/providers/AuthProvider";
 
 export default function Page({ params }) {
   const videoRef = useRef();
@@ -20,28 +21,76 @@ export default function Page({ params }) {
   const [activeTab, setActiveTab] = useState("module1");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [duration, setDuration] = useState(0);
+  let stopTime = null
+  let dur = null
   const room = params.courseId;
-
-
-  // Initialize the connection
+  const liveId = room.split('L')[1];
+  const { userId } = AuthContext()
   const initConnection = async () => {
     if (!room) {
       alert("Class is missing in the URL!");
       return;
     }
-
     try {
       const newPeer = createPeerConnection();
       setPeer(newPeer);
       await setupPeerConnection(newPeer, room);
+      setStartTime(new Date().getTime());
+      try {
+        const response = await fetch("/api/createStudentLive", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            studentId: userId,
+            courseId: room,
+            liveId: liveId,
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to submit duration");
+        }
+        else {
+          console.log(response)
+        }
+      } catch (error) {
+        console.error("Error submitting duration:", error);
+      }
     } catch (error) {
       console.error("Initialization error:", error);
       alert("Failed to connect to the broadcast: " + error.message);
     }
   };
 
-  // Disconnect and clean up resources
-  const disconnectFromBroadcast = () => {
+  const disconnectFromBroadcast = async () => {
+    stopTime = new Date().getTime();
+    dur = (stopTime - startTime) / 1000
+    setDuration(dur)
+    try {
+      const response = await fetch("/api/updateStudentLive", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          liveId:liveId,
+          duration:dur
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit duration");
+      }
+      else {
+        console.log(response)
+      }
+    } catch (error) {
+      console.error("Error submitting duration:", error);
+    }
     if (videoRef.current?.srcObject) {
       videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
       videoRef.current.srcObject = null;
@@ -137,6 +186,15 @@ export default function Page({ params }) {
     }
   };
 
+  // Handle page unload to track the student's attendance duration
+  // const handleBeforeUnload = () => {
+  //   if (startTime) {
+  //     const attendedDuration = Math.floor((Date.now() - startTime) / 1000); // Duration in seconds
+  //     setDuration(attendedDuration);
+  //     submitDuration(attendedDuration); 
+  //   }
+  // };
+
   return (
     <div className="grid">
       <Navbar />
@@ -149,8 +207,8 @@ export default function Page({ params }) {
             >
               <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li className="inline-flex items-center">
-                  <a
-                    href="#"
+                  <Link
+                    href="/"
                     className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                   >
                     <svg
@@ -163,7 +221,7 @@ export default function Page({ params }) {
                       <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                     </svg>
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <div className="flex items-center">
@@ -182,12 +240,12 @@ export default function Page({ params }) {
                         d="m1 9 4-4-4-4"
                       />
                     </svg>
-                    <a
-                      href="#"
+                    <Link
+                      href={`/courses/${room}`}
                       className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
                     >
                       Courses
-                    </a>
+                    </Link>
                   </div>
                 </li>
                 <li aria-current="page">
@@ -283,6 +341,7 @@ export default function Page({ params }) {
         </div>
         <div className="flex-col pb-2 ml-2">
           <Button id="video" className="px-7 mx-2" onClick={initConnection}>Join Class</Button>
+          <Button id="video" className="bg-red-500" onClick={disconnectFromBroadcast}>Leave Class</Button>
         </div>
         {/* Bottom Cards */}
         <div>

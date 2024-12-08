@@ -4,23 +4,25 @@ import { NextResponse } from 'next/server';
 const prisma = new PrismaClient();
 
 export async function POST(req) {
-    const { duration, status, course_id, tutor_id } = await req.json();
-    if (!duration || !status || !course_id || !tutor_id) {
+    const { status, course_id, tutor_id,datetime,title,description} = await req.json();
+    if (!status || !course_id || !tutor_id) {
         return NextResponse.json(
-            { error: 'All fields (duration, status, course_id, tutor_id) are required' },
+            { error: 'All fields are required' },
             { status: 400 }
         );
     }
     try {
-        const setDuration = await prisma.livestreams.create({
+        const createLivestream = await prisma.livestreams.create({
             data: {
-                duration: parseInt(duration),
+                title: title,
+                description:description,
                 status: status,
                 course_id: parseInt(course_id),
                 tutor_id: parseInt(tutor_id),
+                datetime: new Date(datetime).getDate()
             },
         });
-        return NextResponse.json(setDuration, { status: 200 });
+        return NextResponse.json(createLivestream, { status: 200 });
     } catch (error) {
         console.error('Error creating course:', error);
         return NextResponse.json(

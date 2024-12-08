@@ -13,6 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/providers/AuthProvider";
+import Link from "next/link";
 
 export default function Page({ params }) {
     const videoRef = useRef(null);
@@ -28,7 +29,7 @@ export default function Page({ params }) {
     const [start, setStart] = useState(startTime)
     const [input, setInput] = useState('');
     const room = params.courseId;
-
+    const streamId = room.split('L')[1];
     // Create WebRTC Peer Connection
     const createPeerConnection = () => {
         const newPeer = new RTCPeerConnection({
@@ -188,10 +189,10 @@ export default function Page({ params }) {
                 peer.close();
                 setPeer(null);
             }
-            const sendTime = await fetch('/api/setDuration', {
+            const sendTime = await fetch('/api/setDurationTutor', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ duration: duration, status: 'ended', course_id: room, tutor_id: userId }),
+                body: JSON.stringify({streamId:streamId, duration: duration, status: 'ended'}),
             })
             const response = await fetch('http://35.208.76.68:5000/stop-broadcast', {
                 method: 'POST',
@@ -232,8 +233,8 @@ export default function Page({ params }) {
                         >
                             <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                                 <li className="inline-flex items-center">
-                                    <a
-                                        href="#"
+                                    <Link
+                                        href="/"
                                         className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
                                     >
                                         <svg
@@ -246,7 +247,7 @@ export default function Page({ params }) {
                                             <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                                         </svg>
                                         Home
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <div className="flex items-center">
@@ -265,12 +266,12 @@ export default function Page({ params }) {
                                                 d="m1 9 4-4-4-4"
                                             />
                                         </svg>
-                                        <a
-                                            href="#"
+                                        <Link
+                                            href={`/course/${room}`}
                                             className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
                                         >
                                             Courses
-                                        </a>
+                                        </Link>
                                     </div>
                                 </li>
                                 <li aria-current="page">

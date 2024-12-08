@@ -5,7 +5,6 @@ import Header from "@/components/courses/Header";
 import CourseDetails from "@/components/courses/CourseDetails";
 import Navbar from "@/components/Navbar";
 import NavigationTabs from "@/components/courses/NavigationTabs";
-import { AuthContext } from "@/providers/AuthProvider";
 
 export default function Page() {
   const { courseId } = useParams();
