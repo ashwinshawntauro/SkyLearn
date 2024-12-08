@@ -19,7 +19,9 @@ import Navbar from "@/components/Navbar";
 export default function Home() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { logout, isLogged } = AuthContext()
+  const [sortBy, setSortBy] = useState("price"); // Default sort by price
+  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order is ascending
+  const { logout, isLogged } = AuthContext();
 
   // Fetch courses when the component mounts
   useEffect(() => {
@@ -38,6 +40,37 @@ export default function Home() {
     fetchCourses();
   }, []);
 
+  // Helper function to extract numeric part of duration (in hours)
+  const parseDuration = (duration) => {
+    if (!duration) return 0;
+    const match = duration.match(/^(\d+)/);
+    return match ? parseInt(match[1], 10) : 0;
+  };
+
+  // Sorting logic
+  const sortedCourses = [...courses].sort((a, b) => {
+    let comparison = 0;
+
+    if (sortBy === "price") {
+      comparison = a.course_price - b.course_price;
+    } else if (sortBy === "deadline") {
+      comparison = new Date(a.enrollment_deadline) - new Date(b.enrollment_deadline);
+    } else if (sortBy === "name") {
+      comparison = a.course_name.localeCompare(b.course_name);
+    } else if (sortBy === "duration") {
+      comparison = parseDuration(a.course_duration) - parseDuration(b.course_duration);
+    } else if (sortBy === "enrollments") {
+      const aEnrollments = a.course_enrolments === null ? 0 : a.course_enrolments;
+      const bEnrollments = b.course_enrolments === null ? 0 : b.course_enrolments;
+      comparison = aEnrollments - bEnrollments;
+    } else if (sortBy === "difficulty") {
+      const difficultyOrder = { basic: 0, intermediate: 1, advanced: 2 };
+      comparison = difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+    }
+
+    // Apply sorting order (ascending or descending)
+    return sortOrder === "asc" ? comparison : -comparison;
+  });
 
   if (loading) {
     return <div>Loading...</div>;
@@ -63,7 +96,6 @@ export default function Home() {
             <nav className="space-y-3 my-4 flex justify-between flex-col">
               <a href="/" className="block p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">Home</a>
               <a href="/mycourses" className="block p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">My Courses</a>
-              {/* <a href="/learning-progress" className="block p-2 rounded-md hover:bg-primary-light transition-colors hover:text-white duration-300">Learning Progress</a> */}
               <a href="/" className="block p-2 rounded-md hover:bg-primary-light transition-colors hover:text-white duration-300">Contact Us</a>
               {!isLogged &&
                 <div>
@@ -82,9 +114,43 @@ export default function Home() {
             {/* Main Content */}
             <main className="p-6">
               <section>
-                <h3 className="text-lg font-bold mb-4">Courses and Events for Product Designer</h3>
+                <h3 className="text-lg font-bold mb-4">Courses </h3>
+                
+                {/* Sorting Dropdowns */}
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="flex items-center">
+                    <label htmlFor="sortBy" className="mr-2">Sort By:</label>
+                    <select
+                      id="sortBy"
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="p-2 border rounded-md"
+                    >
+                      <option value="price">Price</option>
+                      <option value="deadline">Deadline</option>
+                      <option value="name">Course Name</option>
+                      <option value="duration">Duration</option>
+                      <option value="enrollments">Enrollments</option>
+                      <option value="difficulty">Difficulty</option>
+                    </select>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <label htmlFor="sortOrder" className="mr-2">Order:</label>
+                    <select
+                      id="sortOrder"
+                      value={sortOrder}
+                      onChange={(e) => setSortOrder(e.target.value)}
+                      className="p-2 border rounded-md"
+                    >
+                      <option value="asc">Ascending</option>
+                      <option value="desc">Descending</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {courses.map((course, index) => (
+                  {sortedCourses.map((course, index) => (
                     <Card key={course.id || `${course.course_id}-${index}`} className="bg-white shadow-md rounded-lg p-1">
                       <CardHeader>
                         <CardTitle className="text-primary text-md font-bold">{course.course_name}</CardTitle>
@@ -100,7 +166,7 @@ export default function Home() {
                         </p>
                       </CardContent>
                       <CardFooter>
-                        <Link href={`/courses/${encodeURIComponent(course.course_id)}`} passHref  className="w-full">
+                        <Link href={`/courses/${encodeURIComponent(course.course_id)}`} passHref className="w-full">
                           <Button className="w-full">View Course</Button>
                         </Link>
                       </CardFooter>
