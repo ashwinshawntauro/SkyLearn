@@ -107,7 +107,6 @@ function CourseDetails({ course }) {
         <ul className="list-none my-4 space-y-2 text-sm">
           <li>Course Duration: <span className="font-medium">{course.course_duration}</span></li>
           <li>Course Level: <span className="font-medium">{course.difficulty}</span></li>
-          <li>Students Enrolled: <span className="font-medium">{course.course_enrolments}</span></li>
           <li>Language: <span className="font-medium">English</span></li>
         </ul>
 
@@ -160,11 +159,9 @@ function CourseDetails({ course }) {
       <div className="mt-6">
         <h3 className="text-md font-semibold">This Course Includes:</h3>
         <ul className="list-disc ml-5 space-y-2 mt-2 text-sm">
-          <li>8h 56m 9s Video Lectures</li>
+          <li>{course.course_duration} Lecture duration</li>
           <li>Quizzes</li>
           <li>Assignments</li>
-          <li>Downloadable Resources</li>
-          <li>Full Lifetime Access</li>
           <li>Certificate of Completion</li>
         </ul>
       </div>
