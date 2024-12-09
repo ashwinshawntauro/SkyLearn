@@ -3,12 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Generate Certificate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
+
+        input[type="text"], input[type="number"], input[type="file"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn-group a {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        .btn-group a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div class="btn-group mt-4">
-        <a href="{{ url_for('institute') }}" >institute</a>
-        <a href="{{ url_for('verifier') }}">verifier</a>
+    <div class="container">
+        <h2>Fill the details to generate certificate</h2>
+
+        <form action="/generate-certificate" method="POST" class="form-section">
+            <label for="uid">UID:</label>
+            <input type="number" id="uid" name="uid" required>
+
+            <label for="course_id">Course ID:</label>
+            <input type="number" id="course_id" name="course_id" required>
+
+            <label for="candidate_name">Name:</label>
+            <input type="text" id="candidate_name" name="candidate_name" required>
+
+            <label for="course_name">Course Name:</label>
+            <input type="text" id="course_name" name="course_name" required>
+
+            <label for="org_name">Org Name:</label>
+            <input type="text" id="org_name" name="org_name" required>
+
+            <input type="submit" value="Generate Certificate">
+        </form>
+
+        <h2>View Certificate</h2>
+
+        <form action="/view-certificate" method="POST" class="form-section">
+            <label for="certificate_id">Enter the Certificate ID:</label>
+            <input type="text" id="certificate_id" name="certificate_id" required>
+            
+            <input type="submit" value="Submit">
+        </form>
+
+        <h2>Upload the PDF version of the certificate</h2>
+
+        <form action="/upload-certificate" method="POST" enctype="multipart/form-data" class="form-section">
+            <label for="certificate_file">Upload PDF:</label>
+            <input type="file" id="certificate_file" name="certificate_file" accept="application/pdf" required>
+
+            <input type="submit" value="Upload">
+        </form>
+
+        <!-- Uncomment this section if you need to add links to other pages -->
+        <!--
+        <div class="btn-group mt-4">
+            <a href="{{ url_for('institute') }}">Institute</a>
+            <a href="{{ url_for('verifier') }}">Verifier</a>
+        </div>
+        -->
     </div>
 </body>
 </html>
