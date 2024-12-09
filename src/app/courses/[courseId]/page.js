@@ -1,28 +1,26 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "next/navigation";
 import Header from "@/components/courses/Header";
 import CourseDetails from "@/components/courses/CourseDetails";
 import Navbar from "@/components/Navbar";
 import NavigationTabs from "@/components/courses/NavigationTabs";
 
-function CoursePage() {
-  const course_id = useParams();
+export default function Page() {
+  const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    if (course_id) {
+    if (courseId) {
       const fetchCourseData = async () => {
         try {
-          const res = await fetch(`/api/getCourses/?courseId=${course_id.courseId}`, {
-            method: 'POST',
+          const res = await fetch(`/api/getCourses/?courseId=${courseId}`, {
+            method: "POST",
           });
           if (!res.ok) throw new Error("Course not found");
           const data = await res.json();
           setCourse(data);
         } catch (error) {
-
           console.error("Error fetching course data:", error);
           setCourse(null);
         } finally {
@@ -32,7 +30,7 @@ function CoursePage() {
 
       fetchCourseData();
     }
-  }, [course_id]);
+  }, [courseId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -41,15 +39,14 @@ function CoursePage() {
   if (!course) {
     return <div>Course does not exist</div>;
   }
-
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Navbar/>
+      <Navbar />
       <div className="container-fluid mx-auto grid grid-cols-9 gap-3 p-4">
         <div className="col-span-6">
           <Header course={course} className="container mx-auto" />
           <div>
-            <NavigationTabs course={course}/>
+            <NavigationTabs course={course} />
           </div>
         </div>
 
@@ -58,8 +55,5 @@ function CoursePage() {
         </div>
       </div>
     </div>
-
   );
 }
-
-export default CoursePage;

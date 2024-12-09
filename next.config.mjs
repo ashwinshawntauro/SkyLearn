@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  distDir: 'build',
   images: {
     remotePatterns: [
       {
@@ -10,37 +11,7 @@ const nextConfig = {
       },
     ],
   },
-  async headers() {
-    return [
-      {
-        source: '/signup',
-        headers: [
-          {
-            key: 'x-custom-header',
-            value: 'my custom header value',
-          },
-          {
-            key: 'x-another-custom-header',
-            value: 'my other custom header value',
-          },
-        ],
-      },
-      {
-        source: '/signin',
-        headers: [
-          {
-            key: 'x-custom-header',
-            value: 'my custom header value',
-          },
-          {
-            key: 'x-another-custom-header',
-            value: 'my other custom header value',
-          },
-        ],
-      },
-    ];
-  },
-  
+
 };
 
 export default nextConfig;

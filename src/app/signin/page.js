@@ -124,7 +124,7 @@ export default function SignInPage() {
               )}
             </Button>
             <span className="flex justify-center">Not yet Registered? <Link href={"/signup"} className="px-2 text-blue-500 font-semibold">Signup</Link></span>
-          </form>
+          <span className="flex justify-center">Forgot Password? <Link href={"/forgot-password"} className="px-2 text-blue-500 font-semibold"> Click Here</Link></span></form>
         </div>
       </div>
     </div>

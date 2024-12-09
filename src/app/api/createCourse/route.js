@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 export async function POST(req) {
-    const {CourseName,CourseDesc,course_price,Diff,courseDuration,enrollment_deadline}= await req.json()
+    const {tutorId,CourseName,CourseDesc,course_price,Diff,courseDuration,enrollment_deadline}= await req.json()
     try {
         const newCourse = await prisma.cOURSE.create({
             data: {
@@ -15,8 +15,14 @@ export async function POST(req) {
                 enrollment_deadline: new Date(enrollment_deadline),
             },
         });
-        if (newCourse){
-            return NextResponse.json(newCourse)
+        const createTeaching = await prisma.tEACHING.create({
+            data: {
+                course_id: newCourse.course_id, 
+                tutor_id: tutorId,
+            },
+        });
+        if (newCourse && createTeaching){
+            return NextResponse.json(newCourse,{status:200})
         }
         else{
             return NextResponse.error({ error: 'All fields are required' },
