@@ -108,6 +108,28 @@ function NavigationTabs({ course }) {
       console.error("Error fetching livestreams:", error);
     }
   };
+  const endLive = async (streamId) => {
+    try {
+      const response = await fetch("/api/updateLiveEnd", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          livestreamId: streamId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit duration");
+      }
+      else {
+        console.log(response)
+      }
+    } catch (error) {
+      console.error("Error submitting duration:", error);
+    }
+  }
 
   useEffect(() => {
     fetchLeaderboardData();
@@ -173,45 +195,49 @@ function NavigationTabs({ course }) {
               <div>
                 <TutorLivestream courseId={courseId} tutorId={userId} />
                 {livestreams.map((livestream) => (
-                <div
-                  key={livestream.id}
-                  className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
-                >
-                  <div className="">
-                    <div className="mb-2">
-                      {livestream.status === "active" && (
-                        <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
-                          Live
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-black font-bold text-xl mb-2">
-                      {livestream.title}
-                    </div>
-                    <p className="text-grey-darker text-base">
-                      {livestream.description}
-                    </p>
-                    <div className="flex items-center">
-                      <div className="text-sm my-4">
-                        <p className="text-primary leading-none">Jonathan Reinink</p>
-                        <p className="text-gray-500">Aug 18</p>
+                  <div
+                    key={livestream.id}
+                    className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                  >
+                    <div className="">
+                      <div className="mb-2">
+                        {livestream.status === "active" && (
+                          <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                            Live
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-black font-bold text-xl mb-2">
+                        {livestream.title}
+                      </div>
+                      <p className="text-grey-darker text-base">
+                        {livestream.description}
+                      </p>
+                      <div className="flex items-center">
+                        <div className="text-sm my-4">
+                          <p className="text-primary leading-none">Jonathan Reinink</p>
+                          <p className="text-gray-500">Aug 18</p>
+                        </div>
                       </div>
                     </div>
+                    {livestream.status === "active" && (
+                      <div>
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `${courseId}L${livestream.id}/livestream`
+                            )
+                          }
+                          className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                        >
+                          Join Class
+                        </button>
+                        <Button onClick={endLive(livestream.id)}>End Live</Button>
+                      </div>
+
+                    )}
                   </div>
-                  {livestream.status === "active" && (
-                    <button
-                      onClick={() =>
-                        router.push(
-                          `${courseId}L${livestream.id}/livestream`
-                        )
-                      }
-                      className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
-                    >
-                      Join Class
-                    </button>
-                  )}
-                </div>
-              ))}
+                ))}
               </div>
             ) :
               (<div></div>)

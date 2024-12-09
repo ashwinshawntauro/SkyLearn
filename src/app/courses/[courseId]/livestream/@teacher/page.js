@@ -194,26 +194,6 @@ export default function Page({ params }) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({streamId:streamId, duration: duration, status: 'ended'}),
             })
-            try {
-                const response = await fetch("/api/updateLiveEnd", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    livestreamId: streamId,
-                  }),
-                });
-          
-                if (!response.ok) {
-                  throw new Error("Failed to submit duration");
-                }
-                else {
-                  console.log(response)
-                }
-              } catch (error) {
-                console.error("Error submitting duration:", error);
-              }
             const response = await fetch('http://35.208.76.68:5000/stop-broadcast', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
