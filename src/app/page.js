@@ -40,6 +40,16 @@ export default function Home() {
     fetchCourses();
   }, []);
 
+
+  courses.forEach(course => {
+    if (course.TEACHING.length > 0) {
+      course.TEACHING.forEach(teaching => {
+        const tutorName = teaching.TUTOR.tutor_name;
+        console.log(`Course: ${course.course_name}, Tutor: ${tutorName}`);
+      });
+    }
+  });
+
   // Helper function to extract numeric part of duration (in hours)
   const parseDuration = (duration) => {
     if (!duration) return 0;
@@ -156,29 +166,34 @@ export default function Home() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {sortedCourses.map((course, index) => (
-                    <Card key={course.id || `${course.course_id}-${index}`} className="bg-white shadow-md rounded-lg p-1">
-                      <CardHeader>
-                        <CardTitle className="text-primary text-lg font-extrabold">{course.course_name}</CardTitle>
-                        <CardDescription>
-                          <span className="text-base font-bold text-gray-800">₹ {course.course_price}</span>
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-sm text-gray-500 font-semibold">By: {course.instructor}</p>
-                        <p className="text-sm text-gray-500 font-semibold">Level: {course.difficulty}</p>
-                        <p className="text-sm text-[#f55045] pt-4 font-extrabold text-center">
-                          Deadline: {new Date(course.enrollment_deadline).toLocaleDateString("en-IN")}
-                        </p>
-                      </CardContent>
-                      <CardFooter>
-                        <Link href={`/courses/${encodeURIComponent(course.course_id)}`} passHref className="w-full">
-                          <Button className="w-full">View Course</Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
+  {sortedCourses.map((course, index) => (
+    <Card key={course.id || `${course.course_id}-${index}`} className="bg-white shadow-md rounded-lg p-1">
+      <CardHeader>
+        <CardTitle className="text-primary text-lg font-extrabold">{course.course_name}</CardTitle>
+        <CardDescription>
+          <span className="text-base font-bold text-gray-800">₹ {course.course_price}</span>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {course.TEACHING.length > 0 && course.TEACHING.map((teaching, idx) => (
+          <p key={idx} className="text-sm text-gray-500 font-semibold">
+            By: {teaching.TUTOR.tutor_name}
+          </p>
+        ))}
+        <p className="text-sm text-gray-500 font-semibold">Level: {course.difficulty}</p>
+        <p className="text-sm text-[#f55045] pt-4 font-extrabold text-center">
+          Deadline: {new Date(course.enrollment_deadline).toLocaleDateString("en-IN")}
+        </p>
+      </CardContent>
+      <CardFooter>
+        <Link href={`/courses/${encodeURIComponent(course.course_id)}`} passHref className="w-full">
+          <Button className="w-full">View Course</Button>
+        </Link>
+      </CardFooter>
+    </Card>
+  ))}
+</div>
+
               </section>
             </main>
           </div>

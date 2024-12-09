@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
 import { Skeleton } from "@/components/ui/skeleton"
 import TutorLivestream from "@/components/courses/tutor/TutorLivestream"
+import QuizForm from "./tutor/TutorQuiz"
 
 function NavigationTabs({ course }) {
   const router = useRouter();
@@ -168,7 +169,6 @@ function NavigationTabs({ course }) {
     }
   }, [courseId, userId]);
 
-
   return (
     <div>
       {isPurchased || isTutor ? (
@@ -282,6 +282,7 @@ function NavigationTabs({ course }) {
           </TabsContent>
 
           <TabsContent value="quizzes" className="p-2">
+            <QuizForm courseId={courseId}/>
             <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
               <div>
                 <div className="mb-2">
