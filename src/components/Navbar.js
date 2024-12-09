@@ -70,7 +70,7 @@ function Navbar() {
         <div className="relative w-full mx-2">
           <Input
             type="text"
-            placeholder="Search courses..."
+            placeholder="Search Courses"
             value={searchQuery}
             onChange={handleSearch}
             className="p-2 border rounded-md w-full"

@@ -38,6 +38,7 @@ export async function GET(req) {
         tutor_email: true,
         tutor_id: true,
         tutor_name: true,
+        address:true,
       }
     });
 
@@ -46,6 +47,7 @@ export async function GET(req) {
         id: tutor.tutor_id,
         email: tutor.tutor_email,
         name: tutor.tutor_name,
+        address:tutor.address,
         role: "teacher"
       });
     }
