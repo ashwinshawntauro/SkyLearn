@@ -28,6 +28,8 @@ function NavigationTabs({ course }) {
   const [isTutor, setIsTutor] = useState(null);
   const [aiResponse, setAiResponse] = useState("");
   const [userQuestion, setUserQuestion] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [quizStatus, setQuizStatus] = useState(false);
   const gemini = async (userQuestion) => {
     try {
       const genAI = new GoogleGenerativeAI("AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0");
@@ -137,6 +139,35 @@ function NavigationTabs({ course }) {
     fetchLeaderboardData();
     fetchLivestreams();
   }, [courseId]);
+
+  useEffect(() => {
+    if (courseId) {
+      const fetchQuizData = async () => {
+        try {
+          const res = await fetch(
+            `/api/getQuizStatus?courseId=${courseId}&userId=${userId}`
+          );
+          if (res.ok) {
+            const data = await res.json();
+            if (data.quiz_attempted) {
+              setQuizStatus(true); // Set stage to prevent retaking
+            } else {
+              setQuizStatus(false); // Set stage to prevent retaking
+            }
+          } else {
+            console.error("Failed to fetch quiz status");
+          }
+        } catch (error) {
+          console.error("Error fetching course data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchQuizData();
+    }
+  }, [courseId, userId]);
+
 
   return (
     <div>
@@ -251,7 +282,29 @@ function NavigationTabs({ course }) {
           </TabsContent>
 
           <TabsContent value="quizzes" className="p-2">
-            Quizzes
+            <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
+              <div>
+                <div className="mb-2">
+                  {quizStatus || (
+                    <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                      Live
+                    </span>
+                  )}
+                </div>
+                <div className="text-black font-bold text-xl mb-2">Quiz</div>
+                <p className="text-grey-darker text-base">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Voluptatibus quia, nulla! Maiores et perferendis eaque,
+                  exercitationem praesentium nihil.
+                </p>
+              </div>
+              <Button
+                onClick={() => router.push(`/courses/${courseId}/quiz`)}
+                className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+              >
+                {quizStatus ? "Already Attempted" : "Attempt Quiz"}
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="leaderboard" className="p-2">
