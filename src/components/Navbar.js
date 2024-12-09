@@ -39,9 +39,6 @@ function Navbar() {
     }
   };
 
-  console.log(searchResults)
-
-
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -100,7 +97,7 @@ function Navbar() {
         {isLogged && (
           <div className="flex items-center space-x-4">
             <span className="inline-flex font-semibold text-sm items-center bg-white text-black p-1.5 px-2 rounded-lg shadow border border-gray-100 whitespace-nowrap">
-              Tokens: 0
+              Points: 0
             </span>
 
             <DropdownMenu>

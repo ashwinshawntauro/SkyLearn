@@ -19,6 +19,8 @@ import { Button } from "../ui/button";
 import { Skeleton } from "@/components/ui/skeleton"
 import TutorLivestream from "@/components/courses/tutor/TutorLivestream"
 import QuizForm from "./tutor/TutorQuiz"
+import LivestreamStatus from "./student/livestreamStatus"
+import jwt from 'jsonwebtoken';
 
 function NavigationTabs({ course }) {
   const router = useRouter();
@@ -31,6 +33,9 @@ function NavigationTabs({ course }) {
   const [userQuestion, setUserQuestion] = useState("");
   const [loading, setLoading] = useState(true);
   const [quizStatus, setQuizStatus] = useState(false);
+  const secretKey = process.env.JWT_SECRET_KEY || 'your-secret-key';
+
+
   const gemini = async (userQuestion) => {
     try {
       const genAI = new GoogleGenerativeAI("AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0");
@@ -169,9 +174,43 @@ function NavigationTabs({ course }) {
       };
 
       fetchQuizData();
+      // getToken(courseId)
     }
   }, [courseId, userId]);
-  console.log(isPurchased, isTutor)
+
+  const generateToken = async (courseId, livestreamId) => {
+    try {
+      const token = jwt.sign(
+        { courseId, livestreamId },
+        secretKey
+      );
+      getToken(courseId, token);
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const getToken = async (courseId, token) => {
+    try {
+      const response = await fetch(`/api/getToken?course_id=${courseId}&token=${token}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseId }),
+      });
+
+      const dataToken = await response.json();
+
+      if (response.ok) {
+        console.log(dataToken);
+      }
+    } catch (error) {
+      console.error("Error creating livestream:", error);
+    }
+  }
+
   return (
     <div>
       {isPurchased || isTutor ? (
@@ -189,37 +228,27 @@ function NavigationTabs({ course }) {
               {livestreams.map((livestream) => (
                 <div
                   key={livestream.id}
-                  className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                  className="border mb-2 border-gray-300 rounded-lg p-5 flex flex-col lg:flex-row justify-between items-start lg:items-center bg-white transition-shadow duration-300"
                 >
-                  <div className="">
-                    <div className="mb-2">
+                  <div className="w-full lg:w-3/4">
+                    <div className="flex items-center mb-2">
                       {livestream.status === "active" && (
-                        <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                        <span className="bg-red-100 animate-blink text-red-800 text-xs font-medium px-2 py-1 rounded border border-red-400 mr-2">
                           Live
                         </span>
                       )}
+                      <h3 className="text-xl font-semibold text-gray-900">{livestream.title}</h3>
                     </div>
-                    <div className="text-black font-bold text-xl mb-2">
-                      {livestream.title}
-                    </div>
-                    <p className="text-grey-darker text-base">
-                      {livestream.description}
-                    </p>
-                    <div className="flex items-center">
-                      <div className="text-sm my-4">
-                        <p className="text-primary leading-none">Jonathan Reinink</p>
-                        <p className="text-gray-500">Aug 18</p>
-                      </div>
+                    <p className="text-gray-600 mb-3">{livestream.description}</p>
+                    <div className="flex items-center space-x-2">
+                      <LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />
                     </div>
                   </div>
                   {livestream.status === "active" && (
                     <Button
-                      onClick={() =>
-                        router.push(
-                          `${courseId}L${livestream.id}/livestream`
-                        )
-                      }
-                      className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                      onClick={() => router.push(`${courseId}L${livestream.id}/livestream`)}
+                      className="py-14 flex h-full lg:mt-0 lg:ml-4 px-4 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-light"
+                      style={{ height: '100%' }} // Ensure the button stretches to the full height of its container
                     >
                       Join Class
                     </Button>
@@ -233,7 +262,7 @@ function NavigationTabs({ course }) {
                 {livestreams.map((livestream) => (
                   <div
                     key={livestream.id}
-                    className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                    className="border-r mb-2 border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
                     <div className="">
                       <div className="mb-2">
@@ -251,8 +280,8 @@ function NavigationTabs({ course }) {
                       </p>
                       <div className="flex items-center">
                         <div className="text-sm my-4">
-                          <p className="text-primary leading-none">Jonathan Reinink</p>
-                          <p className="text-gray-500">Aug 18</p>
+                          <p className="text-primary leading-none">Tokens Raised</p>
+                          {generateToken(courseId, livestream.id)}
                         </div>
                       </div>
                     </div>
@@ -264,11 +293,11 @@ function NavigationTabs({ course }) {
                               `${courseId}L${livestream.id}/livestream`
                             )
                           }
-                          className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                          className="flex py-10 items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
                         >
                           Join Class
                         </Button>
-                        <Button onClick={() => endLive(livestream.id)} className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800">End Live</Button>
+                        <Button onClick={() => endLive(livestream.id)} className="flex py-10 w-full items-center mx-2 text-nowrap bg-red-600 px-3 text-white hover:bg-red-800">End Live</Button>
                       </div>
 
                     )}

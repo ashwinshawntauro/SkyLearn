@@ -46,6 +46,7 @@ model COURSE {
   STUDENTCLASSES          STUDENTCLASSES[]
   TEACHING                TEACHING[]
   livestreams             livestreams[]
+  user_tokens             user_tokens[]
 }
 
 model COURSE_ASSIGNMENT {
@@ -112,6 +113,7 @@ model STUDENT {
   LEADERBOARD        LEADERBOARD[]
   STUDENTCLASSES     STUDENTCLASSES[]
   SUBMISSION         SUBMISSION[]
+  user_tokens        user_tokens[]
 }
 
 model SUBMISSION {
@@ -219,6 +221,20 @@ model CERTIFICATES {
 
   @@index([course_id], map: "course_id")
   @@index([student_id], map: "student_id")
+}
+
+model user_tokens {
+  id         Int       @id @default(autoincrement())
+  user_id    Int?
+  token      String?   @db.VarChar(500)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  expires_at DateTime? @db.Timestamp(0)
+  course_id  Int?
+  COURSE     COURSE?   @relation(fields: [course_id], references: [course_id], onUpdate: NoAction, map: "fk_course_id")
+  STUDENT    STUDENT?  @relation(fields: [user_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_id")
+
+  @@index([user_id], map: "fk_user_id")
+  @@index([course_id], map: "fk_course_id")
 }
 
 enum COURSE_difficulty {

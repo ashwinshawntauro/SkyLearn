@@ -100,7 +100,6 @@ function CourseDetails({ course }) {
     router.push(url);
   };
 
-  console.log(course.youtube_link);
   return (
     <aside className="bg-white p-6 rounded-lg shadow-md">
       <div className="rounded overflow-hidden">
