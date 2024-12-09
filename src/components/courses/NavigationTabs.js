@@ -22,7 +22,7 @@ import QuizForm from "./tutor/TutorQuiz"
 
 function NavigationTabs({ course }) {
   const router = useRouter();
-  const { userId, userName } = AuthContext();
+  const { userId, userName, role } = AuthContext();
   const courseId = course.course_id;
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
@@ -54,7 +54,7 @@ function NavigationTabs({ course }) {
       const res = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(studentId)}`, {
         method: 'GET',
       });
-      if (res.status === 200) {
+      if (res.ok) {
         const data = await res.json();
         const enrolledCourses = data.getEnroll || [];
         const courseExists = enrolledCourses.some(course => course.course_id === courseId);
@@ -86,7 +86,10 @@ function NavigationTabs({ course }) {
   useEffect(() => {
     if (userId) {
       getEnroll(userId);
-      getTutor(userId);
+      if (role == 'teacher') { getTutor(userId) }
+      else {
+        setIsTutor(false)
+      }
     }
   }, [userId]);
 
@@ -168,7 +171,7 @@ function NavigationTabs({ course }) {
       fetchQuizData();
     }
   }, [courseId, userId]);
-
+  console.log(isPurchased, isTutor)
   return (
     <div>
       {isPurchased || isTutor ? (
@@ -265,7 +268,7 @@ function NavigationTabs({ course }) {
                         >
                           Join Class
                         </Button>
-                        <Button onClick={()=>endLive(livestream.id)} className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800">End Live</Button>
+                        <Button onClick={() => endLive(livestream.id)} className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800">End Live</Button>
                       </div>
 
                     )}
@@ -282,7 +285,7 @@ function NavigationTabs({ course }) {
           </TabsContent>
 
           <TabsContent value="quizzes" className="p-2">
-            <QuizForm courseId={courseId}/>
+            <QuizForm courseId={courseId} />
             <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
               <div>
                 <div className="mb-2">
