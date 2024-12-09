@@ -35,6 +35,7 @@ model COURSE {
   course_enrolments       Int?
   googleClassroomId       String?             @unique(map: "googleClassroomId") @db.VarChar(255)
   googleClassroomJoinLink String?             @db.VarChar(255)
+  youtube_link            String?             @db.VarChar(255)
   CERTIFICATES            CERTIFICATES[]
   COURSE_ASSIGNMENT       COURSE_ASSIGNMENT[]
   COURSE_CERTIFICATE      COURSE_CERTIFICATE?

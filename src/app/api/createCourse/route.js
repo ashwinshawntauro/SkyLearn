@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 export async function POST(req) {
-    const {tutorId,tutorName,CourseName,CourseDesc,course_price,Diff,courseDuration,enrollment_deadline}= await req.json()
+    const {tutorId,tutorName,CourseName,CourseDesc,course_price,Diff,courseDuration,enrollment_deadline,youtube_link}= await req.json()
     try {
         const newCourse = await prisma.cOURSE.create({
             data: {
@@ -13,6 +13,7 @@ export async function POST(req) {
                 difficulty:Diff,
                 course_duration:courseDuration,
                 enrollment_deadline: new Date(enrollment_deadline),
+                youtube_link:youtube_link,
             },
         });
         const createTeaching = await prisma.tEACHING.create({
