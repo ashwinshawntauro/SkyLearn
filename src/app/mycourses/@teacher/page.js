@@ -30,6 +30,7 @@ export default function TeacherDashboard() {
     Diff: "",
     courseDuration: "",
     enrollment_deadline: "",
+    youtube_link:"",
   });
 
   useEffect(() => {
@@ -150,6 +151,7 @@ export default function TeacherDashboard() {
           Diff: "",
           courseDuration: "",
           enrollment_deadline: "",
+          youtube_link:"",
         });
       } else {
         console.error("Error creating course:", response.statusText);
@@ -321,6 +323,17 @@ export default function TeacherDashboard() {
                     type="date"
                     name="enrollment_deadline"
                     value={newCourse.enrollment_deadline}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full p-2 border rounded"
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Youtube Link</label>
+                  <input
+                    type="text"
+                    name="youtube_link"
+                    value={newCourse.youtube_link}
                     onChange={handleInputChange}
                     required
                     className="w-full p-2 border rounded"

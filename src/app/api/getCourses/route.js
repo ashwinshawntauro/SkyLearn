@@ -17,8 +17,20 @@ export async function GET() {
                 course_duration:true,
                 enrollment_deadline: true,
                 googleClassroomId:true,
-                googleClassroomJoinLink:true
+                googleClassroomJoinLink:true,
+                youtube_link:true,
+                 TEACHING: {
+            select: {
+                tutor_id: true,
+                TUTOR: { // Access the relation to the TUTOR model
+                    select: {
+                        tutor_name: true
+                    }
+                }
             }
+        }
+            }
+            
         });
 
         if (courses) {
@@ -62,7 +74,8 @@ export async function POST(req) {
                 difficulty: true,
                 course_duration:true,
                 course_enrolments:true,
-                enrollment_deadline: true
+                enrollment_deadline: true,
+                youtube_link:true,
             }
         });
 

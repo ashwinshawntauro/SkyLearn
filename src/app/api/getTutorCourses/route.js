@@ -36,6 +36,7 @@ export async function GET(req) {
                 enrollment_deadline: true,
                 googleClassroomId: true,
                 googleClassroomJoinLink: true,
+                youtube_link:true,
             },
         });
         if (getCourse && getCourse.length > 0) {
