@@ -11,11 +11,13 @@ const Context = createContext({
   role: null,
   userId:null,
   email: null,
-  accessToken:null
+  accessToken:null,
+  address:null,
 });
 
 const AuthProvider = ({ children }) => {
   const [userName, setUserName] = useState(null);
+  const [address, setAddress] = useState(null);
   const [email, setEmail] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -34,6 +36,8 @@ const AuthProvider = ({ children }) => {
         setRole(data.role);
         setEmail(data.email);
         setUserName(data.name);
+        setAddress(data.address);
+
       } else {
         console.error("Error fetching role:", resp.statusText);
       }
@@ -49,6 +53,7 @@ const AuthProvider = ({ children }) => {
       setEmail(null);
       setRole(null);
       setId(null)
+      setAddress(null)
       console.log("User logged out");
     } catch (error) {
       console.error("Error logging out:", error);
@@ -70,7 +75,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <Context.Provider value={{ userName, email, isLogged, loading, role,logout,userId,accessToken}}>
+    <Context.Provider value={{ userName, email, isLogged,address, loading, role,logout,userId,accessToken}}>
       {children}
     </Context.Provider>
   );

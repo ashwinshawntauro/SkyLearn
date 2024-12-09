@@ -18,6 +18,7 @@ export async function GET(req) {
         student_email: true,
         student_id: true,
         student_name: true,
+        address:true,
       }
     });
 
@@ -26,7 +27,8 @@ export async function GET(req) {
         id: student.student_id,
         email: student.student_email,
         name: student.student_name,
-        role: "student"
+        role: "student",
+        address:student.address,
       });
     }
 

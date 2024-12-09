@@ -37,7 +37,7 @@ const QuizApp = () => {
 
   useEffect(() => {
     if (course_id) {
-      const fetchCourseData = async () => {
+      const fetchQuizData = async () => {
         try {
           const res = await fetch(`/api/getQuizStatus?courseId=${course_id.courseId}&userId=${userId}`);
           if (res.ok) {
@@ -74,7 +74,7 @@ const QuizApp = () => {
         }
       };
   
-      fetchCourseData();
+      fetchQuizData();
     }
   }, [course_id,userId]);
   
