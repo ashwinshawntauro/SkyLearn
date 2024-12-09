@@ -11,7 +11,7 @@ function CourseDetails({ course }) {
   const courseName = course.course_name;
   const courseDesc = course.course_description;
 
-  const { userId } = AuthContext();
+  const { userId,role} = AuthContext();
   const [isTutor, setIsTutor] = useState(null);
   const [isPurchased, setIsPurchased] = useState(null);
 
@@ -88,7 +88,10 @@ function CourseDetails({ course }) {
   useEffect(() => {
     if (userId) {
       getEnroll(userId);
-      getTutor(userId);
+      if (role == 'teacher') { getTutor(userId) }
+      else {
+        setIsTutor(false)
+      }
     }
   }, [userId]);
 
