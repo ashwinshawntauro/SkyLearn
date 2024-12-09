@@ -17,8 +17,19 @@ export async function GET() {
                 course_duration:true,
                 enrollment_deadline: true,
                 googleClassroomId:true,
-                googleClassroomJoinLink:true
+                googleClassroomJoinLink:true,
+                 TEACHING: {
+            select: {
+                tutor_id: true,
+                TUTOR: { // Access the relation to the TUTOR model
+                    select: {
+                        tutor_name: true
+                    }
+                }
             }
+        }
+            }
+            
         });
 
         if (courses) {

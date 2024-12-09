@@ -39,6 +39,9 @@ function Navbar() {
     }
   };
 
+  console.log(searchResults)
+
+
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -64,11 +67,36 @@ function Navbar() {
                     Home
                 </Button>
 
-                <Input
-                    type="text"
-                    placeholder="Search for Courses"
-                    className="p-2 border rounded-md w-full mx-2"
-                />
+                <div className="relative w-full mx-2">
+  <Input
+    type="text"
+    placeholder="Search courses..."
+    value={searchQuery}
+    onChange={handleSearch}
+    className="p-2 border rounded-md w-full"
+  />
+  {searchQuery && (
+    <div className="absolute bg-white border rounded-md shadow-lg w-full z-10 mt-2">
+      {isLoading ? (
+        <p className="p-2 text-gray-500">Loading...</p>
+      ) : searchResults.length > 0 ? (
+        searchResults.map((result) => (
+          <div
+            key={result.course_id}
+            className="p-2 hover:bg-gray-100 cursor-pointer"
+            onClick={() => handleResultClick(result.course_id)}
+          >
+            <p className="font-semibold">{result.course_name}</p>
+            <p className="text-sm text-gray-500">{result.course_description}</p>
+          </div>
+        ))
+      ) : (
+        <p className="p-2 text-gray-500">No results found</p>
+      )}
+    </div>
+  )}
+</div>
+
                 {isLogged && (
                     <div className="flex items-center space-x-4">
                         <span className="inline-flex font-semibold text-sm items-center bg-white text-black p-1.5 px-2 rounded-lg shadow border border-gray-100 whitespace-nowrap">
