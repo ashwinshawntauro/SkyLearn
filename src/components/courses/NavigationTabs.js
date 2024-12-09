@@ -13,6 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
 import { Skeleton } from "@/components/ui/skeleton"
 import TutorLivestream from "@/components/courses/tutor/TutorLivestream"
@@ -120,8 +122,8 @@ function NavigationTabs({ course }) {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit duration");
+      if (response.ok) {
+        alert("Livestream ended");
       }
       else {
         console.log(response)
@@ -145,7 +147,7 @@ function NavigationTabs({ course }) {
             <TabsTrigger value="notes">Notes</TabsTrigger>
             <TabsTrigger value="quizzes">Quizzes</TabsTrigger>
             <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
-            <TabsTrigger value="askAi">Ask AI</TabsTrigger>
+            {isPurchased ? (<TabsTrigger value="askAi">Ask AI</TabsTrigger>) : (<TabsTrigger value="gclass">Google Classroom</TabsTrigger>)}
           </TabsList>
 
           <TabsContent value="livestreams" className="p-2 max-w-full lg:flex flex-col gap-3">
@@ -183,7 +185,7 @@ function NavigationTabs({ course }) {
                           `${courseId}L${livestream.id}/livestream`
                         )
                       }
-                      className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                      className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
                     >
                       Join Class
                     </button>
@@ -222,7 +224,7 @@ function NavigationTabs({ course }) {
                     </div>
                     {livestream.status === "active" && (
                       <div>
-                        <button
+                        <Button
                           onClick={() =>
                             router.push(
                               `${courseId}L${livestream.id}/livestream`
@@ -231,8 +233,8 @@ function NavigationTabs({ course }) {
                           className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
                         >
                           Join Class
-                        </button>
-                        <Button onClick={endLive(livestream.id)}>End Live</Button>
+                        </Button>
+                        <Button onClick={()=>endLive(livestream.id)} className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800">End Live</Button>
                       </div>
 
                     )}
@@ -274,7 +276,7 @@ function NavigationTabs({ course }) {
             </Table>
           </TabsContent>
 
-          <TabsContent value="askAi" className="p-2">
+          {isPurchased ? (<TabsContent value="askAi" className="p-2">
             <h3>Ask Gemini</h3>
             <form onSubmit={handleQuestionSubmit} className="flex flex-col space-y-4">
               <textarea
@@ -306,7 +308,20 @@ function NavigationTabs({ course }) {
                 </div>
               </div>
             )}
-          </TabsContent>
+          </TabsContent>) : (
+            <TabsContent value="gclass" className="p-2">
+              <div className="flex items-center space-x-4">
+                <Label htmlFor="gclass-code" className="font-medium">
+                  Google Classroom Code:
+                </Label>
+                <Input
+                  id="gclass-code"
+                  type="text"
+                  placeholder="Enter share code"
+                  className="w-1/2"
+                />
+              </div>
+            </TabsContent>)}
 
         </Tabs>
       ) : isPurchased == false && isTutor == false ? (
