@@ -210,7 +210,7 @@ function NavigationTabs({ course }) {
                     </div>
                   </div>
                   {livestream.status === "active" && (
-                    <button
+                    <Button
                       onClick={() =>
                         router.push(
                           `${courseId}L${livestream.id}/livestream`
@@ -219,7 +219,7 @@ function NavigationTabs({ course }) {
                       className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
                     >
                       Join Class
-                    </button>
+                    </Button>
                   )}
                 </div>
               ))}
@@ -254,7 +254,7 @@ function NavigationTabs({ course }) {
                       </div>
                     </div>
                     {livestream.status === "active" && (
-                      <div>
+                      <div className="flex flex-col">
                         <Button
                           onClick={() =>
                             router.push(

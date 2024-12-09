@@ -10,9 +10,37 @@ function CourseDetails({ course }) {
   const courseAmt = course.course_price;
   const courseName = course.course_name;
   const courseDesc = course.course_description;
-  const { userId} = AuthContext();
+  const { userId } = AuthContext();
   const [isTutor, setIsTutor] = useState(null);
   const [isPurchased, setIsPurchased] = useState(null);
+
+  const [copySuccess, setCopySuccess] = useState(false);
+  const courseUrl = `${window.location.origin}/courses/${courseId}`;
+
+  const handleShareCourse = async () => {
+    if (navigator.share) {
+      // Use Web Share API if available
+      try {
+        await navigator.share({
+          title: `Check out this course: ${course.course_name}`,
+          text: course.course_description,
+          url: courseUrl,
+        });
+        console.log("Course shared successfully!");
+      } catch (error) {
+        console.error("Error sharing course:", error);
+      }
+    } else {
+      // Fallback: Copy the link to clipboard
+      try {
+        await navigator.clipboard.writeText(courseUrl);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000); // Reset success message after 2 seconds
+      } catch (error) {
+        console.error("Failed to copy link:", error);
+      }
+    }
+  };
 
   // Fetch enrolled courses for the student
   const getEnroll = async (studentId) => {
@@ -24,7 +52,7 @@ function CourseDetails({ course }) {
         const data = await res.json();
         const enrolledCourses = data.getEnroll || [];
         const courseExists = enrolledCourses.some(course => course.course_id === courseId);
-        setIsPurchased(courseExists); 
+        setIsPurchased(courseExists);
       } else {
         console.error('Failed to fetch enrollments:', res.status);
       }
@@ -40,7 +68,7 @@ function CourseDetails({ course }) {
         (course) => course.course_id === courseId
       );
       if (matchingCourse) {
-        setIsTutor(true); 
+        setIsTutor(true);
       } else {
         setIsTutor(false);
       }
@@ -51,7 +79,7 @@ function CourseDetails({ course }) {
 
   useEffect(() => {
     if (userId) {
-      getEnroll(userId); 
+      getEnroll(userId);
       getTutor(userId)
     }
   }, [userId]);
@@ -92,24 +120,41 @@ function CourseDetails({ course }) {
           </Button>
         ) : isTutor ? (
           <div></div>
-        ): isPurchased==false && isTutor ==false ? (
+        ) : isPurchased == false && isTutor == false ? (
           <Button onClick={handleEnroll} className="w-full flex justify-center bg-primary font-bold text-white p-2 rounded-lg group ">
             <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
               <path fillRule="evenodd" d="M5.024 3.783A1 1 0 0 1 6 3h12a1 1 0 0 1 .976.783L20.802 12h-4.244a1.99 1.99 0 0 0-1.824 1.205 2.978 2.978 0 0 1-5.468 0A1.991 1.991 0 0 0 7.442 12H3.198l1.826-8.217ZM3 14v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5h-4.43a4.978 4.978 0 0 1-9.14 0H3Z" clipRule="evenodd" />
             </svg>
             Enroll in this Course
           </Button>
-        ):(
+        ) : (
           <Skeleton className="w-full h-[36px] rounded-lg" />
         )
         }
 
-        <Button className="w-full flex justify-center mt-2 border bg-primary group p-2 rounded-lg ">
-          <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+        <Button
+          onClick={handleShareCourse}
+          className="w-full flex justify-center mt-2 border bg-primary group p-2 rounded-lg hover:bg-primary-light"
+        >
+          <svg
+            className="w-6 h-6 text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path d="M17.5 3a3.5 3.5 0 0 0-3.456 4.06L8.143 9.704a3.5 3.5 0 1 0-.01 4.6l5.91 2.65a3.5 3.5 0 1 0 .863-1.805l-5.94-2.662a3.53 3.53 0 0 0 .002-.961l5.948-2.667A3.5 3.5 0 1 0 17.5 3Z" />
           </svg>
           Share Course
         </Button>
+
+        {copySuccess && (
+          <p className="text-center mt-2 text-green-600 font-medium">
+            Link copied to clipboard!
+          </p>
+        )}
       </div>
 
       <div className="mt-6">
