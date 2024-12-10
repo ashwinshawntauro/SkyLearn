@@ -59,7 +59,7 @@ function Navbar() {
 
   return (
     <div>
-      <header className="flex items-center justify-between p-2 bg-zinc-100 shadow max-h-[50px]">
+      <header className="flex items-center justify-between p-2 bg-zinc-100 max-h-[50px]">
         <Button
           className="text-black bg-white hover:text-white group"
           onClick={(e) => router.replace("/")}

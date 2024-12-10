@@ -136,7 +136,6 @@ function NavigationTabs({ course }) {
     if (courseId) {
       const fetchQuizData = async () => {
         try {
-          // Correct API call URL: remove the '/quiz' part as it's not needed in your API route
           const resp = await fetch(`/api/getQuizes?courseId=${courseId}`, {
             method: "POST",
           });
@@ -145,7 +144,7 @@ function NavigationTabs({ course }) {
             const quizData = await resp.json();
 
             if (quizData.error) {
-              console.error(quizData.error); // Handle API-specific errors
+              console.error(quizData.error); 
               return;
             }
 
@@ -212,8 +211,6 @@ function NavigationTabs({ course }) {
 
       if (response.ok) {
         alert("Livestream ended");
-      } else {
-        console.log(response);
       }
     } catch (error) {
       console.error("Error submitting duration:", error);
@@ -323,7 +320,7 @@ function NavigationTabs({ course }) {
                 {livestreams.map((livestream) => (
                   <div
                     key={livestream.id}
-                    className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                    className="border-r border-b mb-2 border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
                     <div className="">
                       <div className="mb-2">
@@ -339,13 +336,8 @@ function NavigationTabs({ course }) {
                       <p className="text-grey-darker text-base">
                         {livestream.description}
                       </p>
-                      <div className="flex items-center">
-                        <div className="text-sm my-4">
-                          <p className="text-primary leading-none">
-                            Jonathan Reinink
-                          </p>
-                          <p className="text-gray-500">Aug 18</p>
-                        </div>
+                      <div className="flex items-center space-x-2">
+                        <LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />
                       </div>
                     </div>
                     {livestream.status === "active" && (
@@ -391,7 +383,7 @@ function NavigationTabs({ course }) {
                             return tokenCount > 0 ? (
                               <div>
                                 <span>{tokenCount}</span>
-                                <ClassSupp/>
+                                <ClassSupp />
                               </div>
                             ) : (
                               <span>{tokenCount}</span>
@@ -454,81 +446,80 @@ function NavigationTabs({ course }) {
           </TabsContent>
 
           <TabsContent value="quizzes" className="p-2">
-  {isTutor ? (
-    <>
-      {/* Display QuizForm for Tutor */}
-      <QuizForm courseId={courseId} />
+            {isTutor ? (
+              <>
+                {/* Display QuizForm for Tutor */}
+                <QuizForm courseId={courseId} />
 
-      {/* Display the questions if they exist */}
-      <div>
-        {questions.length === 0 ? (
-          <p>No quizzes available for this course.</p>
-        ) : (
-          questions.map((question, index) => (
-            <div key={index} className="border-b border-grey-light py-4">
-              <div className="font-bold text-lg">{question.question}</div>
-              <div className="font-bold text-lg text-green-600 mt-2">
-                Correct Answer: {question.options[question.correct]}
-              </div>
+                {/* Display the questions if they exist */}
+                <div>
+                  {questions.length === 0 ? (
+                    <p>No quizzes available for this course.</p>
+                  ) : (
+                    questions.map((question, index) => (
+                      <div key={index} className="border-b border-grey-light py-4">
+                        <div className="font-bold text-lg">{question.question}</div>
+                        <div className="font-bold text-lg text-green-600 mt-2">
+                          Correct Answer: {question.options[question.correct]}
+                        </div>
 
-              <div className="mt-2">
-                {question.options.map((option, idx) => (
-                  <div key={idx} className="flex items-center space-x-2">
-                    <input
-                      type="radio"
-                      name={`question-${index}`}
-                      id={`question-${index}-option-${idx}`}
-                      className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
-                      disabled
-                    />
-                    <label
-                      htmlFor={`question-${index}-option-${idx}`}
-                      className="text-sm text-gray-700"
+                        <div className="mt-2">
+                          {question.options.map((option, idx) => (
+                            <div key={idx} className="flex items-center space-x-2">
+                              <input
+                                type="radio"
+                                name={`question-${index}`}
+                                id={`question-${index}-option-${idx}`}
+                                className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
+                                disabled
+                              />
+                              <label
+                                htmlFor={`question-${index}-option-${idx}`}
+                                className="text-sm text-gray-700"
+                              >
+                                {option}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* For Non-Tutors */}
+                {questions.length === 0 ? (
+                  <div>No quizzes available for this course.</div>
+                ) : (
+                  <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
+                    <div>
+                      <div className="mb-2">
+                        {quizStatus || (
+                          <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                            Live
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-black font-bold text-xl mb-2">Quiz</div>
+                      <p className="text-grey-darker text-base">
+                        Challenge your knowledge with this engaging quiz! Test your
+                        skills, new concepts, and push your limits. This quiz will
+                        provide an exciting and rewarding experience.
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => router.push(`/courses/${courseId}/quiz`)}
+                      className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
                     >
-                      {option}
-                    </label>
+                      {quizStatus ? "Already Attempted" : "Attempt Quiz"}
+                    </Button>
                   </div>
-                ))}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
-    </>
-  ) : (
-    <>
-      {/* For Non-Tutors */}
-      {questions.length === 0 ? (
-        <div>No quizzes available for this course.</div>
-      ) : (
-        <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
-          <div>
-            <div className="mb-2">
-              {quizStatus || (
-                <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
-                  Live
-                </span>
-              )}
-            </div>
-            <div className="text-black font-bold text-xl mb-2">Quiz</div>
-            <p className="text-grey-darker text-base">
-              Challenge your knowledge with this engaging quiz! Test your
-              skills, new concepts, and push your limits. This quiz will
-              provide an exciting and rewarding experience.
-            </p>
-          </div>
-          <Button
-            onClick={() => router.push(`/courses/${courseId}/quiz`)}
-            className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
-          >
-            {quizStatus ? "Already Attempted" : "Attempt Quiz"}
-          </Button>
-        </div>
-      )}
-    </>
-  )}
-</TabsContent>
-
+                )}
+              </>
+            )}
+          </TabsContent>
           <TabsContent value="leaderboard" className="p-2">
             <Table className="w-full px-4 border bg-white">
               <TableCaption>{course.course_name} Leaderboard</TableCaption>
@@ -547,7 +538,6 @@ function NavigationTabs({ course }) {
                       {entry.STUDENT?.student_name ||
                         `Student ${entry.student_id}`}
                     </TableCell>{" "}
-                    {/* Display student_name or fallback to student_id */}
                     <TableCell>{entry.score}</TableCell>
                   </TableRow>
                 ))}

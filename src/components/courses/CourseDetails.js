@@ -13,7 +13,6 @@ function CourseDetails({ course }) {
   const [enrollmentCount, setEnrollmentCount] = useState(null);
 
   const { userId,role} = AuthContext();
-  const { userId, role } = AuthContext();
   const [isTutor, setIsTutor] = useState(null);
   const [isPurchased, setIsPurchased] = useState(null);
 
@@ -54,7 +53,6 @@ function CourseDetails({ course }) {
         console.error("Error sharing course:", error);
       }
     } else {
-      // Fallback: Copy the link to clipboard
       try {
         await navigator.clipboard.writeText(courseUrl);
         setCopySuccess(true);
@@ -132,7 +130,7 @@ function CourseDetails({ course }) {
               ? course.youtube_link.includes("youtube.com/watch")
                 ? course.youtube_link.replace("watch?v=", "embed/")
                 : course.youtube_link
-              : "https://www.youtube.com/embed/default-video-id" // Provide a fallback URL or handle the case
+              : "https://www.youtube.com/embed/default-video-id"
           }
           title="Course Video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

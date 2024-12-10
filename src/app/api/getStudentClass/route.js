@@ -8,20 +8,15 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
         const userId = searchParams.get('userId');
         const livestreamId = searchParams.get('livestreamId');
-
-        // Validate parameters
         if (!userId || !livestreamId) {
             return NextResponse.json({ error: 'Missing userId or livestreamId parameter' }, { status: 400 });
         }
-
         const userIdInt = parseInt(userId, 10);
         const livestreamIdInt = parseInt(livestreamId, 10);
 
         if (isNaN(userIdInt) || isNaN(livestreamIdInt)) {
             return NextResponse.json({ error: 'Invalid userId or livestreamId parameter' }, { status: 400 });
         }
-
-        // Query the database
         const studentClass = await prisma.sTUDENTCLASSES.findFirst({
             where: {
                 student_id: userIdInt,
@@ -35,7 +30,6 @@ export async function GET(req) {
         });
 
         if (!studentClass) {
-            // Represent missed class with proper response structure
             return NextResponse.json({
                 status: "Missed",
                 message: "You have missed this class.",

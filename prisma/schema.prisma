@@ -24,6 +24,20 @@ model CERTIFICATE {
   EARNED_CERTIFICATE EARNED_CERTIFICATE[]
 }
 
+model CERTIFICATES {
+  id              Int       @id @default(autoincrement())
+  student_id      Int
+  course_id       Int
+  certificate_id  String    @unique(map: "certificate_id") @db.VarChar(255)
+  certificate_url String    @db.VarChar(255)
+  issuedDate      DateTime? @default(now()) @db.DateTime(0)
+  STUDENT         STUDENT   @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "CERTIFICATES_ibfk_1")
+  COURSE          COURSE    @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "CERTIFICATES_ibfk_2")
+
+  @@index([course_id], map: "course_id")
+  @@index([student_id], map: "student_id")
+}
+
 model COURSE {
   course_id               Int                 @id @default(autoincrement())
   course_name             String              @db.VarChar(100)
@@ -102,6 +116,43 @@ model LEADERBOARD {
   @@index([student_id], map: "student_id")
 }
 
+model NOTES {
+  id         Int    @id @default(autoincrement())
+  course_id  Int
+  note_title String @db.VarChar(255)
+  note_text  String @db.Text
+  COURSE     COURSE @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "NOTES_ibfk_1")
+
+  @@index([course_id], map: "course_id")
+}
+
+model QUIZ {
+  question_id     Int     @id @default(autoincrement())
+  course_id       Int?
+  question_number Int
+  question_text   String  @db.Text
+  choice_1        String? @db.VarChar(255)
+  choice_2        String? @db.VarChar(255)
+  choice_3        String? @db.VarChar(255)
+  choice_4        String? @db.VarChar(255)
+  correct_choice  Int
+  COURSE          COURSE? @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "QUIZ_ibfk_1")
+
+  @@unique([course_id, question_number], map: "course_id")
+}
+
+model QUIZ_RESULTS {
+  result_id   Int      @id @default(autoincrement())
+  user_id     Int?
+  course_id   Int?
+  total_score Int?
+  is_passed   Boolean?
+  COURSE      COURSE?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "QUIZ_RESULTS_ibfk_1")
+
+  @@unique([user_id, course_id], map: "user_id")
+  @@index([course_id], map: "QUIZ_RESULTS_ibfk_1")
+}
+
 model STUDENT {
   student_id         Int                  @id @default(autoincrement())
   student_name       String               @db.VarChar(100)
@@ -115,6 +166,23 @@ model STUDENT {
   STUDENTCLASSES     STUDENTCLASSES[]
   SUBMISSION         SUBMISSION[]
   user_tokens        user_tokens[]
+}
+
+model STUDENTCLASSES {
+  id                Int         @id @default(autoincrement())
+  student_id        Int
+  course_id         Int
+  livestreaming_id  Int
+  attended_duration Int?
+  status            String?     @db.VarChar(255)
+  attendance_date   DateTime?   @default(now()) @db.DateTime(0)
+  STUDENT           STUDENT     @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_1")
+  COURSE            COURSE      @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_2")
+  livestreams       livestreams @relation(fields: [livestreaming_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_3")
+
+  @@index([course_id], map: "course_id")
+  @@index([livestreaming_id], map: "livestreaming_id")
+  @@index([student_id], map: "student_id")
 }
 
 model SUBMISSION {
@@ -149,114 +217,53 @@ model TUTOR {
   livestreams livestreams[]
 }
 
-model QUIZ {
-  question_id     Int     @id @default(autoincrement())
-  course_id       Int?
-  question_number Int
-  question_text   String  @db.Text
-  choice_1        String? @db.VarChar(255)
-  choice_2        String? @db.VarChar(255)
-  choice_3        String? @db.VarChar(255)
-  choice_4        String? @db.VarChar(255)
-  correct_choice  Int
-  COURSE          COURSE? @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "QUIZ_ibfk_1")
-
-  @@unique([course_id, question_number], map: "course_id")
-}
-
-model QUIZ_RESULTS {
-  result_id   Int      @id @default(autoincrement())
-  user_id     Int?
-  course_id   Int?
-  total_score Int?
-  is_passed   Boolean?
-  COURSE      COURSE?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "QUIZ_RESULTS_ibfk_1")
-
-  @@unique([user_id, course_id], map: "user_id")
-  @@index([course_id], map: "QUIZ_RESULTS_ibfk_1")
-}
-
 model livestreams {
-  id             Int                @id @default(autoincrement())
-  duration       Int?
-  status         livestreams_status @default(inactive)
-  course_id      Int
-  tutor_id       Int
-  title          String             @db.VarChar(255)
-  description    String?            @db.Text
-  datetime       DateTime?          @db.Date
-  STUDENTCLASSES STUDENTCLASSES[]
-  COURSE         COURSE             @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_1")
-  TUTOR          TUTOR              @relation(fields: [tutor_id], references: [tutor_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_2")
-  user_tokens    user_tokens[]
+  id                                                 Int                @id @default(autoincrement())
+  duration                                           Int?
+  status                                             livestreams_status @default(inactive)
+  course_id                                          Int
+  tutor_id                                           Int
+  title                                              String             @db.VarChar(255)
+  description                                        String?            @db.Text
+  datetime                                           DateTime?          @db.Date
+  STUDENTCLASSES                                     STUDENTCLASSES[]
+  COURSE                                             COURSE             @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_1")
+  TUTOR                                              TUTOR              @relation(fields: [tutor_id], references: [tutor_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_2")
+  user_tokens_user_tokens_livestream_idTolivestreams user_tokens[]      @relation("user_tokens_livestream_idTolivestreams")
+  user_tokens_user_tokens_refLiveIdTolivestreams     user_tokens[]      @relation("user_tokens_refLiveIdTolivestreams")
 
   @@index([course_id], map: "course_id")
   @@index([tutor_id], map: "tutor_id")
 }
 
-model STUDENTCLASSES {
-  id                Int         @id @default(autoincrement())
-  student_id        Int
-  course_id         Int
-  livestreaming_id  Int
-  attended_duration Int?
-  status            String?     @db.VarChar(255)
-  attendance_date   DateTime?   @default(now()) @db.DateTime(0)
-  STUDENT           STUDENT     @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_1")
-  COURSE            COURSE      @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_2")
-  livestreams       livestreams @relation(fields: [livestreaming_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_3")
-
-  @@index([course_id], map: "course_id")
-  @@index([livestreaming_id], map: "livestreaming_id")
-  @@index([student_id], map: "student_id")
-}
-
-model CERTIFICATES {
-  id              Int       @id @default(autoincrement())
-  student_id      Int
-  course_id       Int
-  certificate_id  String    @unique(map: "certificate_id") @db.VarChar(255)
-  certificate_url String    @db.VarChar(255)
-  issuedDate      DateTime? @default(now()) @db.DateTime(0)
-  STUDENT         STUDENT   @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "CERTIFICATES_ibfk_1")
-  COURSE          COURSE    @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "CERTIFICATES_ibfk_2")
-
-  @@index([course_id], map: "course_id")
-  @@index([student_id], map: "student_id")
-}
-
-model NOTES {
-  id         Int    @id @default(autoincrement())
-  course_id  Int
-  note_title String @db.VarChar(255)
-  note_text  String @db.Text
-  COURSE     COURSE @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "NOTES_ibfk_1")
-
-  @@index([course_id], map: "course_id")
-}
-
 model user_tokens {
-  id         Int       @id @default(autoincrement())
-  user_id    Int?
-  token      String?   @db.VarChar(500)
-  created_at DateTime? @default(now()) @db.Timestamp(0)
-  expires_at DateTime? @db.Timestamp(0)
-  course_id  Int?
-  COURSE     COURSE?   @relation(fields: [course_id], references: [course_id], onUpdate: NoAction, map: "fk_course_id")
-  STUDENT    STUDENT?  @relation(fields: [user_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_id")
+  id                                                 Int          @id @default(autoincrement())
+  user_id                                            Int?
+  token                                              String?      @db.VarChar(500)
+  created_at                                         DateTime?    @default(now()) @db.Timestamp(0)
+  expires_at                                         DateTime?    @db.Timestamp(0)
+  course_id                                          Int?
+  livestream_id                                      Int?
+  refLiveId                                          Int?
+  COURSE                                             COURSE?      @relation(fields: [course_id], references: [course_id], onUpdate: NoAction, map: "fk_course_id")
+  livestreams_user_tokens_livestream_idTolivestreams livestreams? @relation("user_tokens_livestream_idTolivestreams", fields: [livestream_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_livestream_id")
+  livestreams_user_tokens_refLiveIdTolivestreams     livestreams? @relation("user_tokens_refLiveIdTolivestreams", fields: [refLiveId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_refLiveId")
+  STUDENT                                            STUDENT?     @relation(fields: [user_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_id")
 
   @@index([course_id], map: "fk_course_id")
+  @@index([livestream_id], map: "fk_livestream_id")
+  @@index([refLiveId], map: "fk_refLiveId")
   @@index([user_id], map: "fk_user_id")
-}
-
-enum COURSE_difficulty {
-  basic
-  intermediate
-  advanced
 }
 
 enum livestreams_status {
   inactive
   active
   ended
+}
+
+enum COURSE_difficulty {
+  basic
+  intermediate
+  advanced
 }

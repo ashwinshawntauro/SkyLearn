@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 
 export default function Page({ livestreamId, userId, course_id }) {
-    const [status, setStatus] = useState(null); // State to hold the status
-    const [error, setError] = useState(null); // State to hold error messages
-    console.log(course_id.course_id)
+    const [status, setStatus] = useState(null); 
+    const [error, setError] = useState(null); 
 
     const getStatus = async (livestreamId, userId) => {
         try {
@@ -40,8 +39,6 @@ export default function Page({ livestreamId, userId, course_id }) {
 
             if (response.ok) {
                 const data = await response.json();
-                const token = data.token; // Get the JWT token from the response
-                console.log("Generated JWT Token:", token); // Log the token to the console
                 alert("Token raised successfully!");
             } else {
                 const errorData = await response.json();
