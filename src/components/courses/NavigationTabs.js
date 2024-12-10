@@ -174,31 +174,42 @@ function NavigationTabs({ course }) {
       };
 
       fetchQuizData();
-      // getToken(courseId)
     }
   }, [courseId, userId]);
 
+  useEffect(()=>{
+    
+  })
   const generateToken = async (courseId, livestreamId) => {
     try {
-      const token = jwt.sign(
-        { courseId, livestreamId },
-        secretKey
-      );
-      getToken(courseId, token);
-
+      const res = await fetch('/api/generateToken', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ courseId, livestreamId }),
+      });
+  
+      if (res.ok) {
+        const data = await res.json();
+        console.log('Generated Token:', data.token);
+        // getToken(data.token);
+      } else {
+        console.error('Failed to generate token');
+      }
     } catch (error) {
-      console.log(error)
+      console.error('Error fetching token:', error);
     }
-  }
+  };
+  
 
-  const getToken = async (courseId, token) => {
+  const getToken = async (token) => {
     try {
-      const response = await fetch(`/api/getToken?course_id=${courseId}&token=${token}`, {
+      const response = await fetch(`/api/getToken?token=${token}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ courseId }),
       });
 
       const dataToken = await response.json();
