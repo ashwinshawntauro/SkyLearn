@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -27,7 +27,6 @@ export default function Page({ courseId, tutorId }) {
       course_id: courseId,
       tutor_id: tutorId,
     };
-
     try {
       const response = await fetch("/api/createLivestream", {
         method: "POST",
@@ -52,6 +51,7 @@ export default function Page({ courseId, tutorId }) {
 
   return (
     <div className="p-4">
+      <div></div>
       <Dialog>
         <DialogTrigger asChild>
           <Button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light">

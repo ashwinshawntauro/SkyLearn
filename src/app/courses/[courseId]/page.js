@@ -5,7 +5,7 @@ import Header from "@/components/courses/Header";
 import CourseDetails from "@/components/courses/CourseDetails";
 import Navbar from "@/components/Navbar";
 import NavigationTabs from "@/components/courses/NavigationTabs";
-
+import Loading from "./loading"
 export default function Page() {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
@@ -33,7 +33,7 @@ export default function Page() {
   }, [courseId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   if (!course) {

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Loading from "@/app/loading";
 
 // Page.js
 export default function Page() {
@@ -56,103 +57,95 @@ export default function Page() {
       <div className="px-8 py-6">
         {/* Course Metrics Section */}
         <h2 className="text-2xl font-bold mb-4">My Courses</h2>
-        <div className="flex space-x-24  text-gray-800 mb-8">
-          <div>
-            <p className="text-lg font-semibold">Course Enrolments</p>
-            <p className="text-gray-500">{enrolledCourses.length} Active</p>
-          </div>
-          <div>
-            <p className="text-lg font-semibold">Course Completions</p>
-            <p className="text-gray-500">
-              {completedCourses.length} Completed Courses
-            </p>
-          </div>
-        </div>
 
-        <section className="mt-8">
-          <h2 className="text-lg font-semibold m-4">Enrolled Courses</h2>
-          <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {enrolledCourses.length === 0 ? (
-              <p>No courses enrolled yet.</p> // If no courses, show a message
-            ) : (
-              enrolledCourses.map((course) => (
-                <Card key={course.course_id} className="shadow-md">
-                  <CardHeader>
-                    <CardTitle>{course.course_name}</CardTitle>
-                    <CardDescription>
-                      {course.course_description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-xs text-gray-500">
-                      Duration: {course.course_duration} weeks
-                    </p>
+        {loading ? (
+          <Loading/>
+        ) : (
+          <>
+            <div className="flex space-x-24 text-gray-800 mb-8">
+              <div>
+                <p className="text-lg font-semibold">Course Enrolments</p>
+                <p className="text-gray-500">{enrolledCourses.length} Active</p>
+              </div>
+              <div>
+                <p className="text-lg font-semibold">Course Completions</p>
+                <p className="text-gray-500">
+                  {completedCourses.length} Completed Courses
+                </p>
+              </div>
+            </div>
 
-                    <Link
-                      href={`/courses/${encodeURIComponent(course.course_id)}`}
-                      passHref
-                      className="w-full"
-                    >
-                      <Button className="mt-4">View Course</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </div>
-        </section>
+            <section className="mt-8">
+              <h2 className="text-lg font-semibold m-4">Enrolled Courses</h2>
+              <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {enrolledCourses.length === 0 ? (
+                  <p>No courses enrolled yet.</p>
+                ) : (
+                  enrolledCourses.map((course) => (
+                    <Card key={course.course_id} className="shadow-md">
+                      <CardHeader>
+                        <CardTitle>{course.course_name}</CardTitle>
+                        <CardDescription>
+                          {course.course_description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-xs text-gray-500">
+                          Duration: {course.course_duration} weeks
+                        </p>
 
-        <section className="mt-8">
-          <h2 className="text-lg font-semibold m-4">Completed Courses</h2>
-          <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {completedCourses.length === 0 ? (
-              <p>No courses Completed yet.</p> // If no courses, show a message
-            ) : (
-              completedCourses.map((course) => (
-                <Card key={course.course_id} className="shadow-md">
-                  <CardHeader>
-                    <CardTitle>{course.course_name}</CardTitle>
-                    <CardDescription>
-                      {course.course_description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-xs text-gray-500">
-                      Duration: {course.course_duration} weeks
-                    </p>
+                        <Link
+                          href={`/courses/${encodeURIComponent(
+                            course.course_id
+                          )}`}
+                          passHref
+                          className="w-full"
+                        >
+                          <Button className="mt-4">View Course</Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </section>
 
-                    <Link
-                      href={`/courses/${encodeURIComponent(course.course_id)}`}
-                      passHref
-                      className="w-full"
-                    >
-                      <Button className="mt-4">View Course</Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))
-            )}
-          </div>
-        </section>
+            <section className="mt-8">
+              <h2 className="text-lg font-semibold m-4">Completed Courses</h2>
+              <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {completedCourses.length === 0 ? (
+                  <p>No courses Completed yet.</p>
+                ) : (
+                  completedCourses.map((course) => (
+                    <Card key={course.course_id} className="shadow-md">
+                      <CardHeader>
+                        <CardTitle>{course.course_name}</CardTitle>
+                        <CardDescription>
+                          {course.course_description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-xs text-gray-500">
+                          Duration: {course.course_duration} weeks
+                        </p>
 
-        {/* Filter and Search Section
-        <div className="flex items-center space-x-4 mb-6">
-          <select className="border p-2 rounded bg-gray-100">
-            <option>All</option>
-            <option>Active</option>
-            <option>Completed</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Search"
-            className="border p-2 rounded w-1/2"
-          />
-          <button className="bg-blue-600 text-white px-4 py-2 rounded">
-            Sort by course name
-          </button>
-        </div> */}
-
-        {/* Course Cards Section */}
+                        <Link
+                          href={`/courses/${encodeURIComponent(
+                            course.course_id
+                          )}`}
+                          passHref
+                          className="w-full"
+                        >
+                          <Button className="mt-4">View Course</Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </section>
+          </>
+        )}
       </div>
     </div>
   );

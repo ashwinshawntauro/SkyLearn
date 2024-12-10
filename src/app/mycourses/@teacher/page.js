@@ -15,6 +15,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { AuthContext } from "@/providers/AuthProvider";
+import Loading from "@/app/loading";
 
 export default function TeacherDashboard() {
   const [courses, setCourses] = useState([]);
@@ -162,7 +163,7 @@ export default function TeacherDashboard() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   const deleteCourse = async (courseId) => {

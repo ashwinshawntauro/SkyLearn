@@ -9,6 +9,7 @@ export async function GET() {
             select:{
                 id:true,
                 status:true,
+                course_id:true,
                 tutor_id:true,
                 title:true,
                 description:true

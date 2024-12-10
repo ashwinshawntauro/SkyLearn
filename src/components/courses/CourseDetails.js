@@ -10,6 +10,7 @@ function CourseDetails({ course }) {
   const courseAmt = course.course_price;
   const courseName = course.course_name;
   const courseDesc = course.course_description;
+  const [enrollmentCount, setEnrollmentCount] = useState(null);
 
   const { userId,role} = AuthContext();
   const [isTutor, setIsTutor] = useState(null);
@@ -17,6 +18,26 @@ function CourseDetails({ course }) {
 
   const [copySuccess, setCopySuccess] = useState(false);
   const courseUrl = `${window.location.origin}/courses/${courseId}`;
+
+  useEffect(() => {
+    const fetchEnrollmentCount = async () => {
+      try {
+        const response = await fetch(
+          `/api/getEnrollmentCount?courseId=${courseId}`
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setEnrollmentCount(data.enrolledStudents);
+        } else {
+          console.error(data.error);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchEnrollmentCount();
+  }, [courseId]);
 
   const handleShareCourse = async () => {
     if (navigator.share) {
@@ -32,7 +53,6 @@ function CourseDetails({ course }) {
         console.error("Error sharing course:", error);
       }
     } else {
-      // Fallback: Copy the link to clipboard
       try {
         await navigator.clipboard.writeText(courseUrl);
         setCopySuccess(true);
@@ -76,7 +96,6 @@ function CourseDetails({ course }) {
 
       if (matchingCourse) {
         setIsTutor(true);
-        setIsTutor(true);
       } else {
         setIsTutor(false);
       }
@@ -88,9 +107,10 @@ function CourseDetails({ course }) {
   useEffect(() => {
     if (userId) {
       getEnroll(userId);
-      if (role == 'teacher') { getTutor(userId) }
-      else {
-        setIsTutor(false)
+      if (role == "teacher") {
+        getTutor(userId);
+      } else {
+        setIsTutor(false);
       }
     }
   }, [userId]);
@@ -100,7 +120,6 @@ function CourseDetails({ course }) {
     router.push(url);
   };
 
-  console.log(course.youtube_link);
   return (
     <aside className="bg-white p-6 rounded-lg shadow-md">
       <div className="rounded overflow-hidden">
@@ -111,7 +130,7 @@ function CourseDetails({ course }) {
               ? course.youtube_link.includes("youtube.com/watch")
                 ? course.youtube_link.replace("watch?v=", "embed/")
                 : course.youtube_link
-              : "https://www.youtube.com/embed/default-video-id" // Provide a fallback URL or handle the case
+              : "https://www.youtube.com/embed/default-video-id"
           }
           title="Course Video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -135,7 +154,7 @@ function CourseDetails({ course }) {
           </li>
           <li>
             Students Enrolled:{" "}
-            <span className="font-medium">{course.course_enrolments}</span>
+            <span className="font-medium">{enrollmentCount}</span>
           </li>
           <li>
             Language: <span className="font-medium">English</span>

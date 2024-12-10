@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import InstructorSection from "@/components/courses/InstructorSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AuthContext } from "@/providers/AuthProvider";
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   Table,
   TableBody,
@@ -12,13 +12,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
-import { Skeleton } from "@/components/ui/skeleton"
-import TutorLivestream from "@/components/courses/tutor/TutorLivestream"
-import QuizForm from "./tutor/TutorQuiz"
+import { Skeleton } from "@/components/ui/skeleton";
+import TutorLivestream from "@/components/courses/tutor/TutorLivestream";
+import QuizForm from "./tutor/TutorQuiz";
+import TutorNotes from "@/components/courses/tutor/TutorNotes";
+import LivestreamStatus from "./student/livestreamStatus"
+import ClassSupp from "./tutor/ClassSupp"
 
 function NavigationTabs({ course }) {
   const router = useRouter();
@@ -31,9 +34,18 @@ function NavigationTabs({ course }) {
   const [userQuestion, setUserQuestion] = useState("");
   const [loading, setLoading] = useState(true);
   const [quizStatus, setQuizStatus] = useState(false);
+  const secretKey = process.env.JWT_SECRET_KEY || 'your-secret-key';
+
+
+  const [notes, setNotes] = useState([]);
+  const [error, setError] = useState("");
+
+  const [questions, setQuestions] = useState([]);
   const gemini = async (userQuestion) => {
     try {
-      const genAI = new GoogleGenerativeAI("AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0");
+      const genAI = new GoogleGenerativeAI(
+        "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
+      );
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const prompt = `My name is ${userName}.You are an expert tutor on ${course.course_name}.Your Course desciption is ${course.course_description}. A student asked: "${userQuestion}".
         Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
@@ -57,13 +69,15 @@ function NavigationTabs({ course }) {
       if (res.ok) {
         const data = await res.json();
         const enrolledCourses = data.getEnroll || [];
-        const courseExists = enrolledCourses.some(course => course.course_id === courseId);
+        const courseExists = enrolledCourses.some(
+          (course) => course.course_id === courseId
+        );
         setIsPurchased(courseExists);
       } else {
-        console.error('Failed to fetch enrollments:', res.status);
+        console.error("Failed to fetch enrollments:", res.status);
       }
     } catch (error) {
-      console.error('Error fetching enrollments:', error);
+      console.error("Error fetching enrollments:", error);
     }
   };
   const getTutor = async (userId) => {
@@ -84,15 +98,77 @@ function NavigationTabs({ course }) {
   };
 
   useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        setLoading(true);
+
+        const response = await fetch(`/api/uploadNotes?courseId=${courseId}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setNotes(data);
+        } else {
+          setError(data.error || "Failed to fetch notes.");
+        }
+      } catch (err) {
+        console.error("Error fetching notes:", err);
+        setError("An error occurred while fetching notes.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (courseId) fetchNotes();
+  }, [courseId]);
+
+  useEffect(() => {
     if (userId) {
       getEnroll(userId);
-      if (role == 'teacher') { getTutor(userId) }
-      else {
-        setIsTutor(false)
+      if (role == "teacher") {
+        getTutor(userId);
+      } else {
+        setIsTutor(false);
       }
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (courseId) {
+      const fetchQuizData = async () => {
+        try {
+          const resp = await fetch(`/api/getQuizes?courseId=${courseId}`, {
+            method: "POST",
+          });
+
+          if (resp.ok) {
+            const quizData = await resp.json();
+
+            if (quizData.error) {
+              console.error(quizData.error); 
+              return;
+            }
+
+            const formattedQuestions = quizData.map((q) => ({
+              question: q.question_text,
+              options: [q.choice_1, q.choice_2, q.choice_3, q.choice_4],
+              correct: q.correct_choice - 1, // Assuming correct_choice is 1-indexed
+            }));
+            setQuestions(formattedQuestions);
+
+            console.log(formattedQuestions);
+          } else {
+            console.error("Failed to fetch questions");
+          }
+        } catch (error) {
+          console.error("Error fetching course data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchQuizData();
+    }
+  }, [courseId, userId]);
 
   const [leaderboardData, setLeaderboardData] = useState([]);
 
@@ -104,14 +180,19 @@ function NavigationTabs({ course }) {
         setLeaderboardData(data.leaderboardInfo || []);
       }
     } catch (error) {
-      console.error('Error fetching leaderboard data:', error);
+      console.error("Error fetching leaderboard data:", error);
     }
   };
   const fetchLivestreams = async () => {
     try {
       const response = await fetch("/api/getLivestreams");
       const data = await response.json();
-      setLivestreams(data);
+      const filteredLivestreams = data.filter(
+        (livestream) => livestream.course_id === courseId
+      );
+
+      setLivestreams(filteredLivestreams);
+      console.log(livestreams);
     } catch (error) {
       console.error("Error fetching livestreams:", error);
     }
@@ -131,13 +212,10 @@ function NavigationTabs({ course }) {
       if (response.ok) {
         alert("Livestream ended");
       }
-      else {
-        console.log(response)
-      }
     } catch (error) {
       console.error("Error submitting duration:", error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchLeaderboardData();
@@ -154,9 +232,9 @@ function NavigationTabs({ course }) {
           if (res.ok) {
             const data = await res.json();
             if (data.quiz_attempted) {
-              setQuizStatus(true); // Set stage to prevent retaking
+              setQuizStatus(true);
             } else {
-              setQuizStatus(false); // Set stage to prevent retaking
+              setQuizStatus(false);
             }
           } else {
             console.error("Failed to fetch quiz status");
@@ -171,69 +249,78 @@ function NavigationTabs({ course }) {
       fetchQuizData();
     }
   }, [courseId, userId]);
-  console.log(isPurchased, isTutor)
+
+  // const generateToken = async (courseId, livestreamId) => {
+  //   try {
+  //     const res = await fetch('/api/generateToken', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ courseId, livestreamId }),
+  //     });
+
+  //     if (res.ok) {
+  //       const data = await res.json();
+  //       console.log(`${courseId}`, data.token);
+  //       // getToken(data.token);
+  //     } else {
+  //       console.error('Failed to generate token');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching token:', error);
+  //   }
+  // };
+
+
+  const getToken = async (courseId, livestreamId) => {
+    try {
+      const response = await fetch(`/api/getToken?courseId=${courseId}&livestreamId=${livestreamId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const dataToken = await response.json();
+
+      if (response.ok) {
+        return dataToken.count
+      }
+    } catch (error) {
+      console.error("Error creating livestream:", error);
+    }
+  }
+
   return (
     <div>
       {isPurchased || isTutor ? (
-        <Tabs defaultValue="livestreams" className="w-full p-2 bg-gray-100 h-auto">
+        <Tabs
+          defaultValue="livestreams"
+          className="w-full p-2 bg-gray-100 h-auto"
+        >
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="livestreams">Livestreams</TabsTrigger>
             <TabsTrigger value="notes">Notes</TabsTrigger>
             <TabsTrigger value="quizzes">Quizzes</TabsTrigger>
             <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
-            {isPurchased ? (<TabsTrigger value="askAi">Ask AI</TabsTrigger>) : (<TabsTrigger value="gclass">Google Classroom</TabsTrigger>)}
+            {isPurchased ? (
+              <TabsTrigger value="askAi">Ask AI</TabsTrigger>
+            ) : (
+              <TabsTrigger value="gclass">Google Classroom</TabsTrigger>
+            )}
           </TabsList>
 
-          <TabsContent value="livestreams" className="p-2 max-w-full lg:flex flex-col gap-3">
-            {isPurchased ? (<div>
-              {livestreams.map((livestream) => (
-                <div
-                  key={livestream.id}
-                  className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
-                >
-                  <div className="">
-                    <div className="mb-2">
-                      {livestream.status === "active" && (
-                        <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
-                          Live
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-black font-bold text-xl mb-2">
-                      {livestream.title}
-                    </div>
-                    <p className="text-grey-darker text-base">
-                      {livestream.description}
-                    </p>
-                    <div className="flex items-center">
-                      <div className="text-sm my-4">
-                        <p className="text-primary leading-none">Jonathan Reinink</p>
-                        <p className="text-gray-500">Aug 18</p>
-                      </div>
-                    </div>
-                  </div>
-                  {livestream.status === "active" && (
-                    <Button
-                      onClick={() =>
-                        router.push(
-                          `${courseId}L${livestream.id}/livestream`
-                        )
-                      }
-                      className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
-                    >
-                      Join Class
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-            ) : isTutor ? (
+          <TabsContent
+            value="livestreams"
+            className="p-2 max-w-full lg:flex flex-col gap-3"
+          >
+            {isPurchased ? (
               <div>
-                <TutorLivestream courseId={courseId} tutorId={userId} />
                 {livestreams.map((livestream) => (
                   <div
                     key={livestream.id}
-                    className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                    className="border-r border-b mb-2 border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
                     <div className="">
                       <div className="mb-2">
@@ -249,10 +336,59 @@ function NavigationTabs({ course }) {
                       <p className="text-grey-darker text-base">
                         {livestream.description}
                       </p>
+                      <div className="flex items-center space-x-2">
+                        <LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />
+                      </div>
+                    </div>
+                    {livestream.status === "active" && (
+                      <Button
+                        onClick={() =>
+                          router.push(`${courseId}L${livestream.id}/livestream`)
+                        }
+                        className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                      >
+                        Join Class
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : isTutor ? (
+              <div>
+                <TutorLivestream courseId={courseId} tutorId={userId} />
+                {livestreams.map((livestream) => (
+                  <div
+                    key={livestream.id}
+                    className="border-r mb-2 border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                  >
+                    <div>
+                      <div className="mb-2">
+                        {livestream.status === "active" && (
+                          <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                            Live
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-black font-bold text-xl mb-2">
+                        {livestream.title}
+                      </div>
+                      <p className="text-grey-darker text-base">
+                        {livestream.description}
+                      </p>
                       <div className="flex items-center">
                         <div className="text-sm my-4">
-                          <p className="text-primary leading-none">Jonathan Reinink</p>
-                          <p className="text-gray-500">Aug 18</p>
+                          <p className="text-primary leading-none">Tokens Raised</p>
+                          {(() => {
+                            const tokenCount = getToken(courseId, livestream.id); // Call getToken once and store the result
+                            return tokenCount > 0 ? (
+                              <div>
+                                <span>{tokenCount}</span>
+                                <ClassSupp />
+                              </div>
+                            ) : (
+                              <span>{tokenCount}</span>
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>
@@ -264,53 +400,126 @@ function NavigationTabs({ course }) {
                               `${courseId}L${livestream.id}/livestream`
                             )
                           }
-                          className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                          className="flex py-10 items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
                         >
                           Join Class
                         </Button>
-                        <Button onClick={() => endLive(livestream.id)} className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800">End Live</Button>
+                        <Button
+                          onClick={() => endLive(livestream.id)}
+                          className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800"
+                        >
+                          End Live
+                        </Button>
                       </div>
-
                     )}
                   </div>
                 ))}
               </div>
-            ) :
-              (<div></div>)
-            }
+            ) : (
+              <div></div>
+            )}
           </TabsContent>
 
           <TabsContent value="notes" className="p-2">
-            Module 1,2,3,4,5 notes
+            {isTutor ? (
+              <>
+                <TutorNotes courseId={courseId} />
+                <div className="space-y-4">
+                  {notes.map((note) => (
+                    <div key={note.id} className="border p-4 rounded-lg">
+                      <h3 className="text-lg font-bold">{note.note_title}</h3>
+                      <p className="mt-2">{note.note_text}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="space-y-4">
+                {notes.map((note) => (
+                  <div key={note.id} className="border p-4 rounded-lg">
+                    <h3 className="text-lg font-bold">{note.note_title}</h3>
+                    <p className="mt-2">{note.note_text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="quizzes" className="p-2">
-            <QuizForm courseId={courseId} />
-            <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
-              <div>
-                <div className="mb-2">
-                  {quizStatus || (
-                    <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
-                      Live
-                    </span>
+            {isTutor ? (
+              <>
+                {/* Display QuizForm for Tutor */}
+                <QuizForm courseId={courseId} />
+
+                {/* Display the questions if they exist */}
+                <div>
+                  {questions.length === 0 ? (
+                    <p>No quizzes available for this course.</p>
+                  ) : (
+                    questions.map((question, index) => (
+                      <div key={index} className="border-b border-grey-light py-4">
+                        <div className="font-bold text-lg">{question.question}</div>
+                        <div className="font-bold text-lg text-green-600 mt-2">
+                          Correct Answer: {question.options[question.correct]}
+                        </div>
+
+                        <div className="mt-2">
+                          {question.options.map((option, idx) => (
+                            <div key={idx} className="flex items-center space-x-2">
+                              <input
+                                type="radio"
+                                name={`question-${index}`}
+                                id={`question-${index}-option-${idx}`}
+                                className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
+                                disabled
+                              />
+                              <label
+                                htmlFor={`question-${index}-option-${idx}`}
+                                className="text-sm text-gray-700"
+                              >
+                                {option}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))
                   )}
                 </div>
-                <div className="text-black font-bold text-xl mb-2">Quiz</div>
-                <p className="text-grey-darker text-base">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Voluptatibus quia, nulla! Maiores et perferendis eaque,
-                  exercitationem praesentium nihil.
-                </p>
-              </div>
-              <Button
-                onClick={() => router.push(`/courses/${courseId}/quiz`)}
-                className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
-              >
-                {quizStatus ? "Already Attempted" : "Attempt Quiz"}
-              </Button>
-            </div>
+              </>
+            ) : (
+              <>
+                {/* For Non-Tutors */}
+                {questions.length === 0 ? (
+                  <div>No quizzes available for this course.</div>
+                ) : (
+                  <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
+                    <div>
+                      <div className="mb-2">
+                        {quizStatus || (
+                          <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                            Live
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-black font-bold text-xl mb-2">Quiz</div>
+                      <p className="text-grey-darker text-base">
+                        Challenge your knowledge with this engaging quiz! Test your
+                        skills, new concepts, and push your limits. This quiz will
+                        provide an exciting and rewarding experience.
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => router.push(`/courses/${courseId}/quiz`)}
+                      className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                    >
+                      {quizStatus ? "Already Attempted" : "Attempt Quiz"}
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
           </TabsContent>
-
           <TabsContent value="leaderboard" className="p-2">
             <Table className="w-full px-4 border bg-white">
               <TableCaption>{course.course_name} Leaderboard</TableCaption>
@@ -325,7 +534,10 @@ function NavigationTabs({ course }) {
                 {leaderboardData.map((entry, index) => (
                   <TableRow key={entry.student_id}>
                     <TableCell className="font-medium">{index + 1}</TableCell>
-                    <TableCell>{entry.STUDENT?.student_name || `Student ${entry.student_id}`}</TableCell> {/* Display student_name or fallback to student_id */}
+                    <TableCell>
+                      {entry.STUDENT?.student_name ||
+                        `Student ${entry.student_id}`}
+                    </TableCell>{" "}
                     <TableCell>{entry.score}</TableCell>
                   </TableRow>
                 ))}
@@ -333,39 +545,51 @@ function NavigationTabs({ course }) {
             </Table>
           </TabsContent>
 
-          {isPurchased ? (<TabsContent value="askAi" className="p-2">
-            <h3>Ask Gemini</h3>
-            <form onSubmit={handleQuestionSubmit} className="flex flex-col space-y-4">
-              <textarea
-                value={userQuestion}
-                onChange={(e) => setUserQuestion(e.target.value)}
-                placeholder="Type your question here..."
-                className="w-full p-2 border rounded-md resize-none"
-                rows="4"
-              />
-              <button type="submit" className="px-4 py-2 bg-primary text-white rounded-md">
-                Ask
-              </button>
-            </form>
-            {aiResponse && (
-              <div className="mt-4 p-4 bg-gray-200 rounded-md">
-                <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
-                <div className="space-y-3 leading-relaxed text-gray-800">
-                  {aiResponse.split('\n').map((line, index) => (
-                    <div key={index} className="mb-2">
-                      {line.startsWith("**") ? (
-                        <p className="font-bold text-blue-600">{line.replace(/\*\*/g, '')}</p>
-                      ) : line.startsWith("* ") ? (
-                        <li className="list-disc list-inside ml-4">{line.replace("* ", "")}</li>
-                      ) : (
-                        <p>{line}</p>
-                      )}
-                    </div>
-                  ))}
+          {isPurchased ? (
+            <TabsContent value="askAi" className="p-2">
+              <h3>Ask Gemini</h3>
+              <form
+                onSubmit={handleQuestionSubmit}
+                className="flex flex-col space-y-4"
+              >
+                <textarea
+                  value={userQuestion}
+                  onChange={(e) => setUserQuestion(e.target.value)}
+                  placeholder="Type your question here..."
+                  className="w-full p-2 border rounded-md resize-none"
+                  rows="4"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary text-white rounded-md"
+                >
+                  Ask
+                </button>
+              </form>
+              {aiResponse && (
+                <div className="mt-4 p-4 bg-gray-200 rounded-md">
+                  <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
+                  <div className="space-y-3 leading-relaxed text-gray-800">
+                    {aiResponse.split("\n").map((line, index) => (
+                      <div key={index} className="mb-2">
+                        {line.startsWith("**") ? (
+                          <p className="font-bold text-blue-600">
+                            {line.replace(/\*\*/g, "")}
+                          </p>
+                        ) : line.startsWith("* ") ? (
+                          <li className="list-disc list-inside ml-4">
+                            {line.replace("* ", "")}
+                          </li>
+                        ) : (
+                          <p>{line}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </TabsContent>) : (
+              )}
+            </TabsContent>
+          ) : (
             <TabsContent value="gclass" className="p-2">
               <div className="flex items-center space-x-4">
                 <Label htmlFor="gclass-code" className="font-medium">
@@ -378,11 +602,14 @@ function NavigationTabs({ course }) {
                   className="w-1/2"
                 />
               </div>
-            </TabsContent>)}
-
+            </TabsContent>
+          )}
         </Tabs>
       ) : isPurchased == false && isTutor == false ? (
-        <Tabs defaultValue="instructors" className="w-full p-2 bg-gray-100 h-auto">
+        <Tabs
+          defaultValue="instructors"
+          className="w-full p-2 bg-gray-100 h-auto"
+        >
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
             <TabsTrigger value="discussion">Discussion</TabsTrigger>
@@ -404,8 +631,7 @@ function NavigationTabs({ course }) {
         </Tabs>
       ) : (
         <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />
-      )
-      }
+      )}
     </div>
   );
 }

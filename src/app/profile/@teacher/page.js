@@ -27,6 +27,7 @@ export default function Dashboard() {
   const [courses, setCourses] = useState([]);
   const { userId } = AuthContext();
   const [loading, setLoading] = useState(true); // Loading state for questions
+  const [saving, setSaving] = useState(false); // State for saving indicator
 
   useEffect(() => {
     const registeredCourses = async () => {
@@ -68,6 +69,7 @@ export default function Dashboard() {
   }
 
   const handleSave = async () => {
+    setSaving(true); // Start loading
     try {
       const updatedData = {
         newUserName,
@@ -98,6 +100,8 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error("Error saving changes:", error);
+    } finally {
+      setSaving(false); // Stop loading
     }
   };
 
@@ -214,8 +218,35 @@ export default function Dashboard() {
                       <Button
                         onClick={handleSave}
                         className="mt-4 w-full bg-blue-600 text-white hover:bg-blue-700 rounded-md py-2"
+                        disabled={saving} // Disable button while saving
                       >
-                        Save Changes
+                        {saving ? (
+                          <div className="flex justify-center items-center space-x-2">
+                            <svg
+                              className="w-5 h-5 animate-spin text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v8h8a8 8 0 11-8-8z"
+                              ></path>
+                            </svg>
+                            <span>Saving...</span>
+                          </div>
+                        ) : (
+                          "Save Changes"
+                        )}
                       </Button>
                     </DialogContent>
                   </Dialog>
@@ -249,38 +280,42 @@ export default function Dashboard() {
             </Card>
           </section>
           <section className="mt-8 p-8">
-            <h2 className="text-lg font-semibold m-4">Registered Courses</h2>
-            <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {courses.length === 0 ? (
-                <p>No courses registered yet.</p> // If no courses, show a message
-              ) : (
-                courses.map((course) => (
-                  <Card key={course.course_id} className="shadow-md">
-                    <CardHeader>
-                      <CardTitle>{course.course_name}</CardTitle>
-                      <CardDescription>
-                        {course.course_description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-xs text-gray-500">
-                        Duration: {course.course_duration} weeks
-                      </p>
-
-                      <Link
-                        href={`/courses/${encodeURIComponent(
-                          course.course_id
-                        )}`}
-                        passHref
-                        className="w-full"
-                      >
-                        <Button className="mt-4">View Course</Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-            </div>
+            <h2 className="text-lg font-semibold m-4">Supervised Courses</h2>
+            {loading ? ( // Display loader while fetching
+              <div className="text-center">
+                <p>Loading courses...</p>
+              </div>
+            ) : (
+              <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {courses.length === 0 ? (
+                  <p>No courses registered yet.</p> // If no courses
+                ) : (
+                  courses.map((course) => (
+                    <Card key={course.course_id} className="shadow-md">
+                      <CardHeader>
+                        <CardTitle>{course.course_name}</CardTitle>
+                        <CardDescription>
+                          {course.course_description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-xs text-gray-500">
+                          Duration: {course.course_duration}
+                        </p>
+                        <Link
+                          href={`/courses/${encodeURIComponent(
+                            course.course_id
+                          )}`}
+                          passHref
+                        >
+                          <Button className="mt-4">View Course</Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+              </div>
+            )}
           </section>
         </main>
       </div>
