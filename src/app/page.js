@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
+import Loading from "./loading"
 
 export default function Home() {
   const [courses, setCourses] = useState([]);
@@ -22,19 +23,23 @@ export default function Home() {
   const [sortBy, setSortBy] = useState("price"); // Default sort by price
   const [sortOrder, setSortOrder] = useState("asc"); // Default sort order is ascending
   const { userId, role, logout, isLogged } = AuthContext();
+  
 
   // Fetch courses when the component mounts
   // Fetch courses when the component mounts
   useEffect(() => {
     const fetchCourses = async () => {
-      if (!userId || !role) return;
-
+      // if (!userId || !role) {
+      //   return;
+      // }
+  
       try {
+        // Check if the user is a student or the role is not provided
         const endpoint =
-          role === "teacher"
-            ? `/api/getTutorCourses?tutorId=${userId}`
-            : "/api/getCourses";
-
+          role === "teacher" && userId
+            ? `/api/getTutorCourses?tutorId=${userId}` // Tutor role
+            : "/api/getCourses"; // Student or role is null
+  
         const res = await fetch(endpoint);
         const data = await res.json();
         setCourses(data);
@@ -44,9 +49,10 @@ export default function Home() {
         setLoading(false);
       }
     };
-
+  
     fetchCourses();
   }, [userId, role]);
+  
 
   // Helper function to extract numeric part of duration (in hours)
   const parseDuration = (duration) => {
@@ -86,7 +92,7 @@ export default function Home() {
   });
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   return (

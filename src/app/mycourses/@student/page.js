@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Loading from "@/app/loading";
 
 // Page.js
 export default function Page() {
@@ -58,9 +59,7 @@ export default function Page() {
         <h2 className="text-2xl font-bold mb-4">My Courses</h2>
 
         {loading ? (
-          <div className="text-center">
-            <p>Loading </p>
-          </div>
+          <Loading/>
         ) : (
           <>
             <div className="flex space-x-24 text-gray-800 mb-8">
