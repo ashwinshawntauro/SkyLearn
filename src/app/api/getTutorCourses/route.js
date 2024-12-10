@@ -37,6 +37,17 @@ export async function GET(req) {
                 googleClassroomId: true,
                 googleClassroomJoinLink: true,
                 youtube_link:true,
+                TEACHING: {
+                    select: {
+                      tutor_id: true,
+                      TUTOR: {
+                        // Access the relation to the TUTOR model
+                        select: {
+                          tutor_name: true,
+                        },
+                      },
+                    },
+                  },
             },
         });
         if (getCourse && getCourse.length > 0) {

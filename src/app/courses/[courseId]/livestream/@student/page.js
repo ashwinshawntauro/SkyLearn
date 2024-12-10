@@ -15,6 +15,15 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/providers/AuthProvider";
 
+import {
+  db,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+} from "@/lib/firebase/auth";
+
 export default function Page({ params }) {
   const videoRef = useRef();
   const [peer, setPeer] = useState(null);
@@ -23,11 +32,49 @@ export default function Page({ params }) {
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [duration, setDuration] = useState(0);
-  let stopTime = null
-  let dur = null
+  let stopTime = null;
+  let dur = null;
   const room = params.courseId;
-  const liveId = room.split('L')[1];
-  const { userId } = AuthContext()
+  const liveId = room.split("L")[1];
+  const { userId, userName } = AuthContext();
+
+  console.log(userName);
+  useEffect(() => {
+    const messagesRef = collection(db, "chatMessages", room, "messages");
+    const q = query(messagesRef, orderBy("timestamp"));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const messagesList = [];
+      querySnapshot.forEach((doc) => {
+        messagesList.push(doc.data());
+      });
+      setMessages(messagesList);
+    });
+
+    // Cleanup the listener when component unmounts
+    return () => unsubscribe();
+  }, [room]);
+
+  const handleSendMessage = async () => {
+    if (input.trim() === "") {
+      alert("Message cannot be empty!");
+      return;
+    }
+
+    try {
+      // Send message to Firebase
+      await addDoc(collection(db, "chatMessages", room, "messages"), {
+        message: input,
+        timestamp: new Date(),
+        userId: userId, // Replace with actual user ID
+        username: userName, // Replace with actual username
+      });
+      setInput(""); // Clear the input field after sending the message
+    } catch (error) {
+      console.error("Error sending message: ", error);
+    }
+  };
+
   const initConnection = async () => {
     if (!room) {
       alert("Class is missing in the URL!");
@@ -50,12 +97,11 @@ export default function Page({ params }) {
             liveId: liveId,
           }),
         });
-  
+
         if (!response.ok) {
           throw new Error("Failed to submit duration");
-        }
-        else {
-          console.log(response)
+        } else {
+          console.log(response);
         }
       } catch (error) {
         console.error("Error submitting duration:", error);
@@ -68,8 +114,8 @@ export default function Page({ params }) {
 
   const disconnectFromBroadcast = async () => {
     stopTime = new Date().getTime();
-    dur = (stopTime - startTime) / 1000
-    setDuration(dur)
+    dur = (stopTime - startTime) / 1000;
+    setDuration(dur);
     try {
       const response = await fetch("/api/updateStudentLive", {
         method: "POST",
@@ -77,16 +123,15 @@ export default function Page({ params }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          liveId:liveId,
-          duration:dur
+          liveId: liveId,
+          duration: dur,
         }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to submit duration");
-      }
-      else {
-        console.log(response)
+      } else {
+        console.log(response);
       }
     } catch (error) {
       console.error("Error submitting duration:", error);
@@ -166,10 +211,9 @@ export default function Page({ params }) {
         const remoteDescription = new RTCSessionDescription(data.sdp);
         await peer.setRemoteDescription(remoteDescription);
         console.log("Remote description set successfully.");
-      }
-      else {
+      } else {
         console.error("Failed to fetch from Next.js API route");
-        alert('No class found !')
+        alert("No class found !");
       }
     } catch (error) {
       console.error("Setup error:", error);
@@ -177,21 +221,21 @@ export default function Page({ params }) {
     }
   };
 
-  const handleSendMessage = () => {
-    if (input.trim() !== "") {
-      setMessages((prev) => [...prev, input]);
-      setInput("");
-    } else {
-      alert("Message cannot be empty!");
-    }
-  };
+  // const handleSendMessage = () => {
+  //   if (input.trim() !== "") {
+  //     setMessages((prev) => [...prev, input]);
+  //     setInput("");
+  //   } else {
+  //     alert("Message cannot be empty!");
+  //   }
+  // };
 
   // Handle page unload to track the student's attendance duration
   // const handleBeforeUnload = () => {
   //   if (startTime) {
   //     const attendedDuration = Math.floor((Date.now() - startTime) / 1000); // Duration in seconds
   //     setDuration(attendedDuration);
-  //     submitDuration(attendedDuration); 
+  //     submitDuration(attendedDuration);
   //   }
   // };
 
@@ -301,50 +345,70 @@ export default function Page({ params }) {
               autoPlay
               className="w-full p-3"
             />
+            <div className="flex-col pb-2 ml-2">
+              <Button id="video" className="px-7 mx-2" onClick={initConnection}>
+                Join Class
+              </Button>
+              <Button
+                id="video"
+                className="bg-red-500"
+                onClick={disconnectFromBroadcast}
+              >
+                Leave Class
+              </Button>
+            </div>
           </div>
-          <div>
-            <Card className="w-[350px] h-full flex flex-col rounded-sm">
-              <CardHeader>
-                <CardTitle>Live Chat</CardTitle>
-                <CardDescription>
-                  Engage with your viewers in real-time.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 overflow-y-auto">
-                {messages.length === 0 ? (
-                  <div className="text-center text-gray-500">
-                    No messages yet. Be the first to chat!
-                  </div>
-                ) : (
-                  messages.map((msg, index) => (
-                    <div
-                      key={index}
-                      className="p-2 mb-2 bg-gray-100 rounded text-sm"
-                    >
-                      {msg}
-                    </div>
-                  ))
-                )}
-              </CardContent>
-              <CardFooter className="mt-auto">
-                <div className="grid w-full gap-2">
-                  <Textarea
-                    placeholder="Type your message here."
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                  />
-                  <Button onClick={handleSendMessage}>Send message</Button>
+          <div className="grid">
+            {/* Your other components */}
+            <div className="flex flex-col justify-center p-2">
+              {/* Middle Card */}
+              <div className="grid stream-grid p-2 ">
+                <div className="max-h-[500px]">
+                  <Card className="w-[350px] h-full flex flex-col rounded-sm">
+                    <CardHeader>
+                      <CardTitle>Live Chat</CardTitle>
+                      <CardDescription>
+                        Engage with your viewers in real-time.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1 overflow-y-auto max-h-[400px]">
+                      {messages.length === 0 ? (
+                        <div className="text-center text-gray-500">
+                          No messages yet. Be the first to chat!
+                        </div>
+                      ) : (
+                        messages.map((msg, index) => (
+                          <div
+                            key={index}
+                            className="p-2 mb-2 bg-gray-100 rounded text-sm"
+                          >
+                            <strong>{msg.username}</strong>: {msg.message}
+                          </div>
+                        ))
+                      )}
+                    </CardContent>
+                    <CardFooter className="mt-auto">
+                      <div className="grid w-full gap-2">
+                        <Textarea
+                          placeholder="Type your message here."
+                          value={input}
+                          onChange={(e) => setInput(e.target.value)}
+                        />
+                        <Button onClick={handleSendMessage}>
+                          Send message
+                        </Button>
+                      </div>
+                    </CardFooter>
+                  </Card>
                 </div>
-              </CardFooter>
-            </Card>
+              </div>
+            </div>
+            {/* Your other components */}
           </div>
         </div>
-        <div className="flex-col pb-2 ml-2">
-          <Button id="video" className="px-7 mx-2" onClick={initConnection}>Join Class</Button>
-          <Button id="video" className="bg-red-500" onClick={disconnectFromBroadcast}>Leave Class</Button>
-        </div>
+
         {/* Bottom Cards */}
-        <div>
+        {/* <div>
           <div className="w-full p-5 bg-gray-100 h-[80px] rounded-md">
             <h1 className="text-xl text-left">
               Fundamentals of Computer Science
@@ -378,7 +442,7 @@ export default function Page({ params }) {
               Ask a question from tutor
             </TabsContent>
           </Tabs>
-        </div>
+        </div> */}
       </div>
     </div>
   );
