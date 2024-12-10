@@ -5,11 +5,13 @@ const prisma = new PrismaClient();
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
-    const token = searchParams.get('token');
+    const courseId = searchParams.get('courseId');
+    const livestreamId = searchParams.get('livestreamId');
     try {
         const count = await prisma.user_tokens.count({
             where: {
-                token: token,
+                course_id: parseInt(courseId),
+                livestream_id:parseInt(livestreamId)
             },
         });
 

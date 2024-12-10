@@ -20,7 +20,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import TutorLivestream from "@/components/courses/tutor/TutorLivestream"
 import QuizForm from "./tutor/TutorQuiz"
 import LivestreamStatus from "./student/livestreamStatus"
-import jwt from 'jsonwebtoken';
+import ClassSupp from "./tutor/ClassSupp"
 
 function NavigationTabs({ course }) {
   const router = useRouter();
@@ -159,9 +159,9 @@ function NavigationTabs({ course }) {
           if (res.ok) {
             const data = await res.json();
             if (data.quiz_attempted) {
-              setQuizStatus(true); // Set stage to prevent retaking
+              setQuizStatus(true);
             } else {
-              setQuizStatus(false); // Set stage to prevent retaking
+              setQuizStatus(false);
             }
           } else {
             console.error("Failed to fetch quiz status");
@@ -177,35 +177,32 @@ function NavigationTabs({ course }) {
     }
   }, [courseId, userId]);
 
-  useEffect(()=>{
-    
-  })
-  const generateToken = async (courseId, livestreamId) => {
-    try {
-      const res = await fetch('/api/generateToken', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ courseId, livestreamId }),
-      });
-  
-      if (res.ok) {
-        const data = await res.json();
-        console.log('Generated Token:', data.token);
-        // getToken(data.token);
-      } else {
-        console.error('Failed to generate token');
-      }
-    } catch (error) {
-      console.error('Error fetching token:', error);
-    }
-  };
-  
+  // const generateToken = async (courseId, livestreamId) => {
+  //   try {
+  //     const res = await fetch('/api/generateToken', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ courseId, livestreamId }),
+  //     });
 
-  const getToken = async (token) => {
+  //     if (res.ok) {
+  //       const data = await res.json();
+  //       console.log(`${courseId}`, data.token);
+  //       // getToken(data.token);
+  //     } else {
+  //       console.error('Failed to generate token');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching token:', error);
+  //   }
+  // };
+
+
+  const getToken = async (courseId, livestreamId) => {
     try {
-      const response = await fetch(`/api/getToken?token=${token}`, {
+      const response = await fetch(`/api/getToken?courseId=${courseId}&livestreamId=${livestreamId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -215,7 +212,7 @@ function NavigationTabs({ course }) {
       const dataToken = await response.json();
 
       if (response.ok) {
-        console.log(dataToken);
+        return dataToken.count
       }
     } catch (error) {
       console.error("Error creating livestream:", error);
@@ -275,7 +272,7 @@ function NavigationTabs({ course }) {
                     key={livestream.id}
                     className="border-r mb-2 border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
-                    <div className="">
+                    <div>
                       <div className="mb-2">
                         {livestream.status === "active" && (
                           <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
@@ -292,7 +289,17 @@ function NavigationTabs({ course }) {
                       <div className="flex items-center">
                         <div className="text-sm my-4">
                           <p className="text-primary leading-none">Tokens Raised</p>
-                          {generateToken(courseId, livestream.id)}
+                          {(() => {
+                            const tokenCount = getToken(courseId, livestream.id); // Call getToken once and store the result
+                            return tokenCount > 0 ? (
+                              <div>
+                                <span>{tokenCount}</span>
+                                <ClassSupp/>
+                              </div>
+                            ) : (
+                              <span>{tokenCount}</span>
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>

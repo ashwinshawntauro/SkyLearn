@@ -35,7 +35,7 @@ export default function Page({ livestreamId, userId, course_id }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ userId, livestreamId, courseids }),
+                body: JSON.stringify({ userId, livestreamId, courseids}),
             });
 
             if (response.ok) {

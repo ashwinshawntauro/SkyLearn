@@ -27,6 +27,7 @@ export async function POST(req) {
       data: {
         user_id: userId,
         token: token,
+        livestream_id:livestreamId,
         course_id: courseids,
         expires_at: expiresAt,
       },
