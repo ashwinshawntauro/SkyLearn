@@ -226,6 +226,7 @@ model livestreams {
   title                                              String             @db.VarChar(255)
   description                                        String?            @db.Text
   datetime                                           DateTime?          @db.Date
+  refLiveId                                          Int?
   STUDENTCLASSES                                     STUDENTCLASSES[]
   COURSE                                             COURSE             @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_1")
   TUTOR                                              TUTOR              @relation(fields: [tutor_id], references: [tutor_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_2")

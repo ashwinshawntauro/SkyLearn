@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Page({ courseId, tutorId }) {
-  const [datetime, setDatetime] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -27,11 +26,15 @@ export default function Page({ courseId, tutorId }) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  const handleDatetimeChange = (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, datetime: value })); // Update datetime in formData
+};
 
   const handleCreateLivestream = async () => {
     const reqBody = {
       ...formData,
-      status: "active",
+      status: "inactive",
       course_id: courseId,
       tutor_id: tutorId,
     };
@@ -92,8 +95,8 @@ export default function Page({ courseId, tutorId }) {
             <Input
               type="date"
               name="datetime"
-              value={datetime}
-              onChange={(e) => setDatetime(e.target.value)}
+              value={formData.datetime}
+              onChange={handleDatetimeChange}
               className="border px-2 py-1"
               required
             />

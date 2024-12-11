@@ -39,9 +39,6 @@ function Navbar() {
     }
   };
 
-  console.log(searchResults)
-
-
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);

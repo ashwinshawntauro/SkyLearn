@@ -21,7 +21,7 @@ import TutorLivestream from "@/components/courses/tutor/TutorLivestream";
 import QuizForm from "./tutor/TutorQuiz";
 import TutorNotes from "@/components/courses/tutor/TutorNotes";
 import LivestreamStatus from "./student/livestreamStatus"
-import ClassSupp from "./tutor/ClassSupp"
+import ClassSupp from "./tutor/ClassSup"
 import { Form } from "../ui/form";
 import { Textarea } from "../ui/textarea";
 
@@ -156,8 +156,6 @@ function NavigationTabs({ course }) {
               correct: q.correct_choice - 1, // Assuming correct_choice is 1-indexed
             }));
             setQuestions(formattedQuestions);
-
-            console.log(formattedQuestions);
           } else {
             console.error("Failed to fetch questions");
           }
@@ -192,7 +190,6 @@ function NavigationTabs({ course }) {
       );
 
       setLivestreams(filteredLivestreams);
-      console.log(livestreams);
     } catch (error) {
       console.error("Error fetching livestreams:", error);
     }
@@ -321,7 +318,10 @@ function NavigationTabs({ course }) {
                     key={livestream.id}
                     className="border-r border-b mb-2 border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
-                    <div className="">
+                    <div>
+                      <div className="font-light font-sans text-primary">
+                        {livestream.datetime}
+                      </div>
                       <div className="mb-2">
                         {livestream.status === "active" && (
                           <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
@@ -336,8 +336,16 @@ function NavigationTabs({ course }) {
                         {livestream.description}
                       </p>
                       <div className="flex items-center space-x-2">
-                        <LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />
+                        {livestream.status === "ended"?
+                          (< LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />)
+                          :(<div></div>)
+                        }
                       </div>
+                      {livestream.refLiveId && (
+                        <blockquote className="mt-4 italic text-gray-600 border-l-4 border-primary pl-4">
+                          Supplementary Class
+                        </blockquote>
+                      )}
                     </div>
                     {livestream.status === "active" && (
                       <Button
@@ -361,6 +369,9 @@ function NavigationTabs({ course }) {
                     className="border-r mb-2 border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
                     <div>
+                      <div className="font-light font-sans text-primary">
+                        {livestream.datetime}
+                      </div>
                       <div className="mb-2">
                         {livestream.status === "active" && (
                           <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
@@ -374,24 +385,16 @@ function NavigationTabs({ course }) {
                       <p className="text-grey-darker text-base">
                         {livestream.description}
                       </p>
+                      {livestream.status === "ended"?(
                       <div className="flex items-center">
                         <div className="text-sm my-4">
-                          <p className="text-primary leading-none">Tokens Raised</p>
-                          {(() => {
-                            const tokenCount = getToken(courseId, livestream.id); // Call getToken once and store the result
-                            return tokenCount > 0 ? (
-                              <div>
-                                <span>{tokenCount}</span>
-                                <ClassSupp />
-                              </div>
-                            ) : (
-                              <span>{tokenCount}</span>
-                            );
-                          })()}
+                          <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p>
+                          <ClassSupp title={livestream.title} courseId={courseId} tutorId={userId} description={livestream.description} livestreamId={livestream.id} />
                         </div>
-                      </div>
+                      </div>)
+                      :(<div></div>)}
                     </div>
-                    {livestream.status === "active" && (
+                    {livestream.status !== "ended"  && (
                       <div className="grid grid-flow-col">
                         <Button
                           onClick={() =>
@@ -399,7 +402,7 @@ function NavigationTabs({ course }) {
                               `${courseId}L${livestream.id}/livestream`
                             )
                           }
-                          className="flex w-full items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
+                          className="flex items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
                         >
                           Join Class
                         </Button>
@@ -407,7 +410,7 @@ function NavigationTabs({ course }) {
                           onClick={() => endLive(livestream.id)}
                           className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800"
                         >
-                          End Live
+                          End Class
                         </Button>
                       </div>
                     )}

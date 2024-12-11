@@ -64,7 +64,7 @@ export default function Page({ livestreamId, userId, course_id }) {
             ) : (
                 <div className="py-2">
                     <div
-                        className={`font-sans font-semibold ${status === "Present" ? "text-green-500" : "text-red-500"}`}
+                        className={`font-serif ${status === "Present" ? "text-green-500" : "text-red-500"}`}
                     >
                         Status: {status}
                     </div>
