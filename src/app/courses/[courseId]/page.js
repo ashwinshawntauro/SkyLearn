@@ -35,7 +35,6 @@ export default function Page() {
   if (loading) {
     return <Loading/>;
   }
-
   if (!course) {
     return <div>Course does not exist</div>;
   }

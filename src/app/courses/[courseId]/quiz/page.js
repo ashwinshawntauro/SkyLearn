@@ -2,9 +2,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { AuthContext } from "@/providers/AuthProvider";
+import Loading from "../loading";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Router, useRouter } from "next/navigation";
 
 const QuizApp = () => {
   const course_id = useParams();
+  const router = useRouter()
   const {userId} = AuthContext()
   const [questions, setQuestions] = useState([]); // Store fetched questions
   const [stage, setStage] = useState(); // Stages: home, quiz, results
@@ -167,7 +172,7 @@ const QuizApp = () => {
       console.log('Quiz result submitted successfully:', data);
     } catch (error) {
       console.error('Error submitting quiz results:', error);
-      alert('There was an issue submitting your results. Please try again.');
+      // alert('There was an issue submitting your results. Please try again.');
     }
   };
   
@@ -194,19 +199,19 @@ const QuizApp = () => {
  
 
   if (loading) {
-    return <p className="text-center text-lg">Loading...</p>;
+    return <Loading/>;
   }
 
   if (stage === "home") {
     return (
       <div className="flex flex-col items-center space-y-4 mt-10">
         <h1 className="text-3xl font-bold">Welcome to the Quiz</h1>
-        <button
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+        <Button
+          className="bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-light"
           onClick={startQuiz}
         >
           Start Test
-        </button>
+        </Button>
       </div>
     );
   }
@@ -219,7 +224,7 @@ const QuizApp = () => {
         {/* Navigation by Question Numbers */}
         <div className="flex justify-center space-x-2 mb-4">
           {questions.map((_, index) => (
-            <button
+            <Button
               key={index}
               className={`py-2 px-4 rounded ${
                 currentQuestion === index ? "bg-blue-500 text-white" : "bg-gray-200"
@@ -227,7 +232,7 @@ const QuizApp = () => {
               onClick={() => setCurrentQuestion(index)}
             >
               {index + 1}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -237,37 +242,37 @@ const QuizApp = () => {
             {questions[currentQuestion].question}
           </h2>
           {questions[currentQuestion].options.map((option, index) => (
-            <button
+            <Button
               key={index}
               onClick={() => handleAnswer(index)}
               className={`block w-full text-left py-2 px-4 rounded mb-2 ${
                 answers[currentQuestion] === index
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-100"
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-black"
               }`}
             >
               {option}
-            </button>
+            </Button>
           ))}
         </div>
 
         {/* Next and Previous Buttons */}
         <div className="flex justify-between items-center">
-          <button
-            className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+          <Button
+            className="bg-gray-500 text-black py-2 px-4 rounded hover:bg-gray-600"
             onClick={() =>
               setCurrentQuestion((prev) => Math.max(prev - 1, 0))
             }
             disabled={currentQuestion === 0}
           >
             Previous
-          </button>
+          </Button>
           <p className="text-lg font-bold">
             Time Remaining: {Math.floor(timer / 60)}:
             {String(timer % 60).padStart(2, "0")}
           </p>
-          <button
-            className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600"
+          <Button
+            className="bg-gray-500 text-black py-2 px-4 rounded hover:bg-gray-600"
             onClick={() =>
               setCurrentQuestion((prev) =>
                 Math.min(prev + 1, questions.length - 1)
@@ -276,23 +281,24 @@ const QuizApp = () => {
             disabled={currentQuestion === questions.length - 1}
           >
             Next
-          </button>
+          </Button>
         </div>
 
-        <button
-          className="mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+        <Button
+          className="mt-4 bg-red-500 font-semibold text-white py-2 px-4 rounded hover:bg-red-600"
           onClick={calculateAndEndQuiz}
         >
           Submit
-        </button>
+        </Button>
       </div>
     );
   }
   if (stage === "attempted") {
     return (
       <div className="flex flex-col items-center space-y-4 mt-10">
-        <h1 className="text-3xl font-bold">Quiz Already Attempted</h1>
+        <h1 className="text-3xl font-bold text-primary">Quiz Already Attempted</h1>
         <p className="text-lg">You have already submitted this quiz. Retaking is not allowed.</p>
+        <Button onClick={()=>router.replace(`/courses/${course_id.courseId}`)}>Back to Home</Button>
       </div>
     );
   }
@@ -301,7 +307,7 @@ const QuizApp = () => {
   if (stage === "results") {
     return (
       <div className="p-6">
-        <h1 className="text-3xl font-bold">Results</h1>
+        <h1 className="text-3xl font-bold text-primary">Results</h1>
         <p className="text-xl mt-4">
           Your score: {score}/{questions.length}
         </p>

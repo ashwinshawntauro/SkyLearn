@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Page({ courseId, tutorId }) {
-    const [datetime, setDatetime] = useState("");
+  const [datetime, setDatetime] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     datetime: "",
   });
   const [message, setMessage] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,6 +48,7 @@ export default function Page({ courseId, tutorId }) {
 
       if (response.ok) {
         setMessage("Livestream created successfully!");
+        setIsDialogOpen(false); // Close dialog after success
       } else {
         setMessage(`Error: ${data.error || "Something went wrong"}`);
       }
@@ -51,10 +60,12 @@ export default function Page({ courseId, tutorId }) {
 
   return (
     <div className="p-4">
-      <div></div>
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light">
+          <Button
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light"
+            onClick={() => setIsDialogOpen(true)}
+          >
             Create Livestream
           </Button>
         </DialogTrigger>
@@ -88,10 +99,7 @@ export default function Page({ courseId, tutorId }) {
             />
           </div>
           <DialogFooter>
-            <Button
-              onClick={handleCreateLivestream}
-              className="bg-primary-light"
-            >
+            <Button onClick={handleCreateLivestream} className="bg-primary-light">
               Create Livestream
             </Button>
           </DialogFooter>
@@ -99,7 +107,11 @@ export default function Page({ courseId, tutorId }) {
       </Dialog>
 
       {message && (
-        <p className={`mt-4 ${message.includes("successfully") ? "text-green-500" : "text-red-500"}`}>
+        <p
+          className={`mt-4 ${
+            message.includes("successfully") ? "text-green-500" : "text-red-500"
+          }`}
+        >
           {message}
         </p>
       )}

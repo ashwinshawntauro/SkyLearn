@@ -19,7 +19,7 @@ export default function Page({ courseId }) {
     noteText: "",
   });
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(true); // Loading state
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Dialog open state
 
   const handleChange = (e) => {
@@ -43,7 +43,7 @@ export default function Page({ courseId }) {
     };
 
     try {
-      setLoading(true); // Set loading state to true
+      setLoading(true); 
 
       const response = await fetch("/api/uploadNotes", {
         method: "POST",

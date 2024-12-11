@@ -16,30 +16,29 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Loading from "./loading"
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 export default function Home() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("price"); // Default sort by price
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order is ascending
+  const [sortBy, setSortBy] = useState("price");
+  const [sortOrder, setSortOrder] = useState("asc");
   const { userId, role, logout, isLogged } = AuthContext();
-  
-
-  // Fetch courses when the component mounts
-  // Fetch courses when the component mounts
   useEffect(() => {
     const fetchCourses = async () => {
-      // if (!userId || !role) {
-      //   return;
-      // }
-  
       try {
-        // Check if the user is a student or the role is not provided
         const endpoint =
           role === "teacher" && userId
-            ? `/api/getTutorCourses?tutorId=${userId}` // Tutor role
-            : "/api/getCourses"; // Student or role is null
-  
+            ? `/api/getTutorCourses?tutorId=${userId}`
+            : "/api/getCourses";
+
         const res = await fetch(endpoint);
         const data = await res.json();
         setCourses(data);
@@ -49,19 +48,16 @@ export default function Home() {
         setLoading(false);
       }
     };
-  
+
     fetchCourses();
   }, [userId, role]);
-  
 
-  // Helper function to extract numeric part of duration (in hours)
   const parseDuration = (duration) => {
     if (!duration) return 0;
     const match = duration.match(/^(\d+)/);
     return match ? parseInt(match[1], 10) : 0;
   };
 
-  // Sorting logic
   const sortedCourses = [...courses].sort((a, b) => {
     let comparison = 0;
 
@@ -87,102 +83,102 @@ export default function Home() {
         difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
     }
 
-    // Apply sorting order (ascending or descending)
     return sortOrder === "asc" ? comparison : -comparison;
   });
 
   if (loading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   return (
     <AuthProvider>
       <div className="flex justify-center font-[family-name:var(--font-geist-sans)]">
         {/* Main Content */}
-        <div className="flex w-full h-screen">
+        <div className="flex w-full min-h-screen max-h-full">
           {/* Sidebar */}
-          <aside className="w-64 h-screen text-gray-700 p-6 bg-zinc-100">
-            <div className="flex justify-center p-5 bg-white rounded-xl">
-              <Image
-                src={logo}
-                alt="SkyLearn Logo"
-                width={150}
-                height={50}
-                loading="eager"
-              />
-            </div>
-            <hr />
-
-            <nav className="space-y-3 my-4 flex justify-between flex-col font-bold">
-              <div className="flex items-center  p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 -960 960 960"
-                  width="24px"
-                  fill="#3371b8"
-                  className="pb-1 hover:text-white"
-                >
-                  <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
-                </svg>
-                <a href="/"> Home</a>
+          <aside className="w-64 h-full text-gray-700 p-6 bg-zinc-100">
+            <div className="fixed">
+              <div className="flex justify-center p-5 bg-white rounded-xl">
+                <Image
+                  src={logo}
+                  alt="SkyLearn Logo"
+                  width={150}
+                  height={50}
+                  loading="eager"
+                />
               </div>
-
-              <div className="flex items-center p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">
-                {" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 -960 960 960"
-                  width="24px"
-                  fill="#3371b8"
-                  className="pb-1"
-                >
-                  <path d="M160-80q-17 0-28.5-11.5T120-120v-558q0-15 6-25.5t20-16.5l400-160q20-8 37 5.5t17 34.5v120h40q17 0 28.5 11.5T680-680v120h-80v-80H200v480h207l80 80H160Zm200-640h160v-62l-160 62ZM680-80q-83 0-141.5-58.5T480-280q0-83 58.5-141.5T680-480q83 0 141.5 58.5T880-280q0 83-58.5 141.5T680-80Zm-50-100 160-100-160-100v200Zm-430 20v-480 480Z" />
-                </svg>{" "}
-                <a href="/mycourses">My Course</a>
-              </div>
-
-              <div className="flex items-center p-2 rounded-md hover:bg-primary-light transition-colors hover:text-white duration-300">
-                {" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="24px"
-                  viewBox="0 -960 960 960"
-                  width="24px"
-                  fill="#3371b8"
-                  className="pb-1"
-                >
-                  <path d="M480-400q33 0 56.5-23.5T560-480q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480q0 33 23.5 56.5T480-400ZM320-240h320v-23q0-24-13-44t-36-30q-26-11-53.5-17t-57.5-6q-30 0-57.5 6T369-337q-23 10-36 30t-13 44v23ZM720-80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80Zm0-80v-446L526-800H240v640h480Zm-480 0v-640 640Z" />
-                </svg>{" "}
-                <a href="/contact">Contact Us</a>
-              </div>
-
-              {!isLogged && (
-                <div>
-                  <a
-                    href="/signin"
-                    className="block font-semibold p-2 my-2 rounded-md bg-primary hover:bg-blue-800 text-center text-white transition-colors duration-300"
+              <hr />
+              <nav className="space-y-3 my-4 flex justify-between flex-col font-bold">
+                <div className="flex items-center group p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#3371b8"
+                    className="pb-1"
                   >
-                    Sign In
-                  </a>
-                  <a
-                    href="/signup"
-                    className="block p-2 rounded-md my-2 bg-primary hover:bg-blue-800 text-center text-white transition-colors duration-300 font-semibold"
-                  >
-                    Sign Up
-                  </a>
+                    <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
+                  </svg>
+                  <Link href="/profile">Profile</Link>
                 </div>
-              )}
-              {isLogged && (
-                <a
-                  onClick={logout}
-                  className="cursor-pointer block font-semibold p-2 rounded-md bg-[#f55045] text-white text-center hover:bg-red-700 hover:text-white transition-colors duration-300"
-                >
-                  Logout
-                </a>
-              )}
-            </nav>
+
+                <div className="flex items-center p-2 rounded-md hover:bg-primary-light hover:text-white transition-colors duration-300">
+                  {" "}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#3371b8"
+                    className="pb-1"
+                  >
+                    <path d="M160-80q-17 0-28.5-11.5T120-120v-558q0-15 6-25.5t20-16.5l400-160q20-8 37 5.5t17 34.5v120h40q17 0 28.5 11.5T680-680v120h-80v-80H200v480h207l80 80H160Zm200-640h160v-62l-160 62ZM680-80q-83 0-141.5-58.5T480-280q0-83 58.5-141.5T680-480q83 0 141.5 58.5T880-280q0 83-58.5 141.5T680-80Zm-50-100 160-100-160-100v200Zm-430 20v-480 480Z" />
+                  </svg>{" "}
+                  <Link href="/mycourses">My Course</Link>
+                </div>
+
+                <div className="flex items-center p-2 rounded-md hover:bg-primary-light transition-colors hover:text-white duration-300">
+                  {" "}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#3371b8"
+                    className="pb-1"
+                  >
+                    <path d="M480-400q33 0 56.5-23.5T560-480q0-33-23.5-56.5T480-560q-33 0-56.5 23.5T400-480q0 33 23.5 56.5T480-400ZM320-240h320v-23q0-24-13-44t-36-30q-26-11-53.5-17t-57.5-6q-30 0-57.5 6T369-337q-23 10-36 30t-13 44v23ZM720-80H240q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80Zm0-80v-446L526-800H240v640h480Zm-480 0v-640 640Z" />
+                  </svg>{" "}
+                  <Link href="/contact">Contact Us</Link>
+                </div>
+
+                {!isLogged && (
+                  <div>
+                    <Link
+                      href="/signin"
+                      className="block font-semibold p-2 my-2 rounded-md bg-primary hover:bg-blue-800 text-center text-white transition-colors duration-300"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="block p-2 rounded-md my-2 bg-primary hover:bg-blue-800 text-center text-white transition-colors duration-300 font-semibold"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
+                {isLogged && (
+                  <Button
+                    onClick={logout}
+                    className="cursor-pointer block font-semibold p-2 rounded-md bg-[#f55045] text-white text-center hover:bg-red-700 hover:text-white transition-colors duration-300"
+                  >
+                    Logout
+                  </Button>
+                )}
+              </nav>
+            </div>
           </aside>
 
           {/* Main Dashboard Area */}
@@ -195,39 +191,41 @@ export default function Home() {
                 <h3 className="text-2xl font-bold mb-4">Courses </h3>
 
                 {/* Sorting Dropdowns */}
-                <div className="mb-4 flex items-center gap-4">
+                <div className="mb-4 flex justify-end gap-4">
                   <div className="flex items-center">
-                    <label htmlFor="sortBy" className="mr-2">
-                      Sort By:
-                    </label>
-                    <select
-                      id="sortBy"
+                    <Label htmlFor="sortBy">Sort By: </Label>
+                    <Select
                       value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="p-2 border rounded-md"
+                      onValueChange={(value) => setSortBy(value)} // ShadCN uses onValueChange
                     >
-                      <option value="price">Price</option>
-                      <option value="deadline">Deadline</option>
-                      <option value="name">Course Name</option>
-                      <option value="duration">Duration</option>
-                      <option value="enrollments">Enrollments</option>
-                      <option value="difficulty">Difficulty</option>
-                    </select>
+                      <SelectTrigger id="sortBy" className="w-[200px]">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="price">Price</SelectItem>
+                        <SelectItem value="deadline">Deadline</SelectItem>
+                        <SelectItem value="name">Course Name</SelectItem>
+                        <SelectItem value="duration">Duration</SelectItem>
+                        <SelectItem value="enrollments">Enrollments</SelectItem>
+                        <SelectItem value="difficulty">Difficulty</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="flex items-center">
-                    <label htmlFor="sortOrder" className="mr-2">
-                      Order:
-                    </label>
-                    <select
-                      id="sortOrder"
+                    <Label htmlFor="sortOrder">Order:</Label>
+                    <Select
                       value={sortOrder}
-                      onChange={(e) => setSortOrder(e.target.value)}
-                      className="p-2 border rounded-md"
+                      onValueChange={(value) => setSortOrder(value)} // ShadCN uses onValueChange
                     >
-                      <option value="asc">Ascending</option>
-                      <option value="desc">Descending</option>
-                    </select>
+                      <SelectTrigger id="sortOrder" className="w-[200px]">
+                        <SelectValue placeholder="Select order" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="asc">Ascending</SelectItem>
+                        <SelectItem value="desc">Descending</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -235,10 +233,10 @@ export default function Home() {
                   {sortedCourses.map((course, index) => (
                     <Card
                       key={course.id || `${course.course_id}-${index}`}
-                      className="bg-white shadow-md rounded-lg p-1"
+                      className="bg-white shadow-md border rounded-lg p-1"
                     >
                       <CardHeader>
-                        <CardTitle className="text-primary text-lg font-extrabold">
+                        <CardTitle className="text-primary text-md font-semibold">
                           {course.course_name}
                         </CardTitle>
                         <CardDescription>
@@ -260,7 +258,7 @@ export default function Home() {
                         <p className="text-sm text-gray-500 font-semibold">
                           Level: {course.difficulty}
                         </p>
-                        <p className="text-sm text-[#f55045] pt-4 font-extrabold text-center">
+                        <p className="text-sm text-[#f55045] font-semibold">
                           Deadline:{" "}
                           {new Date(
                             course.enrollment_deadline

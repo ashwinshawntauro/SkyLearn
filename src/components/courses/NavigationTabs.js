@@ -22,6 +22,8 @@ import QuizForm from "./tutor/TutorQuiz";
 import TutorNotes from "@/components/courses/tutor/TutorNotes";
 import LivestreamStatus from "./student/livestreamStatus"
 import ClassSupp from "./tutor/ClassSupp"
+import { Form } from "../ui/form";
+import { Textarea } from "../ui/textarea";
 
 function NavigationTabs({ course }) {
   const router = useRouter();
@@ -144,7 +146,7 @@ function NavigationTabs({ course }) {
             const quizData = await resp.json();
 
             if (quizData.error) {
-              console.error(quizData.error); 
+              console.error(quizData.error);
               return;
             }
 
@@ -161,11 +163,9 @@ function NavigationTabs({ course }) {
           }
         } catch (error) {
           console.error("Error fetching course data:", error);
-        } finally {
-          setLoading(false);
         }
       };
-
+      fetchLivestreams();
       fetchQuizData();
     }
   }, [courseId, userId]);
@@ -245,7 +245,6 @@ function NavigationTabs({ course }) {
           setLoading(false);
         }
       };
-
       fetchQuizData();
     }
   }, [courseId, userId]);
@@ -393,14 +392,14 @@ function NavigationTabs({ course }) {
                       </div>
                     </div>
                     {livestream.status === "active" && (
-                      <div className="flex flex-col">
+                      <div className="grid grid-flow-col">
                         <Button
                           onClick={() =>
                             router.push(
                               `${courseId}L${livestream.id}/livestream`
                             )
                           }
-                          className="flex py-10 items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
+                          className="flex w-full items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
                         >
                           Join Class
                         </Button>
@@ -547,25 +546,29 @@ function NavigationTabs({ course }) {
 
           {isPurchased ? (
             <TabsContent value="askAi" className="p-2">
-              <h3>Ask Gemini</h3>
-              <form
+              <Form
                 onSubmit={handleQuestionSubmit}
                 className="flex flex-col space-y-4"
               >
-                <textarea
+                <Textarea
                   value={userQuestion}
                   onChange={(e) => setUserQuestion(e.target.value)}
                   placeholder="Type your question here..."
-                  className="w-full p-2 border rounded-md resize-none"
+                  className="w-full bg-white p-2 border rounded-md focus:border-none focus:outline-none"
                   rows="4"
                 />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-md"
-                >
-                  Ask
-                </button>
-              </form>
+                <div className="w-full flex justify-end">
+                  <Button
+                    type="submit"
+                    className="px-4 py-2 my-2 bg-primary text-white rounded-md"
+                  >
+                    <p className="px-1 font-sans">Ask AI</p>
+                    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18.5A2.493 2.493 0 0 1 7.51 20H7.5a2.468 2.468 0 0 1-2.4-3.154 2.98 2.98 0 0 1-.85-5.274 2.468 2.468 0 0 1 .92-3.182 2.477 2.477 0 0 1 1.876-3.344 2.5 2.5 0 0 1 3.41-1.856A2.5 2.5 0 0 1 12 5.5m0 13v-13m0 13a2.493 2.493 0 0 0 4.49 1.5h.01a2.468 2.468 0 0 0 2.403-3.154 2.98 2.98 0 0 0 .847-5.274 2.468 2.468 0 0 0-.921-3.182 2.477 2.477 0 0 0-1.875-3.344A2.5 2.5 0 0 0 14.5 3 2.5 2.5 0 0 0 12 5.5m-8 5a2.5 2.5 0 0 1 3.48-2.3m-.28 8.551a3 3 0 0 1-2.953-5.185M20 10.5a2.5 2.5 0 0 0-3.481-2.3m.28 8.551a3 3 0 0 0 2.954-5.185" />
+                    </svg>
+                  </Button>
+                </div>
+              </Form>
               {aiResponse && (
                 <div className="mt-4 p-4 bg-gray-200 rounded-md">
                   <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
@@ -610,11 +613,9 @@ function NavigationTabs({ course }) {
           defaultValue="instructors"
           className="w-full p-2 bg-gray-100 h-auto"
         >
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-            <TabsTrigger value="discussion">Discussion</TabsTrigger>
-            <TabsTrigger value="review">Review</TabsTrigger>
-            <TabsTrigger value="instructors">Instructors</TabsTrigger>
+            <TabsTrigger value="instructors">Instructor</TabsTrigger>
           </TabsList>
           <TabsContent value="curriculum" className="p-2">
             Course Curriculum is displayed here!

@@ -58,20 +58,20 @@ export default function Page({ livestreamId, userId, course_id }) {
     return (
         <div>
             {error ? (
-                <div className="text-red-500 font-semibold mb-2">{error}</div>
+                <div className="text-red-500 font-semibold font-sans mb-2">{error}</div>
             ) : status === null ? (
                 <div>Loading status...</div>
             ) : (
-                <div>
+                <div className="py-2">
                     <div
-                        className={`font-semibold ${status === "Present" ? "text-green-500" : "text-red-500"}`}
+                        className={`font-sans font-semibold ${status === "Present" ? "text-green-500" : "text-red-500"}`}
                     >
                         Status: {status}
                     </div>
                     {status !== "Present" && (
                         <Button
                             onClick={raiseToken}
-                            className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                            className="bg-primary font-semibold text-white px-4 py-2 rounded-lg hover:bg-primary-light"
                         >
                             Raise Token
                         </Button>
