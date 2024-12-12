@@ -134,7 +134,6 @@ function CourseDetails({ course }) {
           }
           title="Course Video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          frameBorder="0"
           allowFullScreen
         />
       </div>

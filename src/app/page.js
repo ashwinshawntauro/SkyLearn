@@ -186,7 +186,7 @@ export default function Home() {
             {/* Top Bar */}
             <Navbar />
             {/* Main Content */}
-            <main className="p-6">
+            <main className="p-6 rounded-lg">
               <section>
                 <h3 className="text-2xl font-bold mb-4">Courses </h3>
 

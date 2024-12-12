@@ -2,10 +2,27 @@ import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 
 export default function Page({ livestreamId, userId, course_id }) {
-    const [status, setStatus] = useState(null); 
-    const [error, setError] = useState(null); 
+    const [status, setStatus] = useState(null);
+    const [error, setError] = useState(null);
+    const [tokenPresent,settokenPresent] = useState(null);
+    const courseids = course_id.course_id
 
-    const getStatus = async (livestreamId, userId) => {
+    const getStatus = async (livestreamId, userId,courseids) => {
+        try {
+            const response = await fetch(`/api/getTokenStudent?userId=${userId}&livestreamId=${livestreamId}&courseids=${courseids}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                // const data = await response.json();
+                settokenPresent(true)
+            } 
+        } catch (error) {
+            console.error("Error raising token:", error);
+        }
         try {
             const response = await fetch(`/api/getStudentClass?userId=${userId}&livestreamId=${livestreamId}`, {
                 method: "GET",
@@ -27,14 +44,13 @@ export default function Page({ livestreamId, userId, course_id }) {
         }
     };
     const raiseToken = async () => {
-        const courseids =course_id.course_id
         try {
             const response = await fetch("/api/raiseToken", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ userId, livestreamId, courseids}),
+                body: JSON.stringify({ userId, livestreamId, courseids }),
             });
 
             if (response.ok) {
@@ -51,7 +67,7 @@ export default function Page({ livestreamId, userId, course_id }) {
 
     useEffect(() => {
         if (livestreamId && userId) {
-            getStatus(livestreamId, userId);
+            getStatus(livestreamId, userId,courseids);
         }
     }, [livestreamId, userId]);
 
@@ -68,6 +84,8 @@ export default function Page({ livestreamId, userId, course_id }) {
                     >
                         Status: {status}
                     </div>
+                    {tokenPresent==false ? (
+                    <div>
                     {status !== "Present" && (
                         <Button
                             onClick={raiseToken}
@@ -76,6 +94,10 @@ export default function Page({ livestreamId, userId, course_id }) {
                             Raise Token
                         </Button>
                     )}
+                    </div>
+                    ): tokenPresent==true?(
+                        <Button disabled>Request sent</Button>
+                    ): (<span></span>)}
                 </div>
             )}
         </div>

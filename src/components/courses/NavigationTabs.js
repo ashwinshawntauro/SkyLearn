@@ -319,15 +319,15 @@ function NavigationTabs({ course }) {
                     className="border-r border-b mb-2 border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
                     <div>
-                      <div className="font-light font-sans text-primary">
-                        {livestream.datetime}
-                      </div>
                       <div className="mb-2">
                         {livestream.status === "active" && (
                           <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
                             Live
                           </span>
                         )}
+                      </div>
+                      <div className="font-light font-sans text-primary">
+                        {livestream.datetime}
                       </div>
                       <div className="text-black font-bold text-xl mb-2">
                         {livestream.title}
@@ -369,15 +369,15 @@ function NavigationTabs({ course }) {
                     className="border-r mb-2 border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
                   >
                     <div>
-                      <div className="font-light font-sans text-primary">
-                        {livestream.datetime}
-                      </div>
                       <div className="mb-2">
                         {livestream.status === "active" && (
                           <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
                             Live
                           </span>
                         )}
+                      </div>
+                      <div className="font-light font-sans text-primary">
+                        {livestream.datetime}
                       </div>
                       <div className="text-black font-bold text-xl mb-2">
                         {livestream.title}
@@ -395,7 +395,7 @@ function NavigationTabs({ course }) {
                       :(<div></div>)}
                     </div>
                     {livestream.status !== "ended"  && (
-                      <div className="grid grid-flow-col">
+                      <div className="grid grid-flow-col gap-2">
                         <Button
                           onClick={() =>
                             router.push(
