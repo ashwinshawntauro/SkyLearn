@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Validate Certificate</h2>
+    <form action="/view-certificate" method="POST">
+        <label for="certificate_id">Enter the Certificate ID:</label><br>
+        <input type="text" id="certificate_id" name="certificate_id" required><br><br>
+
+        <input type="submit" value="Validate">
+    </form>
+
+    <h2>Upload the PDF version of the certificate</h2>
+    <form action="/upload-certificate" method="POST" enctype="multipart/form-data">
+        <label for="certificate_file">Upload PDF:</label><br>
+        <input type="file" id="certificate_file" name="certificate_file" accept="application/pdf" required><br><br>
+
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
