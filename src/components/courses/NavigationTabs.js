@@ -22,7 +22,6 @@ import QuizForm from "./tutor/TutorQuiz";
 import TutorNotes from "@/components/courses/tutor/TutorNotes";
 import LivestreamStatus from "./student/livestreamStatus";
 import ClassSupp from "./tutor/ClassSup";
-import { Form } from "../ui/form";
 import GetTokens from "./tutor/GetTokens"
 import { Textarea } from "../ui/textarea";
 
@@ -136,17 +135,6 @@ function NavigationTabs({ course }) {
     setQuizStatus(data.quiz_attempted || false);
   };
 
-  // const getToken = async (courseId, livestreamId) => {
-  //   try {
-  //     const response = await fetch(`/api/getToken?courseId=${courseId}&livestreamId=${livestreamId}`);
-  //     const data = await response.json();
-  //     return response.ok ? data.count : 0;
-  //   } catch (error) {
-  //     console.error("Error getting token:", error);
-  //     return 0;
-  //   }
-  // };
-
   const endLive = async (streamId) => {
     try {
       const response = await fetch("/api/updateLiveEnd", {
@@ -159,7 +147,7 @@ function NavigationTabs({ course }) {
 
       if (response.ok) {
         alert("Livestream ended");
-        fetchLivestreams(); // Refresh livestreams after ending
+        fetchLivestreams(); 
       }
     } catch (error) {
       console.error("Error ending livestream:", error);
@@ -454,7 +442,7 @@ function NavigationTabs({ course }) {
 
           {isPurchased ? (
             <TabsContent value="askAi" className="p-2">
-              <Form
+              <form
                 onSubmit={handleQuestionSubmit}
                 className="flex flex-col space-y-4"
               >
@@ -471,12 +459,12 @@ function NavigationTabs({ course }) {
                     className="px-4 py-2 my-2 bg-primary text-white rounded-md"
                   >
                     <p className="px-1 font-sans">Ask AI</p>
-                    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18.5A2.493 2.493 0 0 1 7.51 20H7.5a2.468 2.468 0 0 1-2.4-3.154 2.98 2.98 0 0 1-.85-5.274 2.468 2.468 0 0 1 .92-3.182 2.477 2.477 0 0 1 1.876-3.344 2.5 2.5 0 0 1 3.41-1.856A2.5 2.5 0 0 1 12 5.5m0 13v-13m0 13a2.493 2.493 0 0 0 4.49 1.5h.01a2.468 2.468 0 0 0 2.403-3.154 2.98 2.98 0 0 0 .847-5.274 2.468 2.468 0 0 0-.921-3.182 2.477 2.477 0 0 0-1.875-3.344A2.5 2.5 0 0 0 14.5 3 2.5 2.5 0 0 0 12 5.5m-8 5a2.5 2.5 0 0 1 3.48-2.3m-.28 8.551a3 3 0 0 1-2.953-5.185M20 10.5a2.5 2.5 0 0 0-3.481-2.3m.28 8.551a3 3 0 0 0 2.954-5.185" />
+                    <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18.5A2.493 2.493 0 0 1 7.51 20H7.5a2.468 2.468 0 0 1-2.4-3.154 2.98 2.98 0 0 1-.85-5.274 2.468 2.468 0 0 1 .92-3.182 2.477 2.477 0 0 1 1.876-3.344 2.5 2.5 0 0 1 3.41-1.856A2.5 2.5 0 0 1 12 5.5m0 13v-13m0 13a2.493 2.493 0 0 0 4.49 1.5h.01a2.468 2.468 0 0 0 2.403-3.154 2.98 2.98 0 0 0 .847-5.274 2.468 2.468 0 0 0-.921-3.182 2.477 2.477 0 0 0-1.875-3.344A2.5 2.5 0 0 0 14.5 3 2.5 2.5 0 0 0 12 5.5m-8 5a2.5 2.5 0 0 1 3.48-2.3m-.28 8.551a3 3 0 0 1-2.953-5.185M20 10.5a2.5 2.5 0 0 0-3.481-2.3m.28 8.551a3 3 0 0 0 2.954-5.185" />
                     </svg>
                   </Button>
                 </div>
-              </Form>
+              </form>
               {aiResponse && (
                 <div className="mt-4 p-4 bg-gray-200 rounded-md">
                   <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
