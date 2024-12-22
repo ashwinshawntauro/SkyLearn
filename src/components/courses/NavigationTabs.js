@@ -20,15 +20,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import TutorLivestream from "@/components/courses/tutor/TutorLivestream";
 import QuizForm from "./tutor/TutorQuiz";
 import TutorNotes from "@/components/courses/tutor/TutorNotes";
-import LivestreamStatus from "./student/livestreamStatus"
-import ClassSupp from "./tutor/ClassSup"
+import LivestreamStatus from "./student/livestreamStatus";
+import ClassSupp from "./tutor/ClassSup";
 import { Form } from "../ui/form";
+import GetTokens from "./tutor/GetTokens"
 import { Textarea } from "../ui/textarea";
 
 function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName, role } = AuthContext();
   const courseId = course.course_id;
+  
+  // States
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
@@ -36,164 +39,114 @@ function NavigationTabs({ course }) {
   const [userQuestion, setUserQuestion] = useState("");
   const [loading, setLoading] = useState(true);
   const [quizStatus, setQuizStatus] = useState(false);
-  const secretKey = process.env.JWT_SECRET_KEY || 'your-secret-key';
-
-
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState("");
-
   const [questions, setQuestions] = useState([]);
-  const gemini = async (userQuestion) => {
-    try {
-      const genAI = new GoogleGenerativeAI(
-        "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
-      );
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `My name is ${userName}.You are an expert tutor on ${course.course_name}.Your Course desciption is ${course.course_description}. A student asked: "${userQuestion}".
-        Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
-        Break down complex ideas into easily understandable parts and make sure the student can grasp the main ideas.`;
-      const result = await model.generateContent(prompt);
-      setAiResponse(result ? result.response.text() : "No response received");
-    } catch (error) {
-      console.error("Error with Gemini API:", error);
-    }
-  };
-  const handleQuestionSubmit = (e) => {
-    e.preventDefault();
-    gemini(userQuestion);
-    setUserQuestion("");
-  };
-  const getEnroll = async (studentId) => {
-    try {
-      const res = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(studentId)}`, {
-        method: 'GET',
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const enrolledCourses = data.getEnroll || [];
-        const courseExists = enrolledCourses.some(
+  const [leaderboardData, setLeaderboardData] = useState([]);
+
+  // Fetch initial data
+  useEffect(() => {
+    const initializeData = async () => {
+      if (!userId) return;
+
+      try {
+        // Check if user is enrolled
+        const enrollRes = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(userId)}`);
+        const enrollData = await enrollRes.json();
+        const isEnrolled = (enrollData.getEnroll || []).some(
           (course) => course.course_id === courseId
         );
-        setIsPurchased(courseExists);
-      } else {
-        console.error("Failed to fetch enrollments:", res.status);
-      }
-    } catch (error) {
-      console.error("Error fetching enrollments:", error);
-    }
-  };
-  const getTutor = async (userId) => {
-    try {
-      const response = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
-      const data = await response.json();
-      const matchingCourse = data.find(
-        (course) => course.course_id === courseId
-      );
-      if (matchingCourse) {
-        setIsTutor(true);
-      } else {
-        setIsTutor(false);
-      }
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
-  };
+        setIsPurchased(isEnrolled);
 
-  useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        setLoading(true);
-
-        const response = await fetch(`/api/uploadNotes?courseId=${courseId}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setNotes(data);
+        // Check if user is tutor
+        if (role === "teacher") {
+          const tutorRes = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
+          const tutorData = await tutorRes.json();
+          setIsTutor(tutorData.some(course => course.course_id === courseId));
         } else {
-          setError(data.error || "Failed to fetch notes.");
+          setIsTutor(false);
         }
-      } catch (err) {
-        console.error("Error fetching notes:", err);
-        setError("An error occurred while fetching notes.");
+
+        // Fetch other data
+        await Promise.all([
+          fetchNotes(),
+          fetchQuizData(),
+          fetchLivestreams(),
+          fetchLeaderboardData(),
+          fetchQuizStatus()
+        ]);
+
+      } catch (error) {
+        console.error("Error initializing data:", error);
+        setError("Failed to load course data");
       } finally {
         setLoading(false);
       }
     };
 
-    if (courseId) fetchNotes();
-  }, [courseId]);
+    initializeData();
+  }, [userId, courseId, role]);
 
-  useEffect(() => {
-    if (userId) {
-      getEnroll(userId);
-      if (role == "teacher") {
-        getTutor(userId);
-      } else {
-        setIsTutor(false);
-      }
+  // Helper functions
+  const fetchNotes = async () => {
+    const response = await fetch(`/api/uploadNotes?courseId=${courseId}`);
+    const data = await response.json();
+    if (response.ok) {
+      setNotes(data);
+    } else {
+      throw new Error(data.error || "Failed to fetch notes");
     }
-  }, [userId]);
+  };
 
-  useEffect(() => {
-    if (courseId) {
-      const fetchQuizData = async () => {
-        try {
-          const resp = await fetch(`/api/getQuizes?courseId=${courseId}`, {
-            method: "POST",
-          });
-
-          if (resp.ok) {
-            const quizData = await resp.json();
-
-            if (quizData.error) {
-              console.error(quizData.error);
-              return;
-            }
-
-            const formattedQuestions = quizData.map((q) => ({
-              question: q.question_text,
-              options: [q.choice_1, q.choice_2, q.choice_3, q.choice_4],
-              correct: q.correct_choice - 1, // Assuming correct_choice is 1-indexed
-            }));
-            setQuestions(formattedQuestions);
-          } else {
-            console.error("Failed to fetch questions");
-          }
-        } catch (error) {
-          console.error("Error fetching course data:", error);
-        }
-      };
-      fetchLivestreams();
-      fetchQuizData();
+  const fetchQuizData = async () => {
+    const resp = await fetch(`/api/getQuizes?courseId=${courseId}`, {
+      method: "POST",
+    });
+    const quizData = await resp.json();
+    if (resp.ok && !quizData.error) {
+      const formattedQuestions = quizData.map((q) => ({
+        question: q.question_text,
+        options: [q.choice_1, q.choice_2, q.choice_3, q.choice_4],
+        correct: q.correct_choice - 1,
+      }));
+      setQuestions(formattedQuestions);
     }
-  }, [courseId, userId]);
+  };
 
-  const [leaderboardData, setLeaderboardData] = useState([]);
+  const fetchLivestreams = async () => {
+    const response = await fetch("/api/getLivestreams");
+    const data = await response.json();
+    setLivestreams(data.filter(
+      (livestream) => livestream.course_id === courseId
+    ));
+  };
 
   const fetchLeaderboardData = async () => {
-    try {
-      const res = await fetch(`/api/getLeaderboard?course_id=${courseId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setLeaderboardData(data.leaderboardInfo || []);
-      }
-    } catch (error) {
-      console.error("Error fetching leaderboard data:", error);
-    }
+    const res = await fetch(`/api/getLeaderboard?course_id=${courseId}`);
+    const data = await res.json();
+    setLeaderboardData(data.leaderboardInfo || []);
   };
-  const fetchLivestreams = async () => {
-    try {
-      const response = await fetch("/api/getLivestreams");
-      const data = await response.json();
-      const filteredLivestreams = data.filter(
-        (livestream) => livestream.course_id === courseId
-      );
 
-      setLivestreams(filteredLivestreams);
-    } catch (error) {
-      console.error("Error fetching livestreams:", error);
-    }
+  const fetchQuizStatus = async () => {
+    if (!userId) return;
+    const res = await fetch(
+      `/api/getQuizStatus?courseId=${courseId}&userId=${userId}`
+    );
+    const data = await res.json();
+    setQuizStatus(data.quiz_attempted || false);
   };
+
+  // const getToken = async (courseId, livestreamId) => {
+  //   try {
+  //     const response = await fetch(`/api/getToken?courseId=${courseId}&livestreamId=${livestreamId}`);
+  //     const data = await response.json();
+  //     return response.ok ? data.count : 0;
+  //   } catch (error) {
+  //     console.error("Error getting token:", error);
+  //     return 0;
+  //   }
+  // };
+
   const endLive = async (streamId) => {
     try {
       const response = await fetch("/api/updateLiveEnd", {
@@ -201,92 +154,43 @@ function NavigationTabs({ course }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          livestreamId: streamId,
-        }),
+        body: JSON.stringify({ livestreamId: streamId }),
       });
 
       if (response.ok) {
         alert("Livestream ended");
+        fetchLivestreams(); // Refresh livestreams after ending
       }
     } catch (error) {
-      console.error("Error submitting duration:", error);
+      console.error("Error ending livestream:", error);
     }
   };
 
-  useEffect(() => {
-    fetchLeaderboardData();
-    fetchLivestreams();
-  }, [courseId]);
-
-  useEffect(() => {
-    if (courseId) {
-      const fetchQuizData = async () => {
-        try {
-          const res = await fetch(
-            `/api/getQuizStatus?courseId=${courseId}&userId=${userId}`
-          );
-          if (res.ok) {
-            const data = await res.json();
-            if (data.quiz_attempted) {
-              setQuizStatus(true);
-            } else {
-              setQuizStatus(false);
-            }
-          } else {
-            console.error("Failed to fetch quiz status");
-          }
-        } catch (error) {
-          console.error("Error fetching course data:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchQuizData();
-    }
-  }, [courseId, userId]);
-
-  // const generateToken = async (courseId, livestreamId) => {
-  //   try {
-  //     const res = await fetch('/api/generateToken', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ courseId, livestreamId }),
-  //     });
-
-  //     if (res.ok) {
-  //       const data = await res.json();
-  //       console.log(`${courseId}`, data.token);
-  //       // getToken(data.token);
-  //     } else {
-  //       console.error('Failed to generate token');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching token:', error);
-  //   }
-  // };
-
-
-  const getToken = async (courseId, livestreamId) => {
+  const handleQuestionSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch(`/api/getToken?courseId=${courseId}&livestreamId=${livestreamId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const dataToken = await response.json();
-
-      if (response.ok) {
-        return dataToken.count
-      }
+      const genAI = new GoogleGenerativeAI(
+        "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
+      );
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const prompt = `My name is ${userName}. You are an expert tutor on ${course.course_name}. Your Course description is ${course.course_description}. A student asked: "${userQuestion}".
+        Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
+        Break down complex ideas into easily understandable parts and make sure the student can grasp the main ideas.`;
+      const result = await model.generateContent(prompt);
+      setAiResponse(result ? result.response.text() : "No response received");
+      setUserQuestion("");
     } catch (error) {
-      console.error("Error creating livestream:", error);
+      console.error("Error with Gemini API:", error);
+      setAiResponse("Sorry, I couldn't process your question. Please try again.");
     }
+  };
+
+  if (loading) {
+    return <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />;
   }
+
+  // Rest of the component remains the same...
+  // (TabsContent, rendering logic, etc.)
 
   return (
     <div>
@@ -388,7 +292,8 @@ function NavigationTabs({ course }) {
                       {livestream.status === "ended"?(
                       <div className="flex items-center">
                         <div className="text-sm my-4">
-                          <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p>
+                          {/* <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p> */}
+                          <GetTokens courseId={courseId} livestreamId={livestream.id}/>
                           <ClassSupp title={livestream.title} courseId={courseId} tutorId={userId} description={livestream.description} livestreamId={livestream.id} />
                         </div>
                       </div>)

@@ -28,14 +28,13 @@ function Navbar() {
       if (response.ok) {
         const results = await response.json();
         setSearchResults(results);
+        setIsLoading(false);
       } else {
         setSearchResults([]);
       }
     } catch (error) {
       console.error("Error fetching search results:", error);
       setSearchResults([]);
-    } finally {
-      setIsLoading(false);
     }
   };
 

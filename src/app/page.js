@@ -42,10 +42,9 @@ export default function Home() {
         const res = await fetch(endpoint);
         const data = await res.json();
         setCourses(data);
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
       }
     };
 

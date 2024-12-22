@@ -19,7 +19,7 @@ export default function Page({ courseId }) {
     noteText: "",
   });
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true); 
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Dialog open state
 
   const handleChange = (e) => {
