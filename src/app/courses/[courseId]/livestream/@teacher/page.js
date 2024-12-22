@@ -139,6 +139,7 @@ export default function Page({ params }) {
   const startStreaming = async () => {
     startTime = new Date().getTime();
     setStart(startTime);
+
     try {
       const newPeer = createPeerConnection();
       setPeer(newPeer);
@@ -174,8 +175,14 @@ export default function Page({ params }) {
         const data = await response.json();
         const remoteDescription = new RTCSessionDescription(data.sdp);
         await newPeer.setRemoteDescription(remoteDescription);
-
         setIsStreaming(true);
+        const sendLive = await fetch("/api/updateLiveStart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ livestreamId: streamId }),
+        })
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
@@ -252,7 +259,7 @@ export default function Page({ params }) {
         body: JSON.stringify({ room: room }),
       });
 
-      if (response.ok) {
+      if (response.ok & sendTime.ok) {
         setIsStreaming(false);
         if (videoRef.current) {
           videoRef.current.srcObject = null;

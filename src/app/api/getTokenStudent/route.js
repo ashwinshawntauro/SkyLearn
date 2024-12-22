@@ -4,24 +4,42 @@ import { NextResponse } from 'next/server';
 const prisma = new PrismaClient();
 
 export async function GET(req) {
-    const { searchParams } = new URL(req.url);
-    const courseId = searchParams.get('courseId');
-    const studId = searchParams.get('userId');
-    const livestreamId = searchParams.get('livestreamId');
     try {
+        const { searchParams } = new URL(req.url);
+        const courseId = searchParams.get('courseids');
+        const studId = searchParams.get('userId');
+        const livestreamId = searchParams.get('livestreamId');
+
+        if (!courseId || !studId || !livestreamId) {
+            return NextResponse.json(
+                { status: 400, message: 'Missing required query parameters.' },
+                { status: 400 }
+            );
+        }
+
         const count = await prisma.user_tokens.findFirst({
             where: {
-                user_id: parseInt(studId),
-                course_id: parseInt(courseId),
-                livestream_id:parseInt(livestreamId)
+                user_id: parseInt(studId, 10),
+                course_id: parseInt(courseId, 10),
+                livestream_id: parseInt(livestreamId, 10),
             },
         });
 
-        return NextResponse.json({ count }, { status: 200 });
+        if (!count) {
+            return NextResponse.json(
+                { status: 404, message: 'No token found for the given parameters.' },
+                { status: 404 }
+            );
+        }
+
+        return NextResponse.json(
+            { status: 200, data: count },
+            { status: 200 }
+        );
     } catch (error) {
         console.error('Error fetching token count:', error);
         return NextResponse.json(
-            { error: 'Internal Server Error' },
+            { status: 500, message: 'Internal server error.' },
             { status: 500 }
         );
     }

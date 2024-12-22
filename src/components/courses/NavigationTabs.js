@@ -218,10 +218,10 @@ function NavigationTabs({ course }) {
                           </span>
                         )}
                       </div>
-                      <div className="font-light font-sans text-primary">
+                      <div className="font-light font-sans">
                         {livestream.datetime}
                       </div>
-                      <div className="text-black font-bold text-xl mb-2">
+                      <div className="text-primary font-bold text-md mb-1">
                         {livestream.title}
                       </div>
                       <p className="text-grey-darker text-base">
@@ -268,10 +268,10 @@ function NavigationTabs({ course }) {
                           </span>
                         )}
                       </div>
-                      <div className="font-light font-sans text-primary">
+                      <div className="font-light font-sans">
                         {livestream.datetime}
                       </div>
-                      <div className="text-black font-bold text-xl mb-2">
+                      <div className="font-bold text-md text-primary mb-1">
                         {livestream.title}
                       </div>
                       <p className="text-grey-darker text-base">
