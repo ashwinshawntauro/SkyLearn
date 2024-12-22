@@ -38,6 +38,7 @@ export default function Page({ params }) {
   const [input, setInput] = useState("");
   const room = params.courseId;
   const streamId = room.split("L")[1];
+  const courseNo = room.split("L")[0];
 
   // Fetch chat messages in real-time
   useEffect(() => {
@@ -138,6 +139,7 @@ export default function Page({ params }) {
   const startStreaming = async () => {
     startTime = new Date().getTime();
     setStart(startTime);
+
     try {
       const newPeer = createPeerConnection();
       setPeer(newPeer);
@@ -173,8 +175,14 @@ export default function Page({ params }) {
         const data = await response.json();
         const remoteDescription = new RTCSessionDescription(data.sdp);
         await newPeer.setRemoteDescription(remoteDescription);
-
         setIsStreaming(true);
+        const sendLive = await fetch("/api/updateLiveStart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ livestreamId: streamId }),
+        })
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
@@ -251,7 +259,7 @@ export default function Page({ params }) {
         body: JSON.stringify({ room: room }),
       });
 
-      if (response.ok) {
+      if (response.ok & sendTime.ok) {
         setIsStreaming(false);
         if (videoRef.current) {
           videoRef.current.srcObject = null;
@@ -277,7 +285,7 @@ export default function Page({ params }) {
                 <li className="inline-flex items-center">
                   <Link
                     href="/"
-                    className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                    className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
                   >
                     <svg
                       className="w-3 h-3 me-2.5"
@@ -309,7 +317,7 @@ export default function Page({ params }) {
                       />
                     </svg>
                     <Link
-                      href={`/course/${room}`}
+                      href={`/courses/${courseNo}`}
                       className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
                     >
                       Courses

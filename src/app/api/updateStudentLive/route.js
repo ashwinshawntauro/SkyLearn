@@ -25,7 +25,7 @@ export async function POST(req) {
                 id: existingClass.id, 
             },
             data: {
-                attended_duration: newAttendedDuration, 
+                attended_duration: parseInt(newAttendedDuration), 
             },
         });
 

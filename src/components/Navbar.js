@@ -28,19 +28,15 @@ function Navbar() {
       if (response.ok) {
         const results = await response.json();
         setSearchResults(results);
+        setIsLoading(false);
       } else {
         setSearchResults([]);
       }
     } catch (error) {
       console.error("Error fetching search results:", error);
       setSearchResults([]);
-    } finally {
-      setIsLoading(false);
     }
   };
-
-  console.log(searchResults)
-
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -59,7 +55,7 @@ function Navbar() {
 
   return (
     <div>
-      <header className="flex items-center justify-between p-2 bg-zinc-100 max-h-[50px]">
+      <header className="flex w-full items-center justify-between p-2 bg-zinc-100 max-h-[50px]">
         <Button
           className="text-black bg-white hover:text-white group"
           onClick={(e) => router.replace("/")}

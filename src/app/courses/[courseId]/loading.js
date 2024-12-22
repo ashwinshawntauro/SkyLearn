@@ -17,5 +17,4 @@ export default function Loading() {
     style={{ width: '150px', height: '150px' }} // Adjust size here
   />
 </div>
-
 }

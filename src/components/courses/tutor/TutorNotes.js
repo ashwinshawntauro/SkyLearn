@@ -19,7 +19,7 @@ export default function Page({ courseId }) {
     noteText: "",
   });
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(true); 
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Dialog open state
 
   const handleChange = (e) => {
@@ -43,7 +43,7 @@ export default function Page({ courseId }) {
     };
 
     try {
-      setLoading(true); // Set loading state to true
+      setLoading(true); 
 
       const response = await fetch("/api/uploadNotes", {
         method: "POST",
@@ -71,7 +71,7 @@ export default function Page({ courseId }) {
   };
 
   return (
-    <div className="p-4">
+    <div className="py-2 flex justify-end">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light">

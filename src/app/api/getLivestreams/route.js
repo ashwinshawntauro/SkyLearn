@@ -12,7 +12,9 @@ export async function GET() {
                 course_id:true,
                 tutor_id:true,
                 title:true,
-                description:true
+                description:true,
+                datetime:true,
+                refLiveId:true
             },
             orderBy: {
                 id: 'desc'
