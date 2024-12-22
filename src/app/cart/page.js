@@ -140,7 +140,7 @@ export default function Order() {
   }
 
   return (
-    <section className="font-sans bg-gray-100 min-h-screen py-12">
+    <section className="bg-gray-100 min-h-screen py-12">
       <Script
         id="razorpay-script"
         src="https://checkout.razorpay.com/v2/checkout.js"
@@ -154,19 +154,19 @@ export default function Order() {
           <CardContent>
             <div className="mb-6">
               <Progress value={66} className="w-full" />
-              <div className="flex justify-between text-sm text-muted-foreground mt-2">
+              <div className="flex justify-between text-primary text-sm text-muted-foreground mt-2 font-bold">
                 <span>Cart</span>
-                <span className="font-medium">Payment</span>
+                <span>Payment</span>
                 <span>Confirmation</span>
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-lg font-semibold mb-4">Course Details</h3>
+                <h3 className="text-md mb-4">Course Details</h3>
                 <Card>
                   <CardHeader>
-                    <CardTitle>{courseName}</CardTitle>
+                    <CardTitle className="text-primary">{courseName}</CardTitle>
                     <CardDescription>{courseDesc}</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -176,7 +176,7 @@ export default function Order() {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-4">Payment Summary</h3>
+                <h3 className="text-md mb-4">Payment Summary</h3>
                 <Card>
                   <CardContent className="pt-6">
                     <div className="space-y-2">
@@ -200,7 +200,6 @@ export default function Order() {
                       <Label htmlFor="credits" className="text-sm font-medium">Use Credits</Label>
                       <Input
                         id="credits"
-                        type="number"
                         placeholder="Enter credit amount"
                         value={credits}
                         onChange={(e) => setCredits(Math.min(parseFloat(e.target.value) || 0, parseFloat(amount)))}
@@ -210,7 +209,7 @@ export default function Order() {
                     <Button
                       onClick={processPayment}
                       disabled={isLoading}
-                      className="w-full"
+                      className="w-full  font-semibold"
                     >
                       {isLoading ? "Processing..." : `Pay ₹${parseFloat(amount) - credits}`}
                     </Button>
@@ -238,9 +237,6 @@ export default function Order() {
           <CardFooter className="justify-between">
             <Link href={`/courses/${courseId}`} className="text-sm text-muted-foreground hover:text-primary">
               ← Back to Courses
-            </Link>
-            <Link href="/help" className="text-sm text-muted-foreground hover:text-primary">
-              Need Help?
             </Link>
           </CardFooter>
         </Card>
