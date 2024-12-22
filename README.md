@@ -35,9 +35,3 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-Attendance monitor student
-livestream chat
-livestream other features
-notes upload
-classroom student join link
-classroom assignment marks leadboard

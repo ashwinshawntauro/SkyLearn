@@ -19,7 +19,7 @@ export default function Page({courseId,livestreamId}) {
     
     return (
         <div>
-            <p className="text-gray-600 leading-none">Tokens Raised: {tokensRaised}</p>
+          {tokensRaised!== null?(<p className="text-gray-600 leading-none">Tokens Raised: {tokensRaised}</p>):(<p>Loading Tokens...</p>)}
         </div>
     );
 }

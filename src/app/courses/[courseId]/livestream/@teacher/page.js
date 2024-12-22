@@ -38,6 +38,7 @@ export default function Page({ params }) {
   const [input, setInput] = useState("");
   const room = params.courseId;
   const streamId = room.split("L")[1];
+  const courseNo = room.split("L")[0];
 
   // Fetch chat messages in real-time
   useEffect(() => {
@@ -277,7 +278,7 @@ export default function Page({ params }) {
                 <li className="inline-flex items-center">
                   <Link
                     href="/"
-                    className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                    className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
                   >
                     <svg
                       className="w-3 h-3 me-2.5"
@@ -309,7 +310,7 @@ export default function Page({ params }) {
                       />
                     </svg>
                     <Link
-                      href={`/course/${room}`}
+                      href={`/courses/${courseNo}`}
                       className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2"
                     >
                       Courses
