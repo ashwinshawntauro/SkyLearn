@@ -236,7 +236,7 @@ export default function Order() {
             )}
           </CardContent>
           <CardFooter className="justify-between">
-            <Link href="/courses" className="text-sm text-muted-foreground hover:text-primary">
+            <Link href={`/courses/${courseId}`} className="text-sm text-muted-foreground hover:text-primary">
               ← Back to Courses
             </Link>
             <Link href="/help" className="text-sm text-muted-foreground hover:text-primary">
