@@ -62,7 +62,7 @@ export default function TeacherDashboard() {
     }
   }, []);
 
-  const updateClassroom = async (course, googleClassroomId, googleClassroomJoinLink) => {
+  const updateClassroom = async (course, googleClassroomId, googleClassroomLink) => {
     try {
       const updateResponse = await fetch("/api/updateClassroom", {
         method: "PUT",
@@ -72,7 +72,7 @@ export default function TeacherDashboard() {
         body: JSON.stringify({
           courseId: course.course_id,
           googleClassroomId: googleClassroomId,
-          googleClassroomJoinLink: googleClassroomJoinLink,
+          googleClassroomLink: googleClassroom
         }),
       });
 
@@ -111,8 +111,10 @@ export default function TeacherDashboard() {
         return
       }
       const data = await response.json();
-      const googleClassroomJoinLink = `https://classroom.google.com/c/${data.id}`;
-      updateClassroom(course, data.id, googleClassroomJoinLink);
+      const googleClassroomId = data.id;
+      const googleClassroomLink = data.alternateLink;
+      updateClassroom(course, googleClassroomId,googleClassroomLink);
+  
       alert("Course created in Google Classroom:", data);
     } catch (error) {
       console.error("Error creating Google Classroom course:", error);
@@ -219,7 +221,7 @@ export default function TeacherDashboard() {
                 {course.googleClassroomId ? (
                   <Button
                     className="w-1/2"
-                    onClick={() => window.open(`https://classroom.google.com/c/${course.googleClassroomId}`, "_blank")}
+                    onClick={() => window.open(`${course.googleClassroomId}`, "_blank")}
                   >
                     Go to Google Classroom
                   </Button>

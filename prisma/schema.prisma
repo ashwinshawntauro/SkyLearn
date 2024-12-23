@@ -16,14 +16,6 @@ model ASSIGNMENT {
   SUBMISSION        SUBMISSION[]
 }
 
-model CERTIFICATE {
-  certificate_id     Int                  @id
-  issued_date        DateTime             @db.Date
-  blockchain_hash    String?              @unique(map: "blockchain_hash") @db.VarChar(256)
-  COURSE_CERTIFICATE COURSE_CERTIFICATE[]
-  EARNED_CERTIFICATE EARNED_CERTIFICATE[]
-}
-
 model CERTIFICATES {
   id              Int       @id @default(autoincrement())
   student_id      Int
@@ -50,6 +42,8 @@ model COURSE {
   googleClassroomId       String?             @unique(map: "googleClassroomId") @db.VarChar(255)
   googleClassroomJoinLink String?             @db.VarChar(255)
   youtube_link            String?             @db.VarChar(255)
+  status                  COURSE_status?      @default(active)
+  googleClassroomLink     String?             @db.VarChar(255)
   CERTIFICATES            CERTIFICATES[]
   COURSE_ASSIGNMENT       COURSE_ASSIGNMENT[]
   COURSE_CERTIFICATE      COURSE_CERTIFICATE?
@@ -75,10 +69,9 @@ model COURSE_ASSIGNMENT {
 }
 
 model COURSE_CERTIFICATE {
-  course_id      Int          @id
+  course_id      Int    @id
   certificate_id Int?
-  COURSE         COURSE       @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "COURSE_CERTIFICATE_ibfk_1")
-  CERTIFICATE    CERTIFICATE? @relation(fields: [certificate_id], references: [certificate_id], onDelete: Cascade, onUpdate: NoAction, map: "COURSE_CERTIFICATE_ibfk_2")
+  COURSE         COURSE @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "COURSE_CERTIFICATE_ibfk_1")
 
   @@index([certificate_id], map: "certificate_id")
 }
@@ -86,8 +79,7 @@ model COURSE_CERTIFICATE {
 model EARNED_CERTIFICATE {
   student_id     Int
   certificate_id Int
-  STUDENT        STUDENT     @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "EARNED_CERTIFICATE_ibfk_1")
-  CERTIFICATE    CERTIFICATE @relation(fields: [certificate_id], references: [certificate_id], onDelete: Cascade, onUpdate: NoAction, map: "EARNED_CERTIFICATE_ibfk_2")
+  STUDENT        STUDENT @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "EARNED_CERTIFICATE_ibfk_1")
 
   @@id([student_id, certificate_id])
   @@index([certificate_id], map: "certificate_id")
@@ -267,4 +259,9 @@ enum COURSE_difficulty {
   basic
   intermediate
   advanced
+}
+
+enum COURSE_status {
+  active
+  ended
 }

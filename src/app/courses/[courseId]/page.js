@@ -6,6 +6,7 @@ import CourseDetails from "@/components/courses/CourseDetails";
 import Navbar from "@/components/Navbar";
 import NavigationTabs from "@/components/courses/NavigationTabs";
 import Loading from "./loading"
+
 export default function Page() {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);

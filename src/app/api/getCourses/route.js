@@ -19,6 +19,7 @@ export async function GET() {
         googleClassroomId: true,
         googleClassroomJoinLink: true,
         youtube_link: true,
+        status:true,
         TEACHING: {
           select: {
             tutor_id: true,
@@ -30,6 +31,8 @@ export async function GET() {
             },
           },
         },
+        googleClassroomJoinLink:true,
+        googleClassroomLink:true,
       },
     });
 
@@ -81,6 +84,9 @@ export async function POST(req) {
         course_enrolments: true,
         enrollment_deadline: true,
         youtube_link: true,
+        googleClassroomJoinLink:true,
+        googleClassroomLink:true,
+        status:true
       },
     });
 
