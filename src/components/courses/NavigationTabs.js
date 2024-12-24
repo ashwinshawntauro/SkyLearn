@@ -42,6 +42,7 @@ function NavigationTabs({ course }) {
   const [error, setError] = useState("");
   const [questions, setQuestions] = useState([]);
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [enrolledStudents, setEnrolled] = useState([]);
 
   // Fetch initial data
   useEffect(() => {
@@ -72,6 +73,7 @@ function NavigationTabs({ course }) {
           fetchQuizData(),
           fetchLivestreams(),
           fetchLeaderboardData(),
+          fetchEnrolled(),
           fetchQuizStatus()
         ]);
 
@@ -87,6 +89,22 @@ function NavigationTabs({ course }) {
   }, [userId, courseId, role]);
 
   // Helper functions
+  const fetchEnrolled = async () => {
+    try {
+        const response = await fetch(`/api/getEnrolledStudents?courseId=${courseId}`);
+        
+        if (response.ok) {
+            const data = await response.json(); // Await response.json() to properly parse JSON
+            setEnrolled(data.students); // Set only the `students` array in state
+        } else {
+            console.error('Failed to fetch enrolled students:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching enrolled students:', error);
+    }
+};
+
+
   const fetchNotes = async () => {
     const response = await fetch(`/api/uploadNotes?courseId=${courseId}`);
     const data = await response.json();
@@ -491,7 +509,7 @@ function NavigationTabs({ course }) {
           ) : (
             <TabsContent value="students" className="p-2">
               <Table className="w-full px-4 border bg-white">
-                <TableCaption>{course.course_name} Leaderboard</TableCaption>
+                <TableCaption>{course.course_name} Enrolled</TableCaption>
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-center">Student Id</TableHead>
@@ -500,14 +518,11 @@ function NavigationTabs({ course }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {leaderboardData.map((entry, index) => (
+                  {Array.isArray(enrolledStudents) && enrolledStudents.map((entry, index) => (
                     <TableRow key={entry.student_id}>
-                      <TableCell className="font-medium">{entry.student_id}</TableCell>
-                      <TableCell>
-                        {entry.STUDENT?.student_name ||
-                          `Student ${entry.student_email}`}
-                      </TableCell>{" "}
-                      <TableCell>{entry.score}</TableCell>
+                      <TableCell className="text-center">{entry.student_id}</TableCell>
+                      <TableCell className="text-center">{entry.student_name}</TableCell>
+                      <TableCell className="text-center">{entry.student_email}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

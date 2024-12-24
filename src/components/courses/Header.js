@@ -12,7 +12,6 @@ function Header({ course }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const router = useRouter()
-  console.log(course)
   const endCourse = async () => {
     try {
       const response = await fetch("/api/endCourse", {
