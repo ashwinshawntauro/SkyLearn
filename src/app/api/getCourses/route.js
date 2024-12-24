@@ -86,6 +86,8 @@ export async function POST(req) {
         youtube_link: true,
         googleClassroomJoinLink:true,
         googleClassroomLink:true,
+        googleClassroomLink:true,
+        googleClassroomId:true,
         status:true
       },
     });

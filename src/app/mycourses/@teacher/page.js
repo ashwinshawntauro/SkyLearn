@@ -35,6 +35,8 @@ export default function TeacherDashboard() {
   });
 
   useEffect(() => {
+    setAccessToken(localStorage.getItem('accessToken'))
+
     const fetchCourses = async (userId) => {
       try {
         const res = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
@@ -51,16 +53,13 @@ export default function TeacherDashboard() {
     
   }, []);
 
-  useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const params = new URLSearchParams(hash.substring(1));
-      const token = params.get("access_token");
-      if (token) {
-        setAccessToken(token);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   // const hash = window.location.hash;
+  //   // if (hash) {
+  //   //   const params = new URLSearchParams(hash.substring(1));
+  //   //   const token = params.get("access_token");
+  //   }
+  // }, []);
 
   const updateClassroom = async (course, googleClassroomId, googleClassroomLink) => {
     try {
@@ -72,7 +71,7 @@ export default function TeacherDashboard() {
         body: JSON.stringify({
           courseId: course.course_id,
           googleClassroomId: googleClassroomId,
-          googleClassroomLink: googleClassroom
+          googleClassroomLink: googleClassroomLink
         }),
       });
 
@@ -123,7 +122,7 @@ export default function TeacherDashboard() {
   };
 
   const authenticateToken = async () => {
-    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/mycourses&scope=https://www.googleapis.com/auth/classroom.courses&prompt=select_account`;
+    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/authToken&scope=https://www.googleapis.com/auth/classroom.courses&prompt=select_account`;
     window.location.href = oauthUrl;
   }
 

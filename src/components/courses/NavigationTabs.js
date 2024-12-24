@@ -29,7 +29,7 @@ function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName, role } = AuthContext();
   const courseId = course.course_id;
-  
+
   // States
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
@@ -147,7 +147,7 @@ function NavigationTabs({ course }) {
 
       if (response.ok) {
         alert("Livestream ended");
-        fetchLivestreams(); 
+        fetchLivestreams();
       }
     } catch (error) {
       console.error("Error ending livestream:", error);
@@ -195,7 +195,7 @@ function NavigationTabs({ course }) {
             {isPurchased ? (
               <TabsTrigger value="askAi">Ask AI</TabsTrigger>
             ) : (
-              <TabsTrigger value="gclass">Google Classroom</TabsTrigger>
+              <TabsTrigger value="students">Students Enrolled</TabsTrigger>
             )}
           </TabsList>
 
@@ -228,9 +228,9 @@ function NavigationTabs({ course }) {
                         {livestream.description}
                       </p>
                       <div className="flex items-center space-x-2">
-                        {livestream.status === "ended"?
+                        {livestream.status === "ended" ?
                           (< LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />)
-                          :(<div></div>)
+                          : (<div></div>)
                         }
                       </div>
                       {livestream.refLiveId && (
@@ -277,17 +277,17 @@ function NavigationTabs({ course }) {
                       <p className="text-grey-darker text-base">
                         {livestream.description}
                       </p>
-                      {livestream.status === "ended"?(
-                      <div className="flex items-center">
-                        <div className="text-sm my-4">
-                          {/* <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p> */}
-                          <GetTokens courseId={courseId} livestreamId={livestream.id}/>
-                          <ClassSupp title={livestream.title} courseId={courseId} tutorId={userId} description={livestream.description} livestreamId={livestream.id} />
-                        </div>
-                      </div>)
-                      :(<div></div>)}
+                      {livestream.status === "ended" ? (
+                        <div className="flex items-center">
+                          <div className="text-sm my-4">
+                            {/* <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p> */}
+                            <GetTokens courseId={courseId} livestreamId={livestream.id} />
+                            <ClassSupp title={livestream.title} courseId={courseId} tutorId={userId} description={livestream.description} livestreamId={livestream.id} />
+                          </div>
+                        </div>)
+                        : (<div></div>)}
                     </div>
-                    {livestream.status !== "ended"  && (
+                    {livestream.status !== "ended" && (
                       <div className="grid grid-flow-col gap-2">
                         <Button
                           onClick={() =>
@@ -420,20 +420,20 @@ function NavigationTabs({ course }) {
               <TableCaption>{course.course_name} Leaderboard</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Rank</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Points</TableHead>
+                  <TableHead className="text-center">Rank</TableHead>
+                  <TableHead className="text-center">Student Name</TableHead>
+                  <TableHead className="text-center">Points</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {leaderboardData.map((entry, index) => (
                   <TableRow key={entry.student_id}>
-                    <TableCell className="font-medium">{index + 1}</TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium text-center">{index + 1}</TableCell>
+                    <TableCell className="text-center">
                       {entry.STUDENT?.student_name ||
                         `Student ${entry.student_id}`}
                     </TableCell>{" "}
-                    <TableCell>{entry.score}</TableCell>
+                    <TableCell className="text-center">{entry.score}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -489,18 +489,29 @@ function NavigationTabs({ course }) {
               )}
             </TabsContent>
           ) : (
-            <TabsContent value="gclass" className="p-2">
-              <div className="flex items-center space-x-4">
-                <Label htmlFor="gclass-code" className="font-medium">
-                  Google Classroom Code:
-                </Label>
-                <Input
-                  id="gclass-code"
-                  type="text"
-                  placeholder="Enter share code"
-                  className="w-1/2"
-                />
-              </div>
+            <TabsContent value="students" className="p-2">
+              <Table className="w-full px-4 border bg-white">
+                <TableCaption>{course.course_name} Leaderboard</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center">Student Id</TableHead>
+                    <TableHead className="text-center">Student Name</TableHead>
+                    <TableHead className="text-center">Email</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {leaderboardData.map((entry, index) => (
+                    <TableRow key={entry.student_id}>
+                      <TableCell className="font-medium">{entry.student_id}</TableCell>
+                      <TableCell>
+                        {entry.STUDENT?.student_name ||
+                          `Student ${entry.student_email}`}
+                      </TableCell>{" "}
+                      <TableCell>{entry.score}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </TabsContent>
           )}
         </Tabs>

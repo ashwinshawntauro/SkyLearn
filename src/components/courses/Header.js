@@ -53,27 +53,27 @@ function Header({ course }) {
         <span className="mb-4 font-extralight">{course.course_description}</span>
       </div>
       {role === "teacher" &&
-        <div className='flex justify-end'>
+        <div className='inline-flex relative top-6 w-full justify-between'>
+          <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.course_id}/classroom`)}>
+            Classroom Manager
+          </Button>
           <Button className="bg-white hover:bg-zinc-300 text-black font-semibold" onClick={endCourse}>
             End Course
           </Button>
         </div>
       }
-      {role === "student" && course.status === 'ended' &&
-        <div className='flex justify-end'>
+      <div className='inline-flex relative top-3 justify-between w-full mt-2'>
+        {role === "student" && course.status === 'ended' &&
           <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={generateCertificate}>
             Generate Certificate
           </Button>
-        </div>
-      }
-      {role === "student" &&
-        <div className='flex justify-start'>
+        }
+        {role === "student" &&
           <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.googleClassroomLink}?cjc=${course.googleClassroomJoinLink}`)}>
             Join Classroom
           </Button>
-        </div>
-      }
-
+        }
+      </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
