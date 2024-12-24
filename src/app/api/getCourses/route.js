@@ -76,7 +76,7 @@ export async function POST(req) {
         course_id: true,
         course_name: true,
         course_description: true,
-        course_duration: true,
+        course_duration: true,  
         course_enrolments: true,
         course_price: true,
         difficulty: true,
