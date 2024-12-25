@@ -30,7 +30,6 @@ function NavigationTabs({ course }) {
   const { userId, userName, role } = AuthContext();
   const courseId = course.course_id;
 
-  // States
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
@@ -88,14 +87,13 @@ function NavigationTabs({ course }) {
     initializeData();
   }, [userId, courseId, role]);
 
-  // Helper functions
   const fetchEnrolled = async () => {
     try {
         const response = await fetch(`/api/getEnrolledStudents?courseId=${courseId}`);
         
         if (response.ok) {
-            const data = await response.json(); // Await response.json() to properly parse JSON
-            setEnrolled(data.students); // Set only the `students` array in state
+            const data = await response.json(); 
+            setEnrolled(data.students); 
         } else {
             console.error('Failed to fetch enrolled students:', response.statusText);
         }

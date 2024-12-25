@@ -41,14 +41,12 @@ function CourseDetails({ course }) {
 
   const handleShareCourse = async () => {
     if (navigator.share) {
-      // Use Web Share API if available
       try {
         await navigator.share({
           title: `Check out this course: ${course.course_name}`,
           text: course.course_description,
           url: courseUrl,
         });
-        console.log("Course shared successfully!");
       } catch (error) {
         console.error("Error sharing course:", error);
       }
@@ -63,7 +61,6 @@ function CourseDetails({ course }) {
     }
   };
 
-  // Fetch enrolled courses for the student
   const getEnroll = async (studentId) => {
     try {
       const res = await fetch(

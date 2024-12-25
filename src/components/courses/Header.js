@@ -8,11 +8,13 @@ import { Progress } from "@/components/ui/progress"
 import { useRouter } from 'next/navigation';
 
 function Header({ course }) {
-  const { role ,userId} = AuthContext()
+  const { role, userId } = AuthContext()
+  const courseId = course.course_id;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
+  const [getProgressValue, setProgressValue] = useState([]);
   const router = useRouter()
   const endCourse = async () => {
     try {
@@ -37,6 +39,23 @@ function Header({ course }) {
     setIsModalOpen(true);
     setProgress(0);
   }
+
+  const getProgress = async () => {
+    try {
+      const response = await fetch(`/api/getProgress?studentId=${userId}&courseId=${course.course_id}`, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setProgressValue(data);
+      } else {
+        setProgressValue([]);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error while fetching progress');
+    }
+  };
 
   useEffect(() => {
     const initializeData = async () => {
@@ -64,7 +83,8 @@ function Header({ course }) {
       }
     }
     initializeData()
-  }, [])
+    getProgress()
+  }, [userId, courseId, role])
 
   return (
     <div className="bg-primary text-white py-8 px-8 rounded-sm">
@@ -101,11 +121,28 @@ function Header({ course }) {
             <DialogTitle>Generating Certificate</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <Progress value={progress} className="w-full" />
+            <div className="py-2 flex items-center justify-between">
+              <span>Quiz:</span>
+              <div className="flex items-center w-3/4">
+                <Progress value={getProgressValue.f5 == 1 ? 100 : 0} className="w-full" />
+                <span className="ml-2">{getProgressValue.f5 == 1 ? 100 : 0}%</span>
+              </div>
+            </div>
+
+            <div className="py-2 flex items-center justify-between">
+              <span>Class Attendance:</span>
+              <div className="flex items-center w-3/4">
+                <Progress value={getProgressValue.f4} className="w-full" />
+                <span className="ml-2">{getProgressValue.f4}%</span>
+              </div>
+            </div>
           </div>
           <DialogFooter>
-            <Button onClick={() => setIsModalOpen(false)} disabled={progress < 85}>
-              {progress < 85 ? 'Not Eligible' : 'Generate'}
+            <Button
+              onClick={() => setIsModalOpen(false)}
+              disabled={(parseInt(getProgressValue.f4) <= 50) && getProgressValue.f5>0}
+            >
+              Generate
             </Button>
           </DialogFooter>
         </DialogContent>
