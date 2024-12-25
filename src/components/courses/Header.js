@@ -1,16 +1,18 @@
 'use client'
 
 import { AuthContext } from '@/providers/AuthProvider';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
 import { useRouter } from 'next/navigation';
 
 function Header({ course }) {
-  const { role } = AuthContext()
+  const { role ,userId} = AuthContext()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isPurchased, setIsPurchased] = useState(null);
+  const [isTutor, setIsTutor] = useState(null);
   const router = useRouter()
   const endCourse = async () => {
     try {
@@ -34,16 +36,35 @@ function Header({ course }) {
   const generateCertificate = () => {
     setIsModalOpen(true);
     setProgress(0);
-    // const interval = setInterval(() => {
-    //   setProgress((prevProgress) => {
-    //     if (prevProgress >= 100) {
-    //       clearInterval(interval);
-    //       return 100;
-    //     }
-    //     return prevProgress + 10;
-    //   });
-    // }, 500);
   }
+
+  useEffect(() => {
+    const initializeData = async () => {
+      if (!userId) return;
+      try {
+        // Check if user is enrolled
+        const enrollRes = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(userId)}`);
+        const enrollData = await enrollRes.json();
+        const isEnrolled = (enrollData.getEnroll || []).some(
+          (course) => course.course_id === courseId
+        );
+        setIsPurchased(isEnrolled);
+
+        // Check if user is tutor
+        if (role === "teacher") {
+          const tutorRes = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
+          const tutorData = await tutorRes.json();
+          setIsTutor(tutorData.some(course => course.course_id === courseId));
+        } else {
+          setIsTutor(false);
+        }
+      }
+      catch (error) {
+        console.log(error)
+      }
+    }
+    initializeData()
+  }, [])
 
   return (
     <div className="bg-primary text-white py-8 px-8 rounded-sm">
@@ -51,7 +72,7 @@ function Header({ course }) {
         <h1 className="text-xl font-bold mb-4">{course.course_name}</h1>
         <span className="mb-4 font-extralight">{course.course_description}</span>
       </div>
-      {role === "teacher" &&
+      {role === "teacher" && isTutor &&
         <div className='inline-flex relative top-6 w-full justify-between'>
           <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.course_id}/classroom`)}>
             Classroom Manager
@@ -62,12 +83,12 @@ function Header({ course }) {
         </div>
       }
       <div className='inline-flex relative top-3 justify-between w-full mt-2'>
-        {role === "student" && course.status === 'ended' &&
+        {role === "student" && course.status === 'ended' && isPurchased &&
           <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={generateCertificate}>
             Generate Certificate
           </Button>
         }
-        {role === "student" &&
+        {role === "student" && isPurchased &&
           <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.googleClassroomLink}?cjc=${course.googleClassroomJoinLink}`)}>
             Join Classroom
           </Button>
