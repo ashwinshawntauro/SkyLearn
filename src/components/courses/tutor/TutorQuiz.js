@@ -74,7 +74,7 @@ export default function Page({ courseId }) {
     };
     console.log(reqBody)
     try {
-      const response = await fetch("/api/createQuiz", {
+      const response = await fetch("/api/Quiz/createQuiz", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

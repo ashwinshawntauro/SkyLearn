@@ -9,7 +9,7 @@ export default function Page({ livestreamId, userId, course_id }) {
 
     const getStatus = async (livestreamId, userId, courseids) => {
         try {
-            const response = await fetch(`/api/getTokenStudent?userId=${userId}&livestreamId=${livestreamId}&courseids=${courseids}`, {
+            const response = await fetch(`/api/Token/getTokenStudent?userId=${userId}&livestreamId=${livestreamId}&courseids=${courseids}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -25,7 +25,7 @@ export default function Page({ livestreamId, userId, course_id }) {
             console.error("Error raising token:", error);
         }
         try {
-            const response = await fetch(`/api/getStudentClass?userId=${userId}&livestreamId=${livestreamId}`, {
+            const response = await fetch(`/api/Livestreams/getStudentClass?userId=${userId}&livestreamId=${livestreamId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export default function Page({ livestreamId, userId, course_id }) {
     };
     const raiseToken = async () => {
         try {
-            const response = await fetch("/api/raiseToken", {
+            const response = await fetch("/api/Token/raiseToken", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

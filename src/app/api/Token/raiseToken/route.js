@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
-const secretKey = 'a'; // Use a secure secret key
+const secretKey = 'skylearn'; 
 
 export async function POST(req) {
   const { userId, livestreamId, courseids } = await req.json();

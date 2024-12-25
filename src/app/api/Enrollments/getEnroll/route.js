@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url);
-        const student_id = searchParams.get('student_id'); // Extract student_id from query params
+        const student_id = searchParams.get('student_id')
 
         if (!student_id) {
             return NextResponse.json({ error: 'student_id is required' }, { status: 400 });

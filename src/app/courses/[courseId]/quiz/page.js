@@ -44,7 +44,7 @@ const QuizApp = () => {
     if (course_id) {
       const fetchQuizData = async () => {
         try {
-          const res = await fetch(`/api/getQuizStatus?courseId=${course_id.courseId}&userId=${userId}`);
+          const res = await fetch(`/api/Quiz/getQuizStatus?courseId=${course_id.courseId}&userId=${userId}`);
           if (res.ok) {
             const data = await res.json();
             if (data.quiz_attempted) {
@@ -52,7 +52,7 @@ const QuizApp = () => {
             } else {
               setStage("home"); // Set stage to prevent retaking
 
-              const resp = await fetch(`/api/getQuizes/?courseId=${course_id.courseId}/quiz`, {
+              const resp = await fetch(`/api/Quiz/getQuizes/?courseId=${course_id.courseId}/quiz`, {
                 method: "POST",
               });
               if (resp.ok) {
@@ -156,7 +156,7 @@ const QuizApp = () => {
     };
   
     try {
-      const res = await fetch('/api/quizResults', {
+      const res = await fetch('/api/Quiz/quizResults', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

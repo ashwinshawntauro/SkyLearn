@@ -6,7 +6,7 @@ export default function Page({courseId,livestreamId}) {
     useEffect(()=>{
         const getToken = async (courseId, livestreamId) => {
             try {
-              const response = await fetch(`/api/getToken?courseId=${courseId}&livestreamId=${livestreamId}`);
+              const response = await fetch(`/api/Token/getToken?courseId=${courseId}&livestreamId=${livestreamId}`);
               const data = await response.json();
               response.ok ? setTokensRaised(data.count) : setTokensRaised(0);
             } catch (error) {

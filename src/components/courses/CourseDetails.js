@@ -23,7 +23,7 @@ function CourseDetails({ course }) {
     const fetchEnrollmentCount = async () => {
       try {
         const response = await fetch(
-          `/api/getEnrollmentCount?courseId=${courseId}`
+          `/api/Enrollments/getEnrollmentCount?courseId=${courseId}`
         );
         const data = await response.json();
         if (response.ok) {
@@ -41,14 +41,12 @@ function CourseDetails({ course }) {
 
   const handleShareCourse = async () => {
     if (navigator.share) {
-      // Use Web Share API if available
       try {
         await navigator.share({
           title: `Check out this course: ${course.course_name}`,
           text: course.course_description,
           url: courseUrl,
         });
-        console.log("Course shared successfully!");
       } catch (error) {
         console.error("Error sharing course:", error);
       }
@@ -63,11 +61,10 @@ function CourseDetails({ course }) {
     }
   };
 
-  // Fetch enrolled courses for the student
   const getEnroll = async (studentId) => {
     try {
       const res = await fetch(
-        `/api/getEnroll?student_id=${encodeURIComponent(studentId)}`,
+        `/api/Enrollments/getEnroll?student_id=${encodeURIComponent(studentId)}`,
         {
           method: "GET",
         }
@@ -88,7 +85,7 @@ function CourseDetails({ course }) {
   };
   const getTutor = async (userId) => {
     try {
-      const response = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
+      const response = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
       const data = await response.json();
       const matchingCourse = data.find(
         (course) => course.course_id === courseId

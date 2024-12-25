@@ -36,8 +36,8 @@ export default function Home() {
       try {
         const endpoint =
           role === "teacher" && userId
-            ? `/api/getTutorCourses?tutorId=${userId}`
-            : "/api/getCourses";
+            ? `/api/Course/getTutorCourses?tutorId=${userId}`
+            : "/api/Course/getCourses";
 
         const res = await fetch(endpoint);
         const data = await res.json();

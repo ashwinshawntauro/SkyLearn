@@ -28,7 +28,7 @@ export default function Page() {
   useEffect(() => {
     const registeredCourses = async () => {
       try {
-        const res = await fetch(`/api/getRegisteredCourses?userId=${userId}`);
+        const res = await fetch(`/api/Course/getRegisteredCourses?userId=${userId}`);
         const data = await res.json();
         console.log(data);
 

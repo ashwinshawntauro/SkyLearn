@@ -86,7 +86,7 @@ export default function Page({ params }) {
       await setupPeerConnection(newPeer, room);
       setStartTime(new Date().getTime());
       try {
-        const response = await fetch("/api/createStudentLive", {
+        const response = await fetch("/api/Livestreams/createStudentLive", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -117,7 +117,7 @@ export default function Page({ params }) {
     dur = (stopTime - startTime) / 1000;
     setDuration(dur);
     try {
-      const response = await fetch("/api/updateStudentLive", {
+      const response = await fetch("/api/Livestreams/updateStudentLive", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

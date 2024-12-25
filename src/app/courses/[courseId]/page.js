@@ -6,6 +6,7 @@ import CourseDetails from "@/components/courses/CourseDetails";
 import Navbar from "@/components/Navbar";
 import NavigationTabs from "@/components/courses/NavigationTabs";
 import Loading from "./loading"
+
 export default function Page() {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
@@ -14,7 +15,7 @@ export default function Page() {
     if (courseId) {
       const fetchCourseData = async () => {
         try {
-          const res = await fetch(`/api/getCourses/?courseId=${courseId}`, {
+          const res = await fetch(`/api/Course/getCourses/?courseId=${courseId}`, {
             method: "POST",
           });
           if (!res.ok) throw new Error("Course not found");

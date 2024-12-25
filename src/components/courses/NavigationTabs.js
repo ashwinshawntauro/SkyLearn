@@ -29,8 +29,7 @@ function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName, role } = AuthContext();
   const courseId = course.course_id;
-  
-  // States
+
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
@@ -42,6 +41,7 @@ function NavigationTabs({ course }) {
   const [error, setError] = useState("");
   const [questions, setQuestions] = useState([]);
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [enrolledStudents, setEnrolled] = useState([]);
 
   // Fetch initial data
   useEffect(() => {
@@ -50,7 +50,7 @@ function NavigationTabs({ course }) {
 
       try {
         // Check if user is enrolled
-        const enrollRes = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(userId)}`);
+        const enrollRes = await fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`);
         const enrollData = await enrollRes.json();
         const isEnrolled = (enrollData.getEnroll || []).some(
           (course) => course.course_id === courseId
@@ -59,7 +59,7 @@ function NavigationTabs({ course }) {
 
         // Check if user is tutor
         if (role === "teacher") {
-          const tutorRes = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
+          const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
           const tutorData = await tutorRes.json();
           setIsTutor(tutorData.some(course => course.course_id === courseId));
         } else {
@@ -72,6 +72,7 @@ function NavigationTabs({ course }) {
           fetchQuizData(),
           fetchLivestreams(),
           fetchLeaderboardData(),
+          fetchEnrolled(),
           fetchQuizStatus()
         ]);
 
@@ -86,7 +87,22 @@ function NavigationTabs({ course }) {
     initializeData();
   }, [userId, courseId, role]);
 
-  // Helper functions
+  const fetchEnrolled = async () => {
+    try {
+        const response = await fetch(`/api/Enrollments/getEnrolledStudents?courseId=${courseId}`);
+        
+        if (response.ok) {
+            const data = await response.json(); 
+            setEnrolled(data.students); 
+        } else {
+            console.error('Failed to fetch enrolled students:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error fetching enrolled students:', error);
+    }
+};
+
+
   const fetchNotes = async () => {
     const response = await fetch(`/api/uploadNotes?courseId=${courseId}`);
     const data = await response.json();
@@ -98,7 +114,7 @@ function NavigationTabs({ course }) {
   };
 
   const fetchQuizData = async () => {
-    const resp = await fetch(`/api/getQuizes?courseId=${courseId}`, {
+    const resp = await fetch(`/api/Quiz/getQuizes?courseId=${courseId}`, {
       method: "POST",
     });
     const quizData = await resp.json();
@@ -113,7 +129,7 @@ function NavigationTabs({ course }) {
   };
 
   const fetchLivestreams = async () => {
-    const response = await fetch("/api/getLivestreams");
+    const response = await fetch("/api/Livestreams/getLivestreams");
     const data = await response.json();
     setLivestreams(data.filter(
       (livestream) => livestream.course_id === courseId
@@ -129,7 +145,7 @@ function NavigationTabs({ course }) {
   const fetchQuizStatus = async () => {
     if (!userId) return;
     const res = await fetch(
-      `/api/getQuizStatus?courseId=${courseId}&userId=${userId}`
+      `/api/Quiz/getQuizStatus?courseId=${courseId}&userId=${userId}`
     );
     const data = await res.json();
     setQuizStatus(data.quiz_attempted || false);
@@ -137,7 +153,7 @@ function NavigationTabs({ course }) {
 
   const endLive = async (streamId) => {
     try {
-      const response = await fetch("/api/updateLiveEnd", {
+      const response = await fetch("/api/Livestreams/updateLiveEnd", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +163,7 @@ function NavigationTabs({ course }) {
 
       if (response.ok) {
         alert("Livestream ended");
-        fetchLivestreams(); 
+        fetchLivestreams();
       }
     } catch (error) {
       console.error("Error ending livestream:", error);
@@ -158,7 +174,7 @@ function NavigationTabs({ course }) {
     e.preventDefault();
     try {
       const genAI = new GoogleGenerativeAI(
-        "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
+        process.env.NEXT_PUBLIC_GEMINI_API_KEY
       );
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const prompt = `My name is ${userName}. You are an expert tutor on ${course.course_name}. Your Course description is ${course.course_description}. A student asked: "${userQuestion}".
@@ -195,7 +211,7 @@ function NavigationTabs({ course }) {
             {isPurchased ? (
               <TabsTrigger value="askAi">Ask AI</TabsTrigger>
             ) : (
-              <TabsTrigger value="gclass">Google Classroom</TabsTrigger>
+              <TabsTrigger value="students">Students Enrolled</TabsTrigger>
             )}
           </TabsList>
 
@@ -228,9 +244,9 @@ function NavigationTabs({ course }) {
                         {livestream.description}
                       </p>
                       <div className="flex items-center space-x-2">
-                        {livestream.status === "ended"?
+                        {livestream.status === "ended" ?
                           (< LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />)
-                          :(<div></div>)
+                          : (<div></div>)
                         }
                       </div>
                       {livestream.refLiveId && (
@@ -277,17 +293,17 @@ function NavigationTabs({ course }) {
                       <p className="text-grey-darker text-base">
                         {livestream.description}
                       </p>
-                      {livestream.status === "ended"?(
-                      <div className="flex items-center">
-                        <div className="text-sm my-4">
-                          {/* <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p> */}
-                          <GetTokens courseId={courseId} livestreamId={livestream.id}/>
-                          <ClassSupp title={livestream.title} courseId={courseId} tutorId={userId} description={livestream.description} livestreamId={livestream.id} />
-                        </div>
-                      </div>)
-                      :(<div></div>)}
+                      {livestream.status === "ended" ? (
+                        <div className="flex items-center">
+                          <div className="text-sm my-4">
+                            {/* <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p> */}
+                            <GetTokens courseId={courseId} livestreamId={livestream.id} />
+                            <ClassSupp title={livestream.title} courseId={courseId} tutorId={userId} description={livestream.description} livestreamId={livestream.id} />
+                          </div>
+                        </div>)
+                        : (<div></div>)}
                     </div>
-                    {livestream.status !== "ended"  && (
+                    {livestream.status !== "ended" && (
                       <div className="grid grid-flow-col gap-2">
                         <Button
                           onClick={() =>
@@ -420,20 +436,20 @@ function NavigationTabs({ course }) {
               <TableCaption>{course.course_name} Leaderboard</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Rank</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Points</TableHead>
+                  <TableHead className="text-center">Rank</TableHead>
+                  <TableHead className="text-center">Student Name</TableHead>
+                  <TableHead className="text-center">Points</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {leaderboardData.map((entry, index) => (
                   <TableRow key={entry.student_id}>
-                    <TableCell className="font-medium">{index + 1}</TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium text-center">{index + 1}</TableCell>
+                    <TableCell className="text-center">
                       {entry.STUDENT?.student_name ||
                         `Student ${entry.student_id}`}
                     </TableCell>{" "}
-                    <TableCell>{entry.score}</TableCell>
+                    <TableCell className="text-center">{entry.score}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -489,18 +505,26 @@ function NavigationTabs({ course }) {
               )}
             </TabsContent>
           ) : (
-            <TabsContent value="gclass" className="p-2">
-              <div className="flex items-center space-x-4">
-                <Label htmlFor="gclass-code" className="font-medium">
-                  Google Classroom Code:
-                </Label>
-                <Input
-                  id="gclass-code"
-                  type="text"
-                  placeholder="Enter share code"
-                  className="w-1/2"
-                />
-              </div>
+            <TabsContent value="students" className="p-2">
+              <Table className="w-full px-4 border bg-white">
+                <TableCaption>{course.course_name} Enrolled</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-center">Student Id</TableHead>
+                    <TableHead className="text-center">Student Name</TableHead>
+                    <TableHead className="text-center">Email</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Array.isArray(enrolledStudents) && enrolledStudents.map((entry, index) => (
+                    <TableRow key={entry.student_id}>
+                      <TableCell className="text-center">{entry.student_id}</TableCell>
+                      <TableCell className="text-center">{entry.student_name}</TableCell>
+                      <TableCell className="text-center">{entry.student_email}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </TabsContent>
           )}
         </Tabs>

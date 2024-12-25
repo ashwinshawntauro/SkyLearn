@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function PUT(req) {
-    const { courseId, googleClassroomId, googleClassroomJoinLink } = await req.json();
+    const { courseId, googleClassroomId,googleClassroomLink} = await req.json();
     if(!courseId){
         return NextResponse.json("Invalid courseId",{status:400})
     }
@@ -13,7 +13,7 @@ export async function PUT(req) {
         where: { course_id: courseId },
         data: {
           googleClassroomId:googleClassroomId,
-          googleClassroomJoinLink:googleClassroomJoinLink
+          googleClassroomLink: googleClassroomLink
         }
       });
       return NextResponse.json(updatedCourse);
@@ -22,3 +22,4 @@ export async function PUT(req) {
       return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
   }
+
