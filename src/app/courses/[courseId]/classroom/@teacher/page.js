@@ -23,7 +23,7 @@ export default function Page() {
         if (courseId) {
             const fetchCourseData = async () => {
                 try {
-                    const res = await fetch(`/api/getCourses/?courseId=${courseId}`, {
+                    const res = await fetch(`/api/Course/getCourses/?courseId=${courseId}`, {
                         method: "POST",
                     });
                     if (!res.ok) throw new Error("Course not found");
@@ -37,7 +37,7 @@ export default function Page() {
             fetchCourseData();
             const fetchAssignments = async () => {
                 try {
-                    const response = await fetch(`/api/getAssignments?courseId=${courseId}`);
+                    const response = await fetch(`/api/Assignments/getAssignments?courseId=${courseId}`);
                     if (!response.ok) {
                         throw new Error('Failed to fetch assignments');
                     }
@@ -60,7 +60,7 @@ export default function Page() {
     const updateClassroom = async (courseId, shareableCode) => {
         try {
             console.log(shareableCode)
-            const updateResponse = await fetch("/api/updateClassroomSharing", {
+            const updateResponse = await fetch("/api/Classroom/updateClassroomSharing", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function Page() {
         console.log(dueDate)
         console.log(yearDate, monthDate, dayDate)
         try {
-            const response = await fetch('/api/addAssignment', {
+            const response = await fetch('/api/Assignments/addAssignment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -39,7 +39,7 @@ export default function TeacherDashboard() {
 
     const fetchCourses = async (userId) => {
       try {
-        const res = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
+        const res = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
         const data = await res.json();
         setCourses(data);
       } catch (error) {
@@ -63,7 +63,7 @@ export default function TeacherDashboard() {
 
   const updateClassroom = async (course, googleClassroomId, googleClassroomLink) => {
     try {
-      const updateResponse = await fetch("/api/updateClassroom", {
+      const updateResponse = await fetch("/api/Classroom/updateClassroom", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export default function TeacherDashboard() {
 
   const handleCreateClassroom = async (course) => {
     try {
-      const response = await fetch("/api/createClassroom", {
+      const response = await fetch("/api/Classroom/createClassroom", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,7 +134,7 @@ export default function TeacherDashboard() {
   const handleSubmitAndRequestOAuth = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("/api/createCourse", {
+      const response = await fetch("/api/Course/createCourse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -169,7 +169,7 @@ export default function TeacherDashboard() {
 
   const deleteCourse = async (courseId) => {
     try {
-      const response = await fetch("/api/deleteCourse", {
+      const response = await fetch("/api/Course/deleteCourse", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

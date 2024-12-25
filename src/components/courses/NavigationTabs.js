@@ -50,7 +50,7 @@ function NavigationTabs({ course }) {
 
       try {
         // Check if user is enrolled
-        const enrollRes = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(userId)}`);
+        const enrollRes = await fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`);
         const enrollData = await enrollRes.json();
         const isEnrolled = (enrollData.getEnroll || []).some(
           (course) => course.course_id === courseId
@@ -59,7 +59,7 @@ function NavigationTabs({ course }) {
 
         // Check if user is tutor
         if (role === "teacher") {
-          const tutorRes = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
+          const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
           const tutorData = await tutorRes.json();
           setIsTutor(tutorData.some(course => course.course_id === courseId));
         } else {
@@ -89,7 +89,7 @@ function NavigationTabs({ course }) {
 
   const fetchEnrolled = async () => {
     try {
-        const response = await fetch(`/api/getEnrolledStudents?courseId=${courseId}`);
+        const response = await fetch(`/api/Enrollments/getEnrolledStudents?courseId=${courseId}`);
         
         if (response.ok) {
             const data = await response.json(); 
@@ -114,7 +114,7 @@ function NavigationTabs({ course }) {
   };
 
   const fetchQuizData = async () => {
-    const resp = await fetch(`/api/getQuizes?courseId=${courseId}`, {
+    const resp = await fetch(`/api/Quiz/getQuizes?courseId=${courseId}`, {
       method: "POST",
     });
     const quizData = await resp.json();
@@ -129,7 +129,7 @@ function NavigationTabs({ course }) {
   };
 
   const fetchLivestreams = async () => {
-    const response = await fetch("/api/getLivestreams");
+    const response = await fetch("/api/Livestreams/getLivestreams");
     const data = await response.json();
     setLivestreams(data.filter(
       (livestream) => livestream.course_id === courseId
@@ -145,7 +145,7 @@ function NavigationTabs({ course }) {
   const fetchQuizStatus = async () => {
     if (!userId) return;
     const res = await fetch(
-      `/api/getQuizStatus?courseId=${courseId}&userId=${userId}`
+      `/api/Quiz/getQuizStatus?courseId=${courseId}&userId=${userId}`
     );
     const data = await res.json();
     setQuizStatus(data.quiz_attempted || false);
@@ -153,7 +153,7 @@ function NavigationTabs({ course }) {
 
   const endLive = async (streamId) => {
     try {
-      const response = await fetch("/api/updateLiveEnd", {
+      const response = await fetch("/api/Livestreams/updateLiveEnd", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

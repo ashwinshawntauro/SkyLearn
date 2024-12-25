@@ -176,7 +176,7 @@ export default function Page({ params }) {
         const remoteDescription = new RTCSessionDescription(data.sdp);
         await newPeer.setRemoteDescription(remoteDescription);
         setIsStreaming(true);
-        const sendLive = await fetch("/api/updateLiveStart", {
+        const sendLive = await fetch("/api/Livestreams/updateLiveStart", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -244,7 +244,7 @@ export default function Page({ params }) {
         peer.close();
         setPeer(null);
       }
-      const sendTime = await fetch("/api/setDurationTutor", {
+      const sendTime = await fetch("/api/Livestreams/setDurationTutor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

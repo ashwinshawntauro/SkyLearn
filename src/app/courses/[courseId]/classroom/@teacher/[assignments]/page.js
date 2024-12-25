@@ -23,7 +23,7 @@ export default function Page() {
         const fetchStudents = async () => {
             const access_token = localStorage.getItem('accessToken');
             try {
-                const response = await fetch(`/api/getGradesClassroom?accessToken=${access_token}&courseId=${classroomId}&courseWorkId=${courseWorkId}`, {
+                const response = await fetch(`/api/Classroom/getGradesClassroom?accessToken=${access_token}&courseId=${classroomId}&courseWorkId=${courseWorkId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${access_token}`, // Correct Authorization header

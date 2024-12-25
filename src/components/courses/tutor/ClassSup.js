@@ -40,7 +40,7 @@ export default function Page({ title, description, livestreamId, tutorId, course
         };
         console.log(reqBody);
         try {
-            const response = await fetch("/api/createLivestream", {
+            const response = await fetch("/api/Livestreams/createLivestream", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -39,7 +39,7 @@ export default function Page({ courseId, tutorId }) {
       tutor_id: tutorId,
     };
     try {
-      const response = await fetch("/api/createLivestream", {
+      const response = await fetch("/api/Livestreams/createLivestream", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

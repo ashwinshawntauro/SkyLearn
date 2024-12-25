@@ -32,7 +32,7 @@ export default function Order() {
 
   const createOrderId = async () => {
     try {
-      const response = await fetch('/api/order', {
+      const response = await fetch('/api/Orders/order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export default function Order() {
 
   const enrollCourse = async (studentId, courseId) => {
     try {
-      const response = await fetch('/api/courseEnroll', {
+      const response = await fetch('/api/Course/courseEnroll', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ export default function Order() {
             razorpaySignature: response.razorpay_signature,
           }
 
-          const result = await fetch('/api/verifyOrder', {
+          const result = await fetch('/api/Orders/verifyOrder', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json' },

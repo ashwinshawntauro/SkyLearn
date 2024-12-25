@@ -18,7 +18,7 @@ function Header({ course }) {
   const router = useRouter()
   const endCourse = async () => {
     try {
-      const response = await fetch("/api/endCourse", {
+      const response = await fetch("/api/Course/endCourse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +62,7 @@ function Header({ course }) {
       if (!userId) return;
       try {
         // Check if user is enrolled
-        const enrollRes = await fetch(`/api/getEnroll?student_id=${encodeURIComponent(userId)}`);
+        const enrollRes = await fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`);
         const enrollData = await enrollRes.json();
         const isEnrolled = (enrollData.getEnroll || []).some(
           (course) => course.course_id === courseId
@@ -71,7 +71,7 @@ function Header({ course }) {
 
         // Check if user is tutor
         if (role === "teacher") {
-          const tutorRes = await fetch(`/api/getTutorCourses?tutorId=${userId}`);
+          const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
           const tutorData = await tutorRes.json();
           setIsTutor(tutorData.some(course => course.course_id === courseId));
         } else {

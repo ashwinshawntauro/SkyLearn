@@ -15,7 +15,7 @@ export default function Page() {
     if (courseId) {
       const fetchCourseData = async () => {
         try {
-          const res = await fetch(`/api/getCourses/?courseId=${courseId}`, {
+          const res = await fetch(`/api/Course/getCourses/?courseId=${courseId}`, {
             method: "POST",
           });
           if (!res.ok) throw new Error("Course not found");

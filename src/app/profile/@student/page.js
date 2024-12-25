@@ -32,7 +32,7 @@ export default function Dashboard() {
   useEffect(() => {
     const registeredCourses = async () => {
       try {
-        const res = await fetch(`/api/getRegisteredCourses?userId=${userId}`);
+        const res = await fetch(`/api/Course/getRegisteredCourses?userId=${userId}`);
         const data = await res.json();
 
         if (res.ok) {
@@ -78,7 +78,7 @@ export default function Dashboard() {
         userId,
       };
 
-      const res = await fetch("/api/updateUserData", {
+      const res = await fetch("/api/updateData/updateUserData", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
