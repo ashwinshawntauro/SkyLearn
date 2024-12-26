@@ -140,7 +140,7 @@ function Header({ course }) {
           <DialogFooter>
             <Button
               onClick={() => setIsModalOpen(false)}
-              disabled={(parseInt(getProgressValue.f4) <= 50) && getProgressValue.f5>0}
+              disabled={(parseInt(getProgressValue.f4) <= 50) || getProgressValue.f5<1}
             >
               Generate
             </Button>
