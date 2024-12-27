@@ -137,15 +137,15 @@ def generate_certificate_route():
     }
 
     # Send POST request
-    # response = requests.post(api_url, data=json.dumps(data), headers=headers)
+    response = requests.post(api_url, data=json.dumps(data), headers=headers)
 
-    # # Handle the response from the API
-    # if response.status_code == 201:
-    #     return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
-    # else:
-    #     return f"Error calling the API: {response.status_code} - {response.text}"
+    # Handle the response from the API
+    if response.status_code == 201:
+        return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
+    else:
+        return f"Error calling the API: {response.status_code} - {response.text}"
     
-    return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
+    # return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
 
 
 
