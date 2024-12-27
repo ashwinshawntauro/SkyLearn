@@ -51,7 +51,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -128,7 +129,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -147,7 +149,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.13+commit.abaa5c0e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"certificate_id\",\"type\":\"string\"}],\"name\":\"certificateGenerated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"certificates\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"uid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"candidate_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"course_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"org_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"ipfs_hash\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_certificate_id\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_uid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_candidate_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_course_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_org_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_ipfs_hash\",\"type\":\"string\"}],\"name\":\"generateCertificate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_certificate_id\",\"type\":\"string\"}],\"name\":\"getCertificate\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"_uid\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_candidate_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_course_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_org_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_ipfs_hash\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_certificate_id\",\"type\":\"string\"}],\"name\":\"isVerified\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Certification.sol\":\"Certification\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Certification.sol\":{\"keccak256\":\"0x863ec246ee0226a016d528bdf2ae4875e56fb7ea743c9705229499b28cbbd5e2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c8ad51347e631d72bc1c9432a5a3e56cd2c57a3a5172b40516ceefa5ea53ff32\",\"dweb:/ipfs/QmQSX6GuUUT4rBb6A9LY2g59kGfboHRPL5YCefFz364prh\"]}},\"version\":1}",
@@ -7513,10 +7516,77 @@
       "links": {},
       "address": "0x75f6d73FBF4a53e81bFC4AF7882Efc6Af9F87900",
       "transactionHash": "0x341da8cbffed004da205ecdf36ef64bc70db20df94cb215df89f732cb2382a62"
+    },
+    "1733987578804": {
+      "events": {},
+      "links": {},
+      "address": "0x32a9F6608E9F471587aaeDD9F02E678a0F6E0F65",
+      "transactionHash": "0x8fa8fbbfe898b23346a4fb583a6071f13b3c9a6c3aebaa203d3553f6ed32f303"
+    },
+    "1735281512809": {
+      "events": {},
+      "links": {},
+      "address": "0xf463d168de2a275D6d46BdF8e06f83Fb8899dDb8",
+      "transactionHash": "0x005b3a99ec0d7a80b0071c68ba62132c710c09a41e92ade0d4fec63ab8dd7aba"
+    },
+    "1735283483927": {
+      "events": {},
+      "links": {},
+      "address": "0xb098853bd201E76e37Fe8AF7511590F0074072D8",
+      "transactionHash": "0x73eaff97e8a525c38332e4c7b032446fbd21e3cad0f07cd5ccfebb61cb6e5cf4"
+    },
+    "1735283710413": {
+      "events": {},
+      "links": {},
+      "address": "0xF80AFd90B13Bc84F6d70c00F676E16BDA714d1Fb",
+      "transactionHash": "0xe6559c5d54bd95234dadba1c5c9e24b4ea488c969844aae684b30010e102256b"
+    },
+    "1735283980114": {
+      "events": {},
+      "links": {},
+      "address": "0xc25D45670364FC79371Ba81B6454B4d2aE0836c5",
+      "transactionHash": "0x0139f95686794741c43b5267759125397ac2f251043b47e855a1dff3ffe29dbf"
+    },
+    "1735284172955": {
+      "events": {},
+      "links": {},
+      "address": "0xF80AFd90B13Bc84F6d70c00F676E16BDA714d1Fb",
+      "transactionHash": "0xe6559c5d54bd95234dadba1c5c9e24b4ea488c969844aae684b30010e102256b"
+    },
+    "1735284360360": {
+      "events": {},
+      "links": {},
+      "address": "0xE5cc620cfdaE7BE87245A8B5DdB9CCE50883D39E",
+      "transactionHash": "0x404ea8938bad2ea776868c427660a15db4e78ff30c371e0474c29d6505b36dcf"
+    },
+    "1735284480450": {
+      "events": {},
+      "links": {},
+      "address": "0xb098853bd201E76e37Fe8AF7511590F0074072D8",
+      "transactionHash": "0x73eaff97e8a525c38332e4c7b032446fbd21e3cad0f07cd5ccfebb61cb6e5cf4"
+    },
+    "1735284698166": {
+      "events": {},
+      "links": {},
+      "address": "0xF80AFd90B13Bc84F6d70c00F676E16BDA714d1Fb",
+      "transactionHash": "0xe6559c5d54bd95234dadba1c5c9e24b4ea488c969844aae684b30010e102256b"
+    },
+    "1735292052395": {
+      "events": {},
+      "links": {},
+      "address": "0x9681D69A2749bD0d0a1e2284AF28306A2baAFbdc",
+      "transactionHash": "0xa56642462f4045d020dc85e2461bf3d1e4f7ab96bbe1d444f46738b27fa9ea4d"
+    },
+    "1735292125924": {
+      "events": {},
+      "links": {},
+      "address": "0x58AE4aA1424d3be8657D6599Cdc2380f791C2d7E",
+      "transactionHash": "0x83bdaa65d8e08dc09512cb5d0311933fbac246c072583af1c5be818b8cf1f0e6"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-12T05:49:53.621Z",
+  "updatedAt": "2024-12-27T09:36:05.179Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

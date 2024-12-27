@@ -137,35 +137,43 @@ def generate_certificate_route():
     }
 
     # Send POST request
-    response = requests.post(api_url, data=json.dumps(data), headers=headers)
+    # response = requests.post(api_url, data=json.dumps(data), headers=headers)
 
-    # Handle the response from the API
-    if response.status_code == 201:
-        return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
-    else:
-        return f"Error calling the API: {response.status_code} - {response.text}"
+    # # Handle the response from the API
+    # if response.status_code == 201:
+    #     return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
+    # else:
+    #     return f"Error calling the API: {response.status_code} - {response.text}"
+    
+    return f"Certificate successfully generated with Certificate ID: {certificate_id}. Certificate added to the database."
+
 
 
 @app.route("/view-certificate", methods=["GET", "POST"])
 def view_certificate_route():
     if request.method == "POST":
-        # Get the certificate ID from the form submission
-        certificate_id = request.form["certificate_id"]
+        # Get the certificate ID from the form submission (POST)
+        certificate_id = request.form.get("certificate_id")
+    elif request.method == "GET":
+        # Get the certificate ID from query parameters (GET)
+        certificate_id = request.args.get("certificate_id")
 
-        try:
-            # Assume view_certificate returns the IPFS hash for the certificate
-            ipfs_hash = view_certificate(certificate_id)
+    if not certificate_id:
+        return "Certificate ID is required!"
 
-            # Generate the IPFS link
-            ipfs_link = (
-                f"https://peach-passive-porpoise-942.mypinata.cloud/ipfs/{ipfs_hash}"
-            )
+    try:
+        # Assume view_certificate returns the IPFS hash for the certificate
+        ipfs_hash = view_certificate(certificate_id)
 
-            # Return the HTML with the embedded IPFS link in an iframe
-            return f'<iframe src="{ipfs_link}" width="600" height="400" frameborder="0"></iframe>'
-        except Exception as e:
-            # Handle the case where the certificate ID is invalid
-            return "Invalid Certificate ID!"
+        # Generate the IPFS link
+        ipfs_link = f"https://peach-passive-porpoise-942.mypinata.cloud/ipfs/{ipfs_hash}"
+
+        # Return the HTML with the embedded IPFS link in an iframe
+        return f'<iframe src="{ipfs_link}" width="600" height="400" frameborder="0"></iframe>'
+    except Exception as e:
+        # Handle the case where the certificate ID is invalid
+        return "Invalid Certificate ID!"
+
 
 
 

@@ -17,7 +17,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -30,7 +31,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -2068,10 +2070,77 @@
       "links": {},
       "address": "0xF8e54Cab06B6e89D3D919a069E5Ab76Bd617B13E",
       "transactionHash": "0xfac61d1abd7b5d9b426eb8186d63d0d85c432e1bacb2cc6b61ebe7c6e23d0417"
+    },
+    "1733987578804": {
+      "events": {},
+      "links": {},
+      "address": "0x4BcdaF6fb8ca544EDf16fBa180455903be807746",
+      "transactionHash": "0x76a5982c404198e2832b9b368663cf31ff2a0960ae4c9f20d295e319ea3959a8"
+    },
+    "1735281512809": {
+      "events": {},
+      "links": {},
+      "address": "0x7c489061B5222640079fc02C2280724ff31C817e",
+      "transactionHash": "0x0812c0d9fb35027ebc4eac0f435fd599eba58e6b99675cb4e3ee614f33aa374a"
+    },
+    "1735283483927": {
+      "events": {},
+      "links": {},
+      "address": "0x10F742f8aA36A2a0cF46C295528d1bF8bFF056E3",
+      "transactionHash": "0x38039bc457f4f843eba9899a5739808817160d8daaa227eba7d139cee50b4ee7"
+    },
+    "1735283710413": {
+      "events": {},
+      "links": {},
+      "address": "0xf6140296213FA4928316b804e69b8d652cdc7408",
+      "transactionHash": "0xf589b9ec5330b8bb529a23e95a2012d70db9b63025c4d57f3f8161af6944d662"
+    },
+    "1735283980114": {
+      "events": {},
+      "links": {},
+      "address": "0xe13ee0A5c9ddEF73e66a07A87b69F3473f2b4675",
+      "transactionHash": "0xf262a3d12f01ea7e57290f3b472f9c2409de0848b7847b4c973f67f272856db0"
+    },
+    "1735284172955": {
+      "events": {},
+      "links": {},
+      "address": "0xf6140296213FA4928316b804e69b8d652cdc7408",
+      "transactionHash": "0xf589b9ec5330b8bb529a23e95a2012d70db9b63025c4d57f3f8161af6944d662"
+    },
+    "1735284360360": {
+      "events": {},
+      "links": {},
+      "address": "0xB829d1C7a0BF2f498BeE5DbBC2fa06c331293933",
+      "transactionHash": "0x906b1afe64fc918e2a1e26665c6241fa6147a33b80633a4d60db2692c6d1fff9"
+    },
+    "1735284480450": {
+      "events": {},
+      "links": {},
+      "address": "0x10F742f8aA36A2a0cF46C295528d1bF8bFF056E3",
+      "transactionHash": "0x38039bc457f4f843eba9899a5739808817160d8daaa227eba7d139cee50b4ee7"
+    },
+    "1735284698166": {
+      "events": {},
+      "links": {},
+      "address": "0xf6140296213FA4928316b804e69b8d652cdc7408",
+      "transactionHash": "0xf589b9ec5330b8bb529a23e95a2012d70db9b63025c4d57f3f8161af6944d662"
+    },
+    "1735292052395": {
+      "events": {},
+      "links": {},
+      "address": "0x8f8211fD5C5aB428583d47354d1c0f428BB0CeAD",
+      "transactionHash": "0x2f595eb73e15cf1b8c04bca952e7009a0cfcb4d83558d2abe52d3c8ff8b36a40"
+    },
+    "1735292125924": {
+      "events": {},
+      "links": {},
+      "address": "0x6f73eb79ad33821320F65d8615166D7e8450eAbf",
+      "transactionHash": "0x36aa0dc965e7a6582f0ef9528c3b6e090dcb6627da3889887a73ef8561d497a0"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-12-12T05:49:53.629Z",
+  "updatedAt": "2024-12-27T09:36:05.183Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

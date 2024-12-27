@@ -16,11 +16,16 @@ def displayPDF(file):
 
 
 def view_certificate(certificate_id):
-    # Smart Contract Call
-    result = contract.functions.getCertificate(certificate_id).call()
-    ipfs_hash = result[4]
-    
-    return(ipfs_hash)
+    try:
+        # Call the getCertificate function from the contract
+        certificate = contract.functions.getCertificate(certificate_id).call()
+
+        # Extract the IPFS hash
+        ipfs_hash = certificate[4]  # Assuming the IPFS hash is the 5th return value
+        return ipfs_hash
+    except Exception as e:
+        print(f"Error: {e}")
+        raise ValueError("Certificate not found!")
     # st.markdown(f'<a href="https://peach-passive-porpoise-942.mypinata.cloud/ipfs/{ipfs_hash}" target="_blank">Visit IPFS Link</a>', unsafe_allow_html=True)
 
 
