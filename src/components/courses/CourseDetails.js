@@ -12,7 +12,7 @@ function CourseDetails({ course }) {
   const courseDesc = course.course_description;
   const [enrollmentCount, setEnrollmentCount] = useState(null);
 
-  const { userId,role} = AuthContext();
+  const { userId, role } = AuthContext();
   const [isTutor, setIsTutor] = useState(null);
   const [isPurchased, setIsPurchased] = useState(null);
 
@@ -123,12 +123,10 @@ function CourseDetails({ course }) {
         <iframe
           className="w-full h-56 rounded"
           src={
-            course.youtube_link
-              ? course.youtube_link.includes("youtube.com/watch")
-                ? course.youtube_link.replace("watch?v=", "embed/")
-                : course.youtube_link
+            course.youtube_link && course.youtube_link.includes("youtube.com/watch")
+              ? `https://www.youtube.com/embed/${course.youtube_link.split('v=')[1]?.split('&')[0]}`
               : "https://www.youtube.com/embed/default-video-id"
-          }
+          }          
           title="Course Video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

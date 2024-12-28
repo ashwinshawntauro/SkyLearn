@@ -10,10 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/providers/AuthProvider";
+import { useToast } from "@/hooks/use-toast";
 
 import {
   db,
@@ -26,6 +28,7 @@ import {
 
 export default function Page({ params }) {
   const videoRef = useRef();
+  const { toast } = useToast();
   const [peer, setPeer] = useState(null);
   const [activeTab, setActiveTab] = useState("module1");
   const [messages, setMessages] = useState([]);
@@ -57,19 +60,22 @@ export default function Page({ params }) {
 
   const handleSendMessage = async () => {
     if (input.trim() === "") {
-      alert("Message cannot be empty!");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Message cannot be empty!",
+      })
       return;
     }
 
     try {
-      // Send message to Firebase
       await addDoc(collection(db, "chatMessages", room, "messages"), {
         message: input,
         timestamp: new Date(),
-        userId: userId, // Replace with actual user ID
-        username: userName, // Replace with actual username
+        userId: userId,
+        username: userName,
       });
-      setInput(""); // Clear the input field after sending the message
+      setInput("");
     } catch (error) {
       console.error("Error sending message: ", error);
     }
@@ -77,7 +83,11 @@ export default function Page({ params }) {
 
   const initConnection = async () => {
     if (!room) {
-      alert("Class is missing in the URL!");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Sorry! Class is missing in the URL",
+      })
       return;
     }
     try {
@@ -108,7 +118,11 @@ export default function Page({ params }) {
       }
     } catch (error) {
       console.error("Initialization error:", error);
-      alert("Failed to connect to the broadcast: " + error.message);
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: `Failed to connect to the broadcast: ${error.message}`,
+      })
     }
   };
 
@@ -144,7 +158,11 @@ export default function Page({ params }) {
       peer.close();
       setPeer(null);
     }
-    alert("Disconnected from broadcast");
+    toast({
+      variant: "failure",
+      title: "SkyLearn",
+      description: "Disconnected from broadcast!",
+    })
   };
 
   // Create a new WebRTC PeerConnection
@@ -213,31 +231,17 @@ export default function Page({ params }) {
         console.log("Remote description set successfully.");
       } else {
         console.error("Failed to fetch from Next.js API route");
-        alert("No class found !");
+        toast({
+          variant: "failure",
+          title: "SkyLearn",
+          description: "Sorry! No class found",
+        })
       }
     } catch (error) {
       console.error("Setup error:", error);
       throw error;
     }
   };
-
-  // const handleSendMessage = () => {
-  //   if (input.trim() !== "") {
-  //     setMessages((prev) => [...prev, input]);
-  //     setInput("");
-  //   } else {
-  //     alert("Message cannot be empty!");
-  //   }
-  // };
-
-  // Handle page unload to track the student's attendance duration
-  // const handleBeforeUnload = () => {
-  //   if (startTime) {
-  //     const attendedDuration = Math.floor((Date.now() - startTime) / 1000); // Duration in seconds
-  //     setDuration(attendedDuration);
-  //     submitDuration(attendedDuration);
-  //   }
-  // };
 
   return (
     <div className="grid">
@@ -351,7 +355,7 @@ export default function Page({ params }) {
               </Button>
               <Button
                 id="video"
-                className="bg-red-500"
+                className="bg-red-500 hover:bg-red-400"
                 onClick={disconnectFromBroadcast}
               >
                 Leave Class
@@ -363,12 +367,12 @@ export default function Page({ params }) {
             <div className="flex flex-col justify-center p-2">
               {/* Middle Card */}
               <div className="grid stream-grid p-2 ">
-                <div className="max-h-[500px]">
+                <div className="max-h-[520px] h-[520px]">
                   <Card className="w-[350px] h-full flex flex-col rounded-sm">
                     <CardHeader>
-                      <CardTitle>Live Chat</CardTitle>
+                      <CardTitle className="text-primary">Live Chat</CardTitle>
                       <CardDescription>
-                        Engage with your viewers in real-time.
+                        Engage with your peers in real-time.
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 overflow-y-auto max-h-[400px]">
@@ -380,9 +384,38 @@ export default function Page({ params }) {
                         messages.map((msg, index) => (
                           <div
                             key={index}
-                            className="p-2 mb-2 bg-gray-100 rounded text-sm"
+                            className={`flex items-start space-x-3 p-3 mb-3 max-w-xs rounded-lg text-sm bg-gray-300 text-black`}
                           >
-                            <strong>{msg.username}</strong>: {msg.message}
+                            <Avatar className="w-8 h-8 cursor-pointer">
+                              <AvatarImage
+                                className="rounded-full"
+                                src={`https://ui-avatars.com/api/?name=${msg.username}&background=1e90ff&color=FFFFFF`}
+                                alt={msg.username}
+                              />
+                              <AvatarFallback className="bg-gray-200 text-gray-600 rounded-full flex items-center justify-center">
+                                <svg
+                                  className="w-4 h-4 text-gray-800 dark:text-white"
+                                  aria-hidden="true"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                  />
+                                </svg>
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                              <div className="font-semibold">{msg.username}</div>
+                              <div>{msg.message}</div>
+                            </div>
                           </div>
                         ))
                       )}

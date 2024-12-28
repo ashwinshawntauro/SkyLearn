@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,11 +24,10 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 export default function Dashboard() {
-  const { userName, email, role, address, logout, isLogged } = AuthContext();
+  const { userName, email, role, address, isLogged } = AuthContext();
   const [courses, setCourses] = useState([]);
   const { userId } = AuthContext();
-  const [loading, setLoading] = useState(true); // Loading state for questions
-  const [saving, setSaving] = useState(false); // State for saving indicator
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const registeredCourses = async () => {
@@ -42,8 +42,6 @@ export default function Dashboard() {
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -69,15 +67,13 @@ export default function Dashboard() {
   }
 
   const handleSave = async () => {
-    setSaving(true); // Start loading
-
+    setSaving(true);
     try {
       const updatedData = {
         newUserName,
         newAdd,
         userId,
       };
-
       const res = await fetch("/api/updateData/updateUserData", {
         method: "PUT",
         headers: {
@@ -90,11 +86,8 @@ export default function Dashboard() {
 
       if (res.ok) {
         console.log("User updated:", data);
-        setOldUserName(data.student_name); // Reset form values after successful update
+        setOldUserName(data.student_name);
         setOldAdd(data.address);
-
-        // Close the dialog (if you are using a modal)
-        // You can use state or a ref to manage the dialog visibility
         closeDialog();
       } else {
         console.error("Error updating user:", data.error);
@@ -102,7 +95,7 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error saving changes:", error);
     } finally {
-      setSaving(false); // Stop loading
+      setSaving(false);
     }
   };
 
@@ -119,19 +112,6 @@ export default function Dashboard() {
 
         <main className="mt-6 space-y-6">
           <section className="grid lg:grid-cols-2 gap-4">
-            {/* <Card className="shadow-sm">
-              <CardHeader>
-                <CardTitle>Project Progress</CardTitle>
-                <CardDescription>Track the progress of your current projects</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li>Course: <span className="font-semibold">Intro to Computer Science</span></li>
-                  <li>Status: <span className="font-semibold">Ongoing</span></li>
-                  <li>Progress: <span className="font-semibold">20%</span></li>
-                </ul>
-              </CardContent>
-            </Card> */}
             <Card className="ml-10 shadow-lg rounded-lg overflow-hidden bg-white">
               <CardHeader className="px-6 py-4 border-b border-gray-200">
                 <CardTitle className="inline-flex justify-between items-center text-lg font-semibold text-gray-800">
@@ -218,7 +198,7 @@ export default function Dashboard() {
                       </DialogHeader>
                       <Button
                         onClick={handleSave}
-                        className="mt-4 w-full bg-blue-600 text-white hover:bg-blue-700 rounded-md py-2"
+                        className="mt-4 w-full bg-primary text-white hover:bg-primary-light rounded-md py-2"
                         disabled={saving} // Disable button while saving
                       >
                         {saving ? (
@@ -284,7 +264,7 @@ export default function Dashboard() {
             <h2 className="text-lg font-semibold m-4">Registered Courses</h2>
             <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {courses.length === 0 ? (
-                <p>No courses registered yet.</p> // If no courses, show a message
+                <p>No courses registered yet.</p>
               ) : (
                 courses.map((course) => (
                   <Card key={course.course_id} className="shadow-md">
@@ -295,10 +275,11 @@ export default function Dashboard() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm text-gray-500">
                         Duration: {course.course_duration} weeks
                       </p>
-
+                    </CardContent>
+                    <CardFooter>
                       <Link
                         href={`/courses/${encodeURIComponent(
                           course.course_id
@@ -308,7 +289,7 @@ export default function Dashboard() {
                       >
                         <Button className="mt-4">View Course</Button>
                       </Link>
-                    </CardContent>
+                    </CardFooter>
                   </Card>
                 ))
               )}

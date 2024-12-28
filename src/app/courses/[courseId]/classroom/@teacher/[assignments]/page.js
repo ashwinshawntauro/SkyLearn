@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/table";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
+import { useToast } from "@/hooks/use-toast"; 
 
 export default function Page() {
+    const { toast } = useToast();
     const { assignments, courseId } = useParams();
     const classroomId = assignments.split('-')[0];
     const courseWorkId = assignments.split('-')[1];
@@ -36,11 +38,19 @@ export default function Page() {
                 if (response.ok) {
                     setStudents(data.submissions); // Assuming the API returns an array of submissions
                 } else {
-                    alert('Failed to fetch student grades');
+                    toast({
+                        variant: "failure",
+                        title: "SkyLearn",
+                        description: "Sorry! Failed to fetch student grades",
+                    })
                 }
             } catch (error) {
                 console.error('Error fetching student data:', error);
-                alert('Error fetching student grades');
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: `Error fetching student grades: ${error}`,
+                })
             } finally {
                 setLoading(false);
             }
@@ -72,17 +82,25 @@ export default function Page() {
                                 'Content-Type': 'application/json',
                             },
                         });
-                    
+
                         if (response.ok) {
-                            alert('Leaderboard updated successfully!');
+                            toast({
+                                variant: "success",
+                                title: "SkyLearn",
+                                description: "Leaderboard updated successfully!",
+                            })
                         } else {
                             const errorData = await response.json();
-                            alert(`Error: ${errorData.message}`);  // Concatenate the message properly
+                            toast({
+                                variant: "failure",
+                                title: "SkyLearn",
+                                description: `Error: ${errorData.message}`,
+                            })
                         }
                     };
-                    
+
                     updateLeaderboard();
-                    
+
                 } else {
                     console.error(`Error fetching student ID for ${email}`);
                 }

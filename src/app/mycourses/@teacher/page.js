@@ -122,7 +122,7 @@ export default function TeacherDashboard() {
   };
 
   const authenticateToken = async () => {
-    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/authToken&scope=https://www.googleapis.com/auth/classroom.courses&prompt=select_account`;
+    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/authToken&scope=https://www.googleapis.com/auth/classroom.courses&prompt=select_account&courseId=${course.course_id}`;
     window.location.href = oauthUrl;
   }
 
@@ -188,13 +188,11 @@ export default function TeacherDashboard() {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4">Teacher Dashboard</h2>
-
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold">My Courses</h3>
           <div className="gap-2 flex">

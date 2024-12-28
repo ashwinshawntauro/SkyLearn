@@ -10,13 +10,16 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast"; 
 import { Textarea } from "@/components/ui/textarea";
 
-export default function Page({ title, description, livestreamId, tutorId, courseId }) {
+export default function Page({ title, description, livestreamId, tutorId, courseId, fetchLivestreams }) {
+    const { toast } = useToast(); 
+
     const [formData, setFormData] = useState({
         title: `Supplementary: ${title}`,
         description: description,
-        datetime: "", // Initialize datetime here
+        datetime: "",
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -27,7 +30,7 @@ export default function Page({ title, description, livestreamId, tutorId, course
 
     const handleDatetimeChange = (e) => {
         const value = e.target.value;
-        setFormData((prev) => ({ ...prev, datetime: value })); // Update datetime in formData
+        setFormData((prev) => ({ ...prev, datetime: value }));
     };
 
     const handleCreateLivestream = async () => {
@@ -38,7 +41,6 @@ export default function Page({ title, description, livestreamId, tutorId, course
             tutor_id: tutorId,
             refLiveId: livestreamId,
         };
-        console.log(reqBody);
         try {
             const response = await fetch("/api/Livestreams/createLivestream", {
                 method: "POST",
@@ -51,16 +53,24 @@ export default function Page({ title, description, livestreamId, tutorId, course
             const data = await response.json();
 
             if (response.ok) {
-                alert("Livestream created successfully!");
+                toast({
+                    variant:"success",
+                    title: "SkyLearn",
+                    description: "Livestream created successfully!",
+                })
+                fetchLivestreams();
                 setIsDialogOpen(false);
             } else {
-                alert(`Error: ${data.error || "Something went wrong"}`);
+                toast({
+                    variant:"failure",
+                    title: "SkyLearn",
+                    description: "Please enter details correctly!", 
+                })
             }
         } catch (error) {
             console.error("Error creating livestream:", error);
         }
     };
-
     return (
         <div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
