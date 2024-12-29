@@ -6,6 +6,7 @@ import CourseDetails from "@/components/courses/CourseDetails";
 import InstructorSection from "@/components/courses/InstructorSection";
 import NavigationTabs from "@/components/courses/NavigationTabs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Skeleton } from "@/components/ui/skeleton"
 import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/providers/AuthProvider";
 import {
@@ -59,7 +60,50 @@ export default function Page() {
         <h2 className="text-2xl font-bold mb-4">My Courses</h2>
 
         {loading ? (
-          <Loading/>
+          <div>
+            <div className="flex space-x-24 text-gray-800 mb-8">
+              <div>
+                <Skeleton className="w-32 h-6" />
+                <Skeleton className="w-24 h-4 mt-2" />
+              </div>
+              <div>
+                <Skeleton className="w-32 h-6" />
+                <Skeleton className="w-40 h-4 mt-2" />
+              </div>
+            </div>
+
+            <section className="mt-8">
+              <h2 className="text-lg font-semibold m-4">
+                <Skeleton className="w-40 h-6" />
+              </h2>
+              <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array(3).fill(0).map((_, index) => (
+                  <div key={index} className="shadow-md p-4">
+                    <Skeleton className="w-full h-36" />
+                    <Skeleton className="mt-4 w-3/4 h-4" />
+                    <Skeleton className="mt-2 w-2/3 h-4" />
+                    <Skeleton className="mt-6 w-24 h-10" />
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-8">
+              <h2 className="text-lg font-semibold m-4">
+                <Skeleton className="w-40 h-6" />
+              </h2>
+              <div className="m-4 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array(3).fill(0).map((_, index) => (
+                  <div key={index} className="shadow-md p-4">
+                    <Skeleton className="w-full h-36" />
+                    <Skeleton className="mt-4 w-3/4 h-4" />
+                    <Skeleton className="mt-2 w-2/3 h-4" />
+                    <Skeleton className="mt-6 w-24 h-10" />
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
         ) : (
           <>
             <div className="flex space-x-24 text-gray-800 mb-8">

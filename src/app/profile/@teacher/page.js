@@ -51,14 +51,10 @@ export default function Dashboard() {
   }, [userId]);
 
   const [newEmail, setNewEmail] = useState(email);
-
-  // State for dialog form inputs
   const [oldUserName, setOldUserName] = useState(userName);
   const [oldAdd, setOldAdd] = useState(address);
-
   const [newUserName, setNewUserName] = useState(userName);
   const [newAdd, setAdd] = useState(address);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const openDialog = () => setIsDialogOpen(true);
@@ -89,11 +85,8 @@ export default function Dashboard() {
 
       if (res.ok) {
         console.log("User updated:", data);
-        setOldUserName(data.tutor_name); // Reset form values after successful update
+        setOldUserName(data.tutor_name);
         setOldAdd(data.address);
-
-        // Close the dialog (if you are using a modal)
-        // You can use state or a ref to manage the dialog visibility
         closeDialog();
       } else {
         console.error("Error updating user:", data.error);
@@ -101,7 +94,7 @@ export default function Dashboard() {
     } catch (error) {
       console.error("Error saving changes:", error);
     } finally {
-      setSaving(false); // Stop loading
+      setSaving(false);
     }
   };
 
@@ -118,25 +111,10 @@ export default function Dashboard() {
 
         <main className="mt-6 space-y-6">
           <section className="grid lg:grid-cols-2 gap-4">
-            {/* <Card className="shadow-sm">
-              <CardHeader>
-                <CardTitle>Project Progress</CardTitle>
-                <CardDescription>Track the progress of your current projects</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li>Course: <span className="font-semibold">Intro to Computer Science</span></li>
-                  <li>Status: <span className="font-semibold">Ongoing</span></li>
-                  <li>Progress: <span className="font-semibold">20%</span></li>
-                </ul>
-              </CardContent>
-            </Card> */}
             <Card className="ml-10 shadow-lg rounded-lg overflow-hidden bg-white">
               <CardHeader className="px-6 py-4 border-b border-gray-200">
                 <CardTitle className="inline-flex justify-between items-center text-lg font-semibold text-gray-800">
                   <span>User Details</span>
-
-                  {/* Edit Account Information Dialog Trigger */}
                   <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger>
                       <span
@@ -163,7 +141,6 @@ export default function Dashboard() {
                       </span>
                     </DialogTrigger>
 
-                    {/* Dialog Content for Edit Account Info */}
                     <DialogContent className="px-6 py-4">
                       <DialogHeader>
                         <DialogTitle className="text-center text-xl font-semibold text-gray-800">

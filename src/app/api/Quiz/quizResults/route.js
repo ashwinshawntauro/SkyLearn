@@ -29,13 +29,12 @@ export async function POST(req) {
     const leaderboardUpdate =await prisma.lEADERBOARD.create({
       data: {
         student_id:user_id,
-        course_id,
+        course_id:course_id,
         rank:null,
         score:total_score,
       },
     });
 
-    // Return a success response
     return NextResponse.json({
       message: "Quiz result added successfully",
       result: newResult,

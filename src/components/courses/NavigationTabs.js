@@ -24,12 +24,14 @@ import LivestreamStatus from "./student/livestreamStatus";
 import ClassSupp from "./tutor/ClassSup";
 import GetTokens from "./tutor/GetTokens"
 import { Textarea } from "../ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+
 
 function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName, role } = AuthContext();
   const courseId = course.course_id;
-
+  const { toast } = useToast();
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
@@ -47,9 +49,14 @@ function NavigationTabs({ course }) {
   useEffect(() => {
     const initializeData = async () => {
       if (!userId) return;
-
+      if (role === "teacher") {
+        const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
+        const tutorData = await tutorRes.json();
+        setIsTutor(tutorData.some(course => course.course_id === courseId));
+      } else {
+        setIsTutor(false);
+      }
       try {
-        // Check if user is enrolled
         const enrollRes = await fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`);
         const enrollData = await enrollRes.json();
         const isEnrolled = (enrollData.getEnroll || []).some(
@@ -57,7 +64,6 @@ function NavigationTabs({ course }) {
         );
         setIsPurchased(isEnrolled);
 
-        // Check if user is tutor
         if (role === "teacher") {
           const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
           const tutorData = await tutorRes.json();
@@ -89,18 +95,18 @@ function NavigationTabs({ course }) {
 
   const fetchEnrolled = async () => {
     try {
-        const response = await fetch(`/api/Enrollments/getEnrolledStudents?courseId=${courseId}`);
-        
-        if (response.ok) {
-            const data = await response.json(); 
-            setEnrolled(data.students); 
-        } else {
-            console.error('Failed to fetch enrolled students:', response.statusText);
-        }
+      const response = await fetch(`/api/Enrollments/getEnrolledStudents?courseId=${courseId}`);
+
+      if (response.ok) {
+        const data = await response.json();
+        setEnrolled(data.students);
+      } else {
+        console.error('Failed to fetch enrolled students:', response.statusText);
+      }
     } catch (error) {
-        console.error('Error fetching enrolled students:', error);
+      console.error('Error fetching enrolled students:', error);
     }
-};
+  };
 
 
   const fetchNotes = async () => {
@@ -162,7 +168,11 @@ function NavigationTabs({ course }) {
       });
 
       if (response.ok) {
-        alert("Livestream ended");
+        toast({
+          variant: "success",
+          title: "SkyLearn",
+          description: "Livestream ended",
+      })
         fetchLivestreams();
       }
     } catch (error) {
@@ -193,9 +203,6 @@ function NavigationTabs({ course }) {
     return <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />;
   }
 
-  // Rest of the component remains the same...
-  // (TabsContent, rendering logic, etc.)
-
   return (
     <div>
       {isPurchased || isTutor ? (
@@ -221,110 +228,132 @@ function NavigationTabs({ course }) {
           >
             {isPurchased ? (
               <div>
-                {livestreams.map((livestream) => (
-                  <div
-                    key={livestream.id}
-                    className="border-r border-b mb-2 border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
-                  >
-                    <div>
-                      <div className="mb-2">
-                        {livestream.status === "active" && (
-                          <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
-                            Live
-                          </span>
+                {livestreams && livestreams.length > 0 ? (
+                  livestreams.map((livestream) => (
+                    <div
+                      key={livestream.id}
+                      className="border-r border-b mb-2 border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                    >
+                      <div>
+                        <div className="mb-2">
+                          {livestream.status === "active" && (
+                            <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                              Live
+                            </span>
+                          )}
+                        </div>
+                        <div className="font-light font-sans">{livestream.datetime}</div>
+                        <div className="text-primary font-bold text-md mb-1">
+                          {livestream.title}
+                        </div>
+                        <p className="text-grey-darker text-base">
+                          {livestream.description}
+                        </p>
+                        <div className="flex items-center space-x-2">
+                          {livestream.status === "ended" ? (
+                            <LivestreamStatus
+                              livestreamId={livestream.id}
+                              userId={userId}
+                              course_id={course}
+                            />
+                          ) : (
+                            <div></div>
+                          )}
+                        </div>
+                        {livestream.refLiveId && (
+                          <blockquote className="mt-4 italic text-gray-600 border-l-4 border-primary pl-4">
+                            Supplementary Class
+                          </blockquote>
                         )}
                       </div>
-                      <div className="font-light font-sans">
-                        {livestream.datetime}
-                      </div>
-                      <div className="text-primary font-bold text-md mb-1">
-                        {livestream.title}
-                      </div>
-                      <p className="text-grey-darker text-base">
-                        {livestream.description}
-                      </p>
-                      <div className="flex items-center space-x-2">
-                        {livestream.status === "ended" ?
-                          (< LivestreamStatus livestreamId={livestream.id} userId={userId} course_id={course} />)
-                          : (<div></div>)
-                        }
-                      </div>
-                      {livestream.refLiveId && (
-                        <blockquote className="mt-4 italic text-gray-600 border-l-4 border-primary pl-4">
-                          Supplementary Class
-                        </blockquote>
+                      {livestream.status === "active" && (
+                        <Button
+                          onClick={() =>
+                            router.push(`${courseId}L${livestream.id}/livestream`)
+                          }
+                          className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
+                        >
+                          Join Class
+                        </Button>
                       )}
                     </div>
-                    {livestream.status === "active" && (
-                      <Button
-                        onClick={() =>
-                          router.push(`${courseId}L${livestream.id}/livestream`)
-                        }
-                        className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
-                      >
-                        Join Class
-                      </Button>
-                    )}
+                  ))
+                ) : (
+                  <div className="text-gray-500 text-center py-4">
+                    No livestreams available.
                   </div>
-                ))}
+                )}
               </div>
             ) : isTutor ? (
               <div>
                 <TutorLivestream courseId={courseId} tutorId={userId} />
-                {livestreams.map((livestream) => (
-                  <div
-                    key={livestream.id}
-                    className="border-r mb-2 border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
-                  >
-                    <div>
-                      <div className="mb-2">
-                        {livestream.status === "active" && (
-                          <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
-                            Live
-                          </span>
+                {livestreams && livestreams.length > 0 ? (
+                  livestreams.map((livestream) => (
+                    <div
+                      key={livestream.id}
+                      className="border-r mb-2 border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal"
+                    >
+                      <div>
+                        <div className="mb-2">
+                          {livestream.status === "active" && (
+                            <span className="bg-red-100 animate-blink text-red-800 text-sm me-2 px-2.5 py-0.5 rounded border border-red-400">
+                              Live
+                            </span>
+                          )}
+                        </div>
+                        <div className="font-light font-sans">{livestream.datetime}</div>
+                        <div className="font-bold text-md text-primary mb-1">
+                          {livestream.title}
+                        </div>
+                        <p className="text-grey-darker text-base">
+                          {livestream.description}
+                        </p>
+                        {livestream.status === "ended" ? (
+                          <div className="flex items-center">
+                            <div className="text-sm my-4">
+                              <GetTokens
+                                courseId={courseId}
+                                livestreamId={livestream.id}
+                              />
+                              <ClassSupp
+                                fetchLivestreams={fetchLivestreams}
+                                title={livestream.title}
+                                courseId={courseId}
+                                tutorId={userId}
+                                description={livestream.description}
+                                livestreamId={livestream.id}
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          <div></div>
                         )}
                       </div>
-                      <div className="font-light font-sans">
-                        {livestream.datetime}
-                      </div>
-                      <div className="font-bold text-md text-primary mb-1">
-                        {livestream.title}
-                      </div>
-                      <p className="text-grey-darker text-base">
-                        {livestream.description}
-                      </p>
-                      {livestream.status === "ended" ? (
-                        <div className="flex items-center">
-                          <div className="text-sm my-4">
-                            {/* <p className="text-gray-600 leading-none">Tokens Raised: {getToken(courseId, livestream.id)}</p> */}
-                            <GetTokens courseId={courseId} livestreamId={livestream.id} />
-                            <ClassSupp title={livestream.title} courseId={courseId} tutorId={userId} description={livestream.description} livestreamId={livestream.id} />
-                          </div>
-                        </div>)
-                        : (<div></div>)}
+                      {livestream.status !== "ended" && (
+                        <div className="grid grid-flow-col gap-2">
+                          <Button
+                            onClick={() =>
+                              router.push(`${courseId}L${livestream.id}/livestream`)
+                            }
+                            className="flex items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
+                          >
+                            Join Class
+                          </Button>
+                          <Button
+                            onClick={() => endLive(livestream.id)}
+                            className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800"
+                          >
+                            End Class
+                          </Button>
+                        </div>
+                      )}
                     </div>
-                    {livestream.status !== "ended" && (
-                      <div className="grid grid-flow-col gap-2">
-                        <Button
-                          onClick={() =>
-                            router.push(
-                              `${courseId}L${livestream.id}/livestream`
-                            )
-                          }
-                          className="flex items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
-                        >
-                          Join Class
-                        </Button>
-                        <Button
-                          onClick={() => endLive(livestream.id)}
-                          className="flex items-center mx-2 w-fit text-nowrap bg-red-600 px-3 rounded-lg text-white hover:bg-red-800"
-                        >
-                          End Class
-                        </Button>
-                      </div>
-                    )}
+                  ))
+                ) : (
+                  <div className="text-gray-500 text-center py-4">
+                    No livestreams available.
                   </div>
-                ))}
+                )}
               </div>
             ) : (
               <div></div>
@@ -335,23 +364,35 @@ function NavigationTabs({ course }) {
             {isTutor ? (
               <>
                 <TutorNotes courseId={courseId} />
-                <div className="space-y-4">
-                  {notes.map((note) => (
-                    <div key={note.id} className="border p-4 rounded-lg">
-                      <h3 className="text-lg font-bold">{note.note_title}</h3>
-                      <p className="mt-2">{note.note_text}</p>
+                <div>
+                  {notes && notes.length > 0 ? (
+                    notes.map((note) => (
+                      <div key={note.id} className="border bg-white p-4 rounded-lg">
+                        <h3 className="text-lg font-bold">{note.note_title}</h3>
+                        <p className="mt-2">{note.note_text}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 text-center py-4">
+                      No notes available.
                     </div>
-                  ))}
+                  )}
                 </div>
               </>
             ) : (
-              <div className="space-y-4">
-                {notes.map((note) => (
-                  <div key={note.id} className="border p-4 rounded-lg">
-                    <h3 className="text-lg font-bold">{note.note_title}</h3>
-                    <p className="mt-2">{note.note_text}</p>
+              <div>
+                {notes && notes.length > 0 ? (
+                  notes.map((note) => (
+                    <div key={note.id} className="border bg-white p-4 rounded">
+                      <h3 className="text-lg font-bold">{note.note_title}</h3>
+                      <p className="mt-2 text-gray-600">{note.note_text}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-gray-500 text-center py-4">
+                    No notes available.
                   </div>
-                ))}
+                )}
               </div>
             )}
           </TabsContent>
@@ -365,12 +406,12 @@ function NavigationTabs({ course }) {
                 {/* Display the questions if they exist */}
                 <div>
                   {questions.length === 0 ? (
-                    <p>No quizzes available for this course.</p>
+                    <div className="text-gray-500 text-center py-4">No quizzes available for this course.</div>
                   ) : (
                     questions.map((question, index) => (
-                      <div key={index} className="border-b border-grey-light py-4">
-                        <div className="font-bold text-lg">{question.question}</div>
-                        <div className="font-bold text-lg text-green-600 mt-2">
+                      <div key={index} className="border-b bg-white rounded p-4 border-grey-light py-4">
+                        <div className="font-bold text-lg">Q{index+1}. {question.question}</div>
+                        <div className="font-bold text-sm text-green-600 mt-2">
                           Correct Answer: {question.options[question.correct]}
                         </div>
 
@@ -402,7 +443,7 @@ function NavigationTabs({ course }) {
               <>
                 {/* For Non-Tutors */}
                 {questions.length === 0 ? (
-                  <div>No quizzes available for this course.</div>
+                  <div className="text-gray-500 text-center py-4">No quizzes available for this course.</div>
                 ) : (
                   <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
                     <div>
@@ -422,6 +463,7 @@ function NavigationTabs({ course }) {
                     </div>
                     <Button
                       onClick={() => router.push(`/courses/${courseId}/quiz`)}
+                      disabled={quizStatus}
                       className="flex items-center mx-2 w-fit text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
                     >
                       {quizStatus ? "Already Attempted" : "Attempt Quiz"}

@@ -10,7 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import { AuthContext } from "@/providers/AuthProvider";
 import Link from "next/link";
@@ -25,6 +27,7 @@ import {
 
 export default function Page({ params }) {
   const videoRef = useRef(null);
+  const { toast } = useToast();
   const [peer, setPeer] = useState(null);
   const [messages, setMessages] = useState([]);
   const [streamType, setStreamType] = useState("camera");
@@ -53,13 +56,16 @@ export default function Page({ params }) {
       setMessages(messagesList);
     });
 
-    // Cleanup the listener when component unmounts
     return () => unsubscribe();
   }, [room]);
 
   const handleSendMessage = async () => {
     if (input.trim() === "") {
-      alert("Message cannot be empty!");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Message cannot be empty!",
+      })
       return;
     }
 
@@ -131,7 +137,11 @@ export default function Page({ params }) {
       return stream;
     } catch (error) {
       console.error("Error getting media stream:", error);
-      alert("Failed to access media stream");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Check your Camera and Microphone Permissions",
+      })
       return null;
     }
   };
@@ -191,14 +201,22 @@ export default function Page({ params }) {
       }
     } catch (error) {
       console.error("Streaming error:", error);
-      alert("Failed to start streaming");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: `Failed to start streaming, ${error}`,
+      })
     }
   };
 
   // Switch Stream
   const switchStream = async () => {
     if (!peer) {
-      alert("Start streaming first");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Start streaming first",
+      })
       return;
     }
 
@@ -227,7 +245,11 @@ export default function Page({ params }) {
       }
     } catch (error) {
       console.error("Stream switching error:", error);
-      alert("Failed to switch stream");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Failed to switch stream",
+      })
     }
   };
 
@@ -406,7 +428,7 @@ export default function Page({ params }) {
       <div className="flex flex-col justify-center p-2">
         {/* Middle Card */}
         <div className="grid stream-grid p-2">
-          <div>
+        <div className="max-h-[520px] h-[520px]">
             <Card className="w-[350px] h-full flex flex-col rounded-sm">
               <CardHeader>
                 <CardTitle>Live Chat</CardTitle>
@@ -417,8 +439,40 @@ export default function Page({ params }) {
                   <div className="text-center text-gray-500">No messages yet. Be the first to chat!</div>
                 ) : (
                   messages.map((msg, index) => (
-                    <div key={index} className="p-2 mb-2 bg-gray-100 rounded text-sm">
-                      <strong>{msg.username}</strong>: {msg.message}
+                    <div
+                      key={index}
+                      className={`flex items-start space-x-3 p-3 mb-3 max-w-xs rounded-lg text-sm bg-gray-300 text-black`}
+                    >
+                      <Avatar className="w-8 h-8 cursor-pointer">
+                        <AvatarImage
+                          className="rounded-full"
+                          src={`https://ui-avatars.com/api/?name=${msg.username}&background=1e90ff&color=FFFFFF`}
+                          alt={msg.username}
+                        />
+                        <AvatarFallback className="bg-gray-200 text-gray-600 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-4 h-4 text-gray-800 dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                          </svg>
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <div className="font-semibold">{msg.username}</div>
+                        <div>{msg.message}</div>
+                      </div>
                     </div>
                   ))
                 )}

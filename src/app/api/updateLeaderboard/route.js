@@ -36,7 +36,7 @@ export async function PUT(req) {
             },
             data: {
                 score: {
-                    increment: Score,
+                    increment: parseInt(Score) || 0,
                 },
                 marksStatus: 'Graded',
             },

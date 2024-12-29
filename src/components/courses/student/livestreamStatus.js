@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
+import { Skeleton } from "@/components/ui/skeleton"
+import { useToast } from "@/hooks/use-toast";
 
 export default function Page({ livestreamId, userId, course_id }) {
     const [status, setStatus] = useState(null);
     const [error, setError] = useState(null);
     const [tokenPresent, settokenPresent] = useState(null);
     const courseids = course_id.course_id
+    const { toast } = useToast();
 
     const getStatus = async (livestreamId, userId, courseids) => {
         try {
@@ -18,7 +21,7 @@ export default function Page({ livestreamId, userId, course_id }) {
             if (response.ok) {
                 settokenPresent(true)
             }
-            else{
+            else {
                 settokenPresent(false)
             }
         } catch (error) {
@@ -55,8 +58,12 @@ export default function Page({ livestreamId, userId, course_id }) {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                alert("Token raised successfully!");
+                toast({
+                    variant: "success",
+                    title: "SkyLearn",
+                    description: "Dont worry, token raised successfully!",
+                })
+                getStatus(livestreamId, userId, courseids);
             } else {
                 const errorData = await response.json();
                 console.error("Error generating token:", errorData.error);
@@ -77,7 +84,16 @@ export default function Page({ livestreamId, userId, course_id }) {
             {error ? (
                 <div className="text-red-500 font-semibold font-sans mb-2">{error}</div>
             ) : status === null ? (
-                <div>Loading status...</div>
+                <div className="py-2">
+                    <div className="font-serif inline-flex">
+                        <Skeleton className="w-6 h-6" />
+                        <Skeleton className="ml-2 w-32 h-6" />
+                    </div>
+
+                    <div className="mt-4">
+                        <Skeleton className="w-40 h-10 rounded-lg" />
+                    </div>
+                </div>
             ) : (
                 <div className="py-2">
                     <div

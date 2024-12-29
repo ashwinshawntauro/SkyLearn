@@ -5,19 +5,29 @@ import { Plus, Calendar, ChevronRight, Link } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import Navbar from "@/components/Navbar"
 import { usePathname } from 'next/navigation';
+import { Progress } from "@/components/ui/progress"
+import { AuthContext } from '@/providers/AuthProvider';
+import Loading from '@/app/loading';
+import {Skeleton} from '@/components/ui/skeleton';
 
 export default function Page() {
     const pathname = usePathname();
+    const { toast } = useToast();
+    const { loading } = AuthContext();
+    const [isProcessing, setProcessing] = useState(false)
     const courseId = pathname.split('/courses/')[1]?.split('/')[0];
     const [course, setCourse] = useState(null);
     const [assignments, setAssignments] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [shareableCode, setShareableCode] = useState()
     const [newAssignment, setNewAssignment] = useState({ title: '', description: '', maxPoints: 100, dueDate: new Date });
+    const accessToken = localStorage.getItem('accessToken')
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         if (courseId) {
@@ -35,25 +45,30 @@ export default function Page() {
                 }
             };
             fetchCourseData();
-            const fetchAssignments = async () => {
-                try {
-                    const response = await fetch(`/api/Assignments/getAssignments?courseId=${courseId}`);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch assignments');
-                    }
-                    const data = await response.json();
-                    setAssignments(data);
-                } catch (error) {
-                    setError(error.message);
-                }
-            };
-
             fetchAssignments();
         }
     }, [courseId]);
 
+    if (loading) {
+        <Loading />
+    }
+
+    const fetchAssignments = async () => {
+        try {
+            const response = await fetch(`/api/Assignments/getAssignments?courseId=${courseId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch assignments');
+            }
+            const data = await response.json();
+            setAssignments(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     const authenticateToken = async () => {
-        const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/authToken&scope=${encodeURIComponent('https://www.googleapis.com/auth/classroom.student-submissions.me.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.profile.emails https://www.googleapis.com/auth/classroom.profile.photos')}&prompt=select_account`;
+        await localStorage.setItem('course_redirect', courseId)
+        const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/authToken&scope=${encodeURIComponent('https://www.googleapis.com/auth/classroom.student-submissions.me.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.profile.emails https://www.googleapis.com/auth/classroom.profile.photos')}&prompt=select_account`;
         window.location.href = oauthUrl;
     }
 
@@ -72,12 +87,19 @@ export default function Page() {
             });
 
             if (updateResponse.ok) {
-                console.log(updateResponse)
-                alert("Course updated");
+                toast({
+                    variant: "success",
+                    title: "SkyLearn",
+                    description: "Course updated !",
+                })
             }
         } catch (error) {
             console.log(error);
-            alert("An error occurred while creating or updating the classroom");
+            toast({
+                variant: "failure",
+                title: "SkyLearn",
+                description: "Sorry! Couldnt update the course",
+            })
         }
     };
 
@@ -125,26 +147,160 @@ export default function Page() {
 
             if (response.ok) {
                 setIsOpen(false);
-                alert('Assignment created Successfully');
+                fetchAssignments()
+                toast({
+                    variant: "success",
+                    title: "SkyLearn",
+                    description: "Assignment created Successfully !",
+                })
             } else {
                 const errorData = await response.json();
-                console.log('Error creating assignment:', errorData);
-                alert(`Error: ${errorData.message || 'Something went wrong'}`);
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: `Please Grant Permission`,
+                })
             }
         } catch (error) {
             console.error('Network error:', error);
-            alert('Error: Could not create the assignment. Please try again.');
+            toast({
+                variant: "failure",
+                title: "SkyLearn",
+                description: "Sorry! Could not create the assignment",
+            })
         }
     };
 
+    const handleCreateClassroom = async (course) => {
+        setProcessing(true)
+        try {
+            const response = await fetch("/api/Classroom/createClassroom", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({
+                    accessToken,
+                    name: course.course_name,
+                    section: course.course_description,
+                    descriptionHeading: course.course_name,
+                    description: course.course_desc,
+                    room: String(course.course_id),
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: "Click at Grant Permission",
+                })
+                return
+            }
+            else if (response.ok) {
+                setProgress(50)
+            }
+            const data = await response.json();
+            const googleClassroomId = data.id;
+            const googleClassroomLink = data.alternateLink;
+            updateClassroomOnCreate(course, googleClassroomId, googleClassroomLink);
+            toast({
+                variant: "success",
+                title: "SkyLearn",
+                description: "Yes! Course created in Google Classroom",
+            })
+        } catch (error) {
+            console.error("Error creating Google Classroom course:", error);
+            toast({
+                variant: "success",
+                title: "SkyLearn",
+                description: "Sorry! Error creating course in Google Classroom",
+            })
+        }
+    };
+
+    const updateClassroomOnCreate = async (course, googleClassroomId, googleClassroomLink) => {
+        try {
+            const updateResponse = await fetch("/api/Classroom/updateClassroom", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    courseId: course.course_id,
+                    googleClassroomId: googleClassroomId,
+                    googleClassroomLink: googleClassroomLink
+                }),
+            });
+
+            if (updateResponse.ok) {
+                setProgress(100)
+            } else {
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: "Sorry! Failed to update course with classroom details",
+                })
+            }
+            setProcessing(false)
+        } catch (error) {
+            console.log(error);
+        }
+        setProcessing(0)
+    };
     return (
         <div className="flex h-screen bg-gray-100">
             <div className="flex-1 overflow-auto">
                 <Navbar />
+                <div className="bg-primary p-4 w-full text-white">
+                    {loading &&(
+                        <div className="w-1/2 m-auto">
+                        <Skeleton className="h-6 bg-gray-400 w-3/4 mx-auto mb-2" />
+                        <Skeleton className="h-4 bg-gray-400 w-1/2 mx-auto mb-4" />
+                        <div className="flex items-center justify-between text-sm">
+                            <Skeleton className="h-4 bg-gray-400 w-1/4" />
+                            <Skeleton className="h-4 bg-gray-400 w-1/4" />
+                        </div>
+                    </div>
+                    )}
+                    {course && (
+                        <div className='w-1/2 m-auto'>
+                            <h2 className="text-lg flex justify-center font-semibold mb-2">
+                                {course.course_name || 'None'}
+                            </h2>
+                            <p className="mb-4 flex justify-center">
+                                {course.course_description || 'None'}
+                            </p>
+                            <div className="flex items-center justify-between text-sm">
+                                <span>
+                                    <strong>Enrolled:</strong> {course.course_enrolments || 0}
+                                </span>
+                                <span>
+                                    <strong>Difficulty:</strong> {course.difficulty}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                </div>
                 <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <div className='w-full flex justify-end mb-2'>
+
+                    <div className='w-full flex justify-between mb-2'>
+                        <Button onClick={() => handleCreateClassroom(course)}>Create Classroom</Button>
                         <Button onClick={authenticateToken}>Grant Permission</Button>
                     </div>
+                    <Dialog open={isProcessing}>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Processing</DialogTitle>
+                            </DialogHeader>
+                            <div className="flex items-center justify-center flex-col gap-4">
+                                <Progress value={progress} className="w-full" />
+                                <p>Creating classroom, please wait...</p>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                     <Card className="flex mb-2 h-16 items-center">
                         <CardHeader className="flex flex-row items-center justify-between w-full space-y-0">
                             <div className="flex items-center space-x-2">
