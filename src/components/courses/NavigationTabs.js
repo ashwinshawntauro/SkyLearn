@@ -24,12 +24,14 @@ import LivestreamStatus from "./student/livestreamStatus";
 import ClassSupp from "./tutor/ClassSup";
 import GetTokens from "./tutor/GetTokens"
 import { Textarea } from "../ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+
 
 function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName, role } = AuthContext();
   const courseId = course.course_id;
-
+  const { toast } = useToast();
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
@@ -47,9 +49,14 @@ function NavigationTabs({ course }) {
   useEffect(() => {
     const initializeData = async () => {
       if (!userId) return;
-
+      if (role === "teacher") {
+        const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
+        const tutorData = await tutorRes.json();
+        setIsTutor(tutorData.some(course => course.course_id === courseId));
+      } else {
+        setIsTutor(false);
+      }
       try {
-        // Check if user is enrolled
         const enrollRes = await fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`);
         const enrollData = await enrollRes.json();
         const isEnrolled = (enrollData.getEnroll || []).some(
@@ -57,7 +64,6 @@ function NavigationTabs({ course }) {
         );
         setIsPurchased(isEnrolled);
 
-        // Check if user is tutor
         if (role === "teacher") {
           const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
           const tutorData = await tutorRes.json();
@@ -162,7 +168,11 @@ function NavigationTabs({ course }) {
       });
 
       if (response.ok) {
-        alert("Livestream ended");
+        toast({
+          variant: "success",
+          title: "SkyLearn",
+          description: "Livestream ended",
+      })
         fetchLivestreams();
       }
     } catch (error) {
@@ -192,9 +202,6 @@ function NavigationTabs({ course }) {
   if (loading) {
     return <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />;
   }
-
-  // Rest of the component remains the same...
-  // (TabsContent, rendering logic, etc.)
 
   return (
     <div>

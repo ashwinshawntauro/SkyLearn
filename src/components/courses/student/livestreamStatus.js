@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Skeleton } from "@/components/ui/skeleton"
+import { useToast } from "@/hooks/use-toast";
 
 export default function Page({ livestreamId, userId, course_id }) {
     const [status, setStatus] = useState(null);
     const [error, setError] = useState(null);
     const [tokenPresent, settokenPresent] = useState(null);
     const courseids = course_id.course_id
+    const { toast } = useToast();
 
     const getStatus = async (livestreamId, userId, courseids) => {
         try {
@@ -56,8 +58,11 @@ export default function Page({ livestreamId, userId, course_id }) {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                alert("Token raised successfully!");
+                toast({
+                    variant: "success",
+                    title: "SkyLearn",
+                    description: "Dont worry, token raised successfully!",
+                })
                 getStatus(livestreamId, userId, courseids);
             } else {
                 const errorData = await response.json();

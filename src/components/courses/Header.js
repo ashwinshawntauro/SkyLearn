@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
 import { useRouter } from 'next/navigation';
+import { useToast } from "@/hooks/use-toast";
 
 function Header({ course }) {
   const { role, userId } = AuthContext()
+  const { toast } = useToast();
   const courseId = course.course_id;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -28,13 +30,21 @@ function Header({ course }) {
         }),
       })
       if (response.ok) {
-        alert("Course has been ended")
+        toast({
+          variant: "success",
+          title: "SkyLearn",
+          description: "Course has been ended",
+      })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Sorry there was an error",
+    })
     }
   }
-
   const generateCertificate = () => {
     setIsModalOpen(true);
     setProgress(0);
@@ -53,7 +63,11 @@ function Header({ course }) {
       }
     } catch (error) {
       console.error(error);
-      alert('Error while fetching progress');
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Couldnt fetch the progress",
+    })
     }
   };
 

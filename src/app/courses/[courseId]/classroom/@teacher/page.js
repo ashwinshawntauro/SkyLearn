@@ -11,10 +11,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import Navbar from "@/components/Navbar"
 import { usePathname } from 'next/navigation';
 import { Progress } from "@/components/ui/progress"
+import { AuthContext } from '@/providers/AuthProvider';
+import Loading from '@/app/loading';
+import {Skeleton} from '@/components/ui/skeleton';
 
 export default function Page() {
     const pathname = usePathname();
     const { toast } = useToast();
+    const { loading } = AuthContext();
     const [isProcessing, setProcessing] = useState(false)
     const courseId = pathname.split('/courses/')[1]?.split('/')[0];
     const [course, setCourse] = useState(null);
@@ -44,6 +48,10 @@ export default function Page() {
             fetchAssignments();
         }
     }, [courseId]);
+
+    if (loading) {
+        <Loading />
+    }
 
     const fetchAssignments = async () => {
         try {
@@ -184,7 +192,11 @@ export default function Page() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                alert("Click at Grant Permission");
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: "Click at Grant Permission",
+                })
                 return
             }
             else if (response.ok) {
@@ -194,11 +206,18 @@ export default function Page() {
             const googleClassroomId = data.id;
             const googleClassroomLink = data.alternateLink;
             updateClassroomOnCreate(course, googleClassroomId, googleClassroomLink);
-
-            // alert("Course created in Google Classroom:", data);
+            toast({
+                variant: "success",
+                title: "SkyLearn",
+                description: "Yes! Course created in Google Classroom",
+            })
         } catch (error) {
             console.error("Error creating Google Classroom course:", error);
-            alert(error.message || "Error creating course in Google Classroom");
+            toast({
+                variant: "success",
+                title: "SkyLearn",
+                description: "Sorry! Error creating course in Google Classroom",
+            })
         }
     };
 
@@ -218,23 +237,55 @@ export default function Page() {
 
             if (updateResponse.ok) {
                 setProgress(100)
-                // alert("Course updated with Google Classroom ID and join link");
             } else {
-                alert("Failed to update course with classroom details");
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: "Sorry! Failed to update course with classroom details",
+                })
             }
             setProcessing(false)
         } catch (error) {
             console.log(error);
-            alert("An error occurred while creating or updating the classroom");
         }
         setProcessing(0)
     };
-
     return (
         <div className="flex h-screen bg-gray-100">
             <div className="flex-1 overflow-auto">
                 <Navbar />
+                <div className="bg-primary p-4 w-full text-white">
+                    {loading &&(
+                        <div className="w-1/2 m-auto">
+                        <Skeleton className="h-6 bg-gray-400 w-3/4 mx-auto mb-2" />
+                        <Skeleton className="h-4 bg-gray-400 w-1/2 mx-auto mb-4" />
+                        <div className="flex items-center justify-between text-sm">
+                            <Skeleton className="h-4 bg-gray-400 w-1/4" />
+                            <Skeleton className="h-4 bg-gray-400 w-1/4" />
+                        </div>
+                    </div>
+                    )}
+                    {course && (
+                        <div className='w-1/2 m-auto'>
+                            <h2 className="text-lg flex justify-center font-semibold mb-2">
+                                {course.course_name || 'None'}
+                            </h2>
+                            <p className="mb-4 flex justify-center">
+                                {course.course_description || 'None'}
+                            </p>
+                            <div className="flex items-center justify-between text-sm">
+                                <span>
+                                    <strong>Enrolled:</strong> {course.course_enrolments || 0}
+                                </span>
+                                <span>
+                                    <strong>Difficulty:</strong> {course.difficulty}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                </div>
                 <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+
                     <div className='w-full flex justify-between mb-2'>
                         <Button onClick={() => handleCreateClassroom(course)}>Create Classroom</Button>
                         <Button onClick={authenticateToken}>Grant Permission</Button>

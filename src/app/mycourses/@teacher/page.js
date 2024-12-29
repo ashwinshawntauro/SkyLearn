@@ -3,6 +3,11 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,13 +20,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { AuthContext } from "@/providers/AuthProvider";
-import Loading from "@/app/loading";
+import Loading from "../loading";
+import { useRouter } from "next/navigation";
 
 export default function TeacherDashboard() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const router = useRouter()
   const [showModal, setShowModal] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
   const { userId } = AuthContext();
   const [newCourse, setNewCourse] = useState({
     tutorId: userId,
@@ -31,100 +38,28 @@ export default function TeacherDashboard() {
     Diff: "",
     courseDuration: "",
     enrollment_deadline: "",
-    youtube_link:"",
+    youtube_link: "",
   });
 
   useEffect(() => {
-    setAccessToken(localStorage.getItem('accessToken'))
-
-    const fetchCourses = async (userId) => {
-      try {
-        const res = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
-        const data = await res.json();
-        setCourses(data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
     fetchCourses(userId);
-    
-  }, []);
+  }, [userId]);
 
-  // useEffect(() => {
-  //   // const hash = window.location.hash;
-  //   // if (hash) {
-  //   //   const params = new URLSearchParams(hash.substring(1));
-  //   //   const token = params.get("access_token");
-  //   }
-  // }, []);
-
-  const updateClassroom = async (course, googleClassroomId, googleClassroomLink) => {
-    try {
-      const updateResponse = await fetch("/api/Classroom/updateClassroom", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          courseId: course.course_id,
-          googleClassroomId: googleClassroomId,
-          googleClassroomLink: googleClassroomLink
-        }),
-      });
-
-      if (updateResponse.ok) {
-        alert("Course updated with Google Classroom ID and join link");
-      } else {
-        alert("Failed to update course with classroom details");
-      }
-    } catch (error) {
-      console.log(error);
-      alert("An error occurred while creating or updating the classroom");
-    }
-  };
-
-  const handleCreateClassroom = async (course) => {
-    try {
-      const response = await fetch("/api/Classroom/createClassroom", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          accessToken,
-          name: course.course_name,
-          section: course.course_description,
-          descriptionHeading: course.course_name,
-          description: course.course_desc,
-          room: String(course.course_id),
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert("Click at Grant Permission");
-        return
-      }
-      const data = await response.json();
-      const googleClassroomId = data.id;
-      const googleClassroomLink = data.alternateLink;
-      updateClassroom(course, googleClassroomId,googleClassroomLink);
-  
-      alert("Course created in Google Classroom:", data);
-    } catch (error) {
-      console.error("Error creating Google Classroom course:", error);
-      alert(error.message || "Error creating course in Google Classroom");
-    }
-  };
-
-  const authenticateToken = async () => {
-    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/authToken&scope=https://www.googleapis.com/auth/classroom.courses&prompt=select_account&courseId=${course.course_id}`;
-    window.location.href = oauthUrl;
+  if(loading){
+    <Loading/>
   }
+
+  const fetchCourses = async (userId) => {
+    try {
+      const res = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
+      const data = await res.json();
+      setCourses(data);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -153,7 +88,7 @@ export default function TeacherDashboard() {
           Diff: "",
           courseDuration: "",
           enrollment_deadline: "",
-          youtube_link:"",
+          youtube_link: "",
         });
       } else {
         console.error("Error creating course:", response.statusText);
@@ -162,10 +97,6 @@ export default function TeacherDashboard() {
       console.error("Error submitting form:", error);
     }
   };
-
-  if (loading) {
-    return <Loading/>;
-  }
 
   const deleteCourse = async (courseId) => {
     try {
@@ -178,10 +109,20 @@ export default function TeacherDashboard() {
       });
 
       if (response.ok) {
-        alert("Course Deleted");
+        toast({
+          variant: "failure",
+          title: "SkyLearn",
+          description: "Course Deleted!",
+      })
+        fetchCourses(userId)
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.error}`);
+        console.error(errorData);
+        toast({
+          variant: "failure",
+          title: "SkyLearn",
+          description: "Sorry! Couldnt delete course",
+      })
       }
     } catch (error) {
       console.log(error);
@@ -197,7 +138,6 @@ export default function TeacherDashboard() {
           <h3 className="text-lg font-semibold">My Courses</h3>
           <div className="gap-2 flex">
             <Button onClick={() => setShowModal(true)}>+ Create Course</Button>
-            <Button onClick={authenticateToken} className="bg-blue-600">Grant Classroom Permission</Button>
           </div>
         </div>
 
@@ -212,24 +152,14 @@ export default function TeacherDashboard() {
                 <p className="text-sm text-gray-500">Price: ₹{course.course_price}</p>
                 <p className="text-sm text-gray-500">Difficulty: {course.difficulty}</p>
                 <p className="text-sm text-red-600">Deadline: {new Date(course.enrollment_deadline).toLocaleDateString()}</p>
-
               </CardContent>
               <CardFooter className="mt-2 flex gap-2">
-                {course.googleClassroomId ? (
-                  <Button
-                    className="w-1/2"
-                    onClick={() => window.open(`${course.googleClassroomId}`, "_blank")}
-                  >
-                    Go to Google Classroom
-                  </Button>
-                ) : (
-                  <Button
-                    className="w-1/2"
-                    onClick={() => handleCreateClassroom(course)}
-                  >
-                    Create Google Classroom
-                  </Button>
-                )}
+                <Button
+                  className="w-1/2"
+                  onClick={() => router.push(`courses/${course.course_id}`)}
+                >
+                  Go to Course
+                </Button>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button className="w-1/2 bg-red-600 hover:bg-red-500">Delete Course</Button>
@@ -259,7 +189,7 @@ export default function TeacherDashboard() {
               <form onSubmit={handleSubmitAndRequestOAuth}>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">Course Name</label>
-                  <input
+                  <Input
                     type="text"
                     name="CourseName"
                     value={newCourse.CourseName}
@@ -270,17 +200,17 @@ export default function TeacherDashboard() {
                 </div>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">Description</label>
-                  <textarea
+                  <Textarea
                     name="CourseDesc"
                     value={newCourse.CourseDesc}
                     onChange={handleInputChange}
                     required
                     className="w-full p-2 border rounded"
-                  ></textarea>
+                  ></Textarea>
                 </div>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">Price</label>
-                  <input
+                  <Input
                     type="number"
                     name="course_price"
                     value={newCourse.course_price}
