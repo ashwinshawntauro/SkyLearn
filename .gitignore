@@ -35,7 +35,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-build/cache/webpack/server-production/1.pack 
-build/cache/webpack/server-production/0.pack 
-build/cache/webpack/client-production/0.pack 
