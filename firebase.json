@@ -1,14 +1,12 @@
 {
   "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
     "site":"skylearn",
-    "frameworksBackend": {
-      "region": "us-central1"
-    }
+    "rewrites": [{
+        "source": "**",
+        "run": {
+          "serviceId": "skylearn",
+          "region": "us-central1"
+        }
+      }]
   }
 }

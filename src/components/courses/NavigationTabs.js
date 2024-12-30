@@ -184,7 +184,7 @@ function NavigationTabs({ course }) {
     e.preventDefault();
     try {
       const genAI = new GoogleGenerativeAI(
-        process.env.NEXT_PUBLIC_GEMINI_API_KEY
+        "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
       );
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const prompt = `My name is ${userName}. You are an expert tutor on ${course.course_name}. Your Course description is ${course.course_description}. A student asked: "${userQuestion}".

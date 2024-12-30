@@ -1,0 +1,31 @@
+# Ignore node_modules and build output
+node_modules
+.next
+out
+
+# Ignore dependency files
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Ignore environment and config files
+.env
+.env.local
+.env.*.local
+
+# Ignore IDE and editor files
+.idea
+.vscode
+*.swp
+
+# Ignore logs
+logs
+*.log
+*.tflite
+
+# Ignore Docker-related files (if needed)
+Dockerfile
+.dockerignore
+
+# Ignore miscellaneous
+*.DS_Store
