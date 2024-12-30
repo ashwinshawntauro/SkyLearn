@@ -16,9 +16,9 @@ export async function GET(req) {
         }
 
         const oauth2Client = new google.auth.OAuth2(
-            process.env.CLIENT_ID,
-            process.env.CLIENT_SECRET,
-            process.env.REDIRECT_URI
+            "128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com",
+            "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",
+            "http://localhost:5000/authToken"
         );
         oauth2Client.setCredentials({ access_token: accessToken });
 

@@ -86,7 +86,7 @@ export default function Order() {
     try {
       const orderId = await createOrderId()
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        key: "rzp_test_BKcjMd7hTo8tRU",
         amount: parseFloat(amount) * 100,
         currency: "INR",
         name: "Skylearn",
