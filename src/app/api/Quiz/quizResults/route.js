@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 export async function POST(req) {
   try {
     // Parse the incoming request body
-    const { user_id, course_id, total_score, is_passed } = await req.json();
+    const { user_id, course_id, total_score, percentage_score, is_passed } =
+      await req.json();
 
     // Validate the input data
     if (!user_id || !course_id || total_score == null || is_passed == null) {
@@ -26,12 +27,14 @@ export async function POST(req) {
       },
     });
 
-    const leaderboardUpdate =await prisma.lEADERBOARD.create({
+    const leaderboardUpdate = await prisma.lEADERBOARD.create({
       data: {
-        student_id:user_id,
-        course_id:course_id,
-        rank:null,
-        score:total_score,
+        student_id: user_id,
+        course_id: course_id,
+        rank: null,
+        score: total_score,
+        marksStatus: "Not graded",
+        percentage_score: percentage_score,
       },
     });
 

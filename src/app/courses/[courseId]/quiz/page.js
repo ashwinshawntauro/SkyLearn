@@ -7,15 +7,15 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Router, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle, XCircle } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import { CheckCircle, XCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 const QuizApp = () => {
   const course_id = useParams();
-  const router = useRouter()
+  const router = useRouter();
   const { toast } = useToast();
-  const { userId } = AuthContext()
+  const { userId } = AuthContext();
   const [questions, setQuestions] = useState([]);
   const [stage, setStage] = useState();
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -43,7 +43,9 @@ const QuizApp = () => {
     if (course_id) {
       const fetchQuizData = async () => {
         try {
-          const res = await fetch(`/api/Quiz/getQuizStatus?courseId=${course_id.courseId}&userId=${userId}`);
+          const res = await fetch(
+            `/api/Quiz/getQuizStatus?courseId=${course_id.courseId}&userId=${userId}`
+          );
           if (res.ok) {
             const data = await res.json();
             if (data.quiz_attempted) {
@@ -51,9 +53,12 @@ const QuizApp = () => {
             } else {
               setStage("home");
 
-              const resp = await fetch(`/api/Quiz/getQuizes/?courseId=${course_id.courseId}/quiz`, {
-                method: "POST",
-              });
+              const resp = await fetch(
+                `/api/Quiz/getQuizes/?courseId=${course_id.courseId}/quiz`,
+                {
+                  method: "POST",
+                }
+              );
               if (resp.ok) {
                 const quizData = await resp.json();
                 const formattedQuestions = quizData.map((q) => ({
@@ -89,7 +94,7 @@ const QuizApp = () => {
           variant: "failure",
           title: "Quiz",
           description: "Quiz ended as you exited fullscreen!",
-        })
+        });
         calculateAndEndQuiz();
       }
     };
@@ -100,7 +105,7 @@ const QuizApp = () => {
           variant: "failure",
           title: "Quiz",
           description: "Quiz ended as you switched windows or tabs!",
-        })
+        });
         calculateAndEndQuiz();
       }
     };
@@ -111,7 +116,7 @@ const QuizApp = () => {
           variant: "failure",
           title: "Quiz",
           description: "Quiz ended as you switched windows!",
-        })
+        });
         calculateAndEndQuiz();
       }
     };
@@ -131,7 +136,7 @@ const QuizApp = () => {
         variant: "failure",
         title: "Quiz",
         description: "Time's up!",
-      })
+      });
       calculateAndEndQuiz();
     }
     if (stage === "quiz") {
@@ -152,18 +157,21 @@ const QuizApp = () => {
       document.exitFullscreen();
     }
 
+    const percentage = (calculatedScore / questions.length) * 100;
+
     const quizResult = {
       user_id: userId,
       course_id: parseInt(course_id.courseId, 10),
       total_score: calculatedScore,
-      is_passed: calculatedScore >= Math.ceil(questions.length * 0.6)
+      is_passed: calculatedScore >= Math.ceil(questions.length * 0.6),
+      percentage_score: percentage.toFixed(2), // Optional: round to 2 decimal places
     };
 
     try {
-      const res = await fetch('/api/Quiz/quizResults', {
-        method: 'POST',
+      const res = await fetch("/api/Quiz/quizResults", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(quizResult),
       });
@@ -173,27 +181,24 @@ const QuizApp = () => {
           variant: "success",
           title: "Quiz",
           description: "Done! your quiz is submitted",
-        })
-      }
-      else {
+        });
+      } else {
         toast({
           variant: "failure",
           title: "Quiz",
           description: "Sorry! Quiz not submitted!",
-        })
+        });
       }
     } catch (error) {
-      console.error('Error submitting quiz results:', error);
+      console.error("Error submitting quiz results:", error);
       toast({
         variant: "failure",
         title: "Quiz",
-        description: "There was an issue submitting your results. Please try again.",
-      })
+        description:
+          "There was an issue submitting your results. Please try again.",
+      });
     }
   };
-
-
-
 
   const startQuiz = () => {
     if (questions.length === 0) {
@@ -201,7 +206,7 @@ const QuizApp = () => {
         variant: "failure",
         title: "Quiz",
         description: "No questions available to start the quiz.",
-      })
+      });
       return;
     }
     document.documentElement
@@ -221,8 +226,6 @@ const QuizApp = () => {
     updatedAnswers[currentQuestion] = index;
     setAnswers(updatedAnswers);
   };
-
-
 
   if (loading) {
     return <Loading />;
@@ -251,8 +254,11 @@ const QuizApp = () => {
           {questions.map((_, index) => (
             <Button
               key={index}
-              className={`py-2 px-4 rounded ${currentQuestion === index ? "bg-blue-500 text-white" : "bg-gray-200"
-                }`}
+              className={`py-2 px-4 rounded ${
+                currentQuestion === index
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200"
+              }`}
               onClick={() => setCurrentQuestion(index)}
             >
               {index + 1}
@@ -268,10 +274,11 @@ const QuizApp = () => {
             <Button
               key={index}
               onClick={() => handleAnswer(index)}
-              className={`block w-full text-left py-2 px-4 rounded mb-2 ${answers[currentQuestion] === index
-                ? "bg-primary text-white"
-                : "bg-gray-100 text-black"
-                }`}
+              className={`block w-full text-left py-2 px-4 rounded mb-2 ${
+                answers[currentQuestion] === index
+                  ? "bg-primary text-white"
+                  : "bg-gray-100 text-black"
+              }`}
             >
               {option}
             </Button>
@@ -281,9 +288,7 @@ const QuizApp = () => {
         <div className="flex justify-between items-center">
           <Button
             className="bg-gray-500 text-black py-2 px-4 rounded hover:bg-gray-600"
-            onClick={() =>
-              setCurrentQuestion((prev) => Math.max(prev - 1, 0))
-            }
+            onClick={() => setCurrentQuestion((prev) => Math.max(prev - 1, 0))}
             disabled={currentQuestion === 0}
           >
             Previous
@@ -317,13 +322,20 @@ const QuizApp = () => {
   if (stage === "attempted") {
     return (
       <div className="flex flex-col items-center space-y-4 mt-10">
-        <h1 className="text-3xl font-bold text-primary">Quiz Already Attempted</h1>
-        <p className="text-lg">You have already submitted this quiz. Retaking is not allowed.</p>
-        <Button onClick={() => router.replace(`/courses/${course_id.courseId}`)}>Back to Home</Button>
+        <h1 className="text-3xl font-bold text-primary">
+          Quiz Already Attempted
+        </h1>
+        <p className="text-lg">
+          You have already submitted this quiz. Retaking is not allowed.
+        </p>
+        <Button
+          onClick={() => router.replace(`/courses/${course_id.courseId}`)}
+        >
+          Back to Home
+        </Button>
       </div>
     );
   }
-
 
   if (stage === "results") {
     return (
@@ -337,15 +349,25 @@ const QuizApp = () => {
             <div className="text-3xl font-bold mb-2">
               {score} / {questions.length}
             </div>
-            <Progress value={score / questions.length*100} className="h-3 mb-2" />
+            <Progress
+              value={(score / questions.length) * 100}
+              className="h-3 mb-2"
+            />
             <p className="text-sm text-muted-foreground">
-              You got {(score / questions.length*100).toFixed(1)}% correct
+              You got {((score / questions.length) * 100).toFixed(1)}% correct
             </p>
           </CardContent>
         </Card>
         <div className="space-y-6">
           {questions.map((q, index) => (
-            <Card key={index} className={answers[index] === q.correct ? "border-green-500" : "border-red-500"}>
+            <Card
+              key={index}
+              className={
+                answers[index] === q.correct
+                  ? "border-green-500"
+                  : "border-red-500"
+              }
+            >
               <CardHeader>
                 <CardTitle className="flex items-start gap-2">
                   {answers[index] === q.correct ? (
@@ -360,14 +382,22 @@ const QuizApp = () => {
                 <div className="grid gap-2">
                   <div>
                     <span className="font-semibold">Your Answer: </span>
-                    <span className={answers[index] === q.correct ? "text-green-600" : "text-red-600"}>
+                    <span
+                      className={
+                        answers[index] === q.correct
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }
+                    >
                       {q.options[answers[index]] || "Not Answered"}
                     </span>
                   </div>
                   {answers[index] !== q.correct && (
                     <div>
                       <span className="font-semibold">Correct Answer: </span>
-                      <span className="text-green-600">{q.options[q.correct]}</span>
+                      <span className="text-green-600">
+                        {q.options[q.correct]}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -375,7 +405,12 @@ const QuizApp = () => {
             </Card>
           ))}
         </div>
-        <Button className="mt-5" onClick={()=>router.push(`/courses/${course_id.courseId}`)}>Return to Course</Button>
+        <Button
+          className="mt-5"
+          onClick={() => router.push(`/courses/${course_id.courseId}`)}
+        >
+          Return to Course
+        </Button>
       </div>
     );
   }

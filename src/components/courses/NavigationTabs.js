@@ -491,7 +491,7 @@ function NavigationTabs({ course }) {
                       {entry.STUDENT?.student_name ||
                         `Student ${entry.student_id}`}
                     </TableCell>{" "}
-                    <TableCell className="text-center">{entry.score}</TableCell>
+                    <TableCell className="text-center">{entry.percentage_score}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
