@@ -213,16 +213,18 @@ function Header({ course }) {
           </div>
           )
         }
-        {role === "student" && course.status === 'ended' && isPurchased &&
-          <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={generateCertificate}>
-            Generate Certificate
-          </Button>
-        }
-        {role === "student" && isPurchased && course.googleClassroomLink !== null &&
-          <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.googleClassroomLink}?cjc=${course.googleClassroomJoinLink}`)}>
-            Join Classroom
-          </Button>
-        }
+        <div className="inline-flex w-full justify-between">
+          {role === "student" && isCourseEnded && isPurchased &&
+            <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={generateCertificate}>
+              Generate Certificate
+            </Button>
+          }
+          {role === "student" && isPurchased && course.googleClassroomLink !== null &&
+            <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.googleClassroomLink}?cjc=${course.googleClassroomJoinLink}`)}>
+              Google Classroom
+            </Button>
+          }
+        </div>
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
