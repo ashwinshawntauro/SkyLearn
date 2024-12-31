@@ -18,7 +18,6 @@ function Header({ course }) {
   const { role, userId } = AuthContext();
   const { toast } = useToast();
   const courseId = course.course_id;
-  const { toast } = useToast()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isPurchased, setIsPurchased] = useState(null);
@@ -145,6 +144,7 @@ function Header({ course }) {
   }, [userId, courseId, role]);
 
   return (
+    <div>
     <div className="bg-primary text-white py-8 px-8 rounded-sm">
       <div className="container mx-auto text-center">
         <h1 className="text-xl font-bold mb-4">{course.course_name}</h1>
@@ -216,7 +216,7 @@ function Header({ course }) {
           <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.googleClassroomLink}?cjc=${course.googleClassroomJoinLink}`)}>
             Join Classroom
           </Button>
-        )}
+        }
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
