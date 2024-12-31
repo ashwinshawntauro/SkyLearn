@@ -3,6 +3,11 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +27,8 @@ import { useRouter } from "next/navigation";
 export default function TeacherDashboard() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+  const router = useRouter()
   const [showModal, setShowModal] = useState(false);
   const router = useRouter()
   const { userId } = AuthContext();
@@ -35,12 +42,24 @@ export default function TeacherDashboard() {
     courseDuration: "",
     enrollment_deadline: "",
     youtube_link: "",
+    youtube_link: "",
   });
 
   useEffect(() => {
     fetchCourses(userId);
   });
 
+  const fetchCourses = async (userId) => {
+    try {
+      const res = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
+      const data = await res.json();
+      setCourses(data);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const fetchCourses = async (userId) => {
     try {
       const res = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
@@ -80,6 +99,7 @@ export default function TeacherDashboard() {
           Diff: "",
           courseDuration: "",
           enrollment_deadline: "",
+          youtube_link: "",
           youtube_link: "",
         });
         toast({
@@ -192,7 +212,7 @@ export default function TeacherDashboard() {
               <form onSubmit={handleSubmitAndRequestOAuth}>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">Course Name</label>
-                  <input
+                  <Input
                     type="text"
                     name="CourseName"
                     value={newCourse.CourseName}
@@ -203,17 +223,17 @@ export default function TeacherDashboard() {
                 </div>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">Description</label>
-                  <textarea
+                  <Textarea
                     name="CourseDesc"
                     value={newCourse.CourseDesc}
                     onChange={handleInputChange}
                     required
                     className="w-full p-2 border rounded"
-                  ></textarea>
+                  ></Textarea>
                 </div>
                 <div className="mb-4">
                   <label className="block text-sm font-medium text-gray-700">Price</label>
-                  <input
+                  <Input
                     type="number"
                     name="course_price"
                     value={newCourse.course_price}

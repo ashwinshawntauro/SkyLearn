@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
 
   const getUser = async (userEmail) => {
     try {
-      const resp = await fetch(`/api/getUser?userEmail=${encodeURIComponent(userEmail)}`, {
+      const resp = await fetch(`/api/getUser?userEmail=${userEmail}`, {
         method: "GET",
       });
       if (resp.ok) {

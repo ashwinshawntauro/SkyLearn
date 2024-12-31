@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
@@ -15,11 +16,33 @@ import {
 import { useState, useEffect } from "react";
 
 function Navbar() {
-  const { userName, isLogged, logout } = AuthContext();
+  const { userId,userName, isLogged, logout } = AuthContext();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [points, setPoints] = useState(0);
+
+
+  useEffect(() => {
+    // Fetch points only if userId is available
+    if (userId) {
+      async function fetchPoints() {
+        try {
+          const response = await fetch(`/api/getUserPoints?studentId=${userId}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch points");
+          }
+          const data = await response.json();
+          setPoints(data.points || 0);
+        } catch (error) {
+          console.error("Error fetching points:", error);
+        }
+      }
+
+      fetchPoints();
+    }
+  }, [userId]);
 
   const fetchSearchResults = async (query) => {
     setIsLoading(true);
@@ -113,7 +136,7 @@ function Navbar() {
         {isLogged && (
           <div className="flex items-center space-x-4">
             <span className="inline-flex font-semibold text-sm items-center bg-white text-black p-1.5 px-2 rounded-lg shadow border border-gray-100 whitespace-nowrap">
-              Points: 0
+            Points: {points}
             </span>
 
             <DropdownMenu>

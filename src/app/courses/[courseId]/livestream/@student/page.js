@@ -30,7 +30,6 @@ export default function Page({ params }) {
   const videoRef = useRef();
   const { toast } = useToast();
   const [peer, setPeer] = useState(null);
-  const [activeTab, setActiveTab] = useState("module1");
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState(null);
@@ -41,7 +40,6 @@ export default function Page({ params }) {
   const liveId = room.split("L")[1];
   const { userId, userName } = AuthContext();
 
-  console.log(userName);
   useEffect(() => {
     const messagesRef = collection(db, "chatMessages", room, "messages");
     const q = query(messagesRef, orderBy("timestamp"));
@@ -54,7 +52,6 @@ export default function Page({ params }) {
       setMessages(messagesList);
     });
 
-    // Cleanup the listener when component unmounts
     return () => unsubscribe();
   }, [room]);
 

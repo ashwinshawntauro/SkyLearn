@@ -87,6 +87,7 @@ export default function Dashboard() {
       if (res.ok) {
         console.log("User updated:", data);
         setOldUserName(data.tutor_name);
+        setOldUserName(data.tutor_name);
         setOldAdd(data.address);
         closeDialog();
       } else {
@@ -142,7 +143,6 @@ export default function Dashboard() {
                       </span>
                     </DialogTrigger>
 
-                    {/* Dialog Content for Edit Account Info */}
                     <DialogContent className="px-6 py-4">
                       <DialogHeader>
                         <DialogTitle className="text-center text-xl font-semibold text-gray-800">
