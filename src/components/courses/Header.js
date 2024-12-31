@@ -141,6 +141,7 @@ function Header({ course }) {
     initializeData();
     getProgress();
     getCourseStatus(); // Fetch course status on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, courseId, role]);
 
   return (
