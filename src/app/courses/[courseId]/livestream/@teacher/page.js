@@ -129,7 +129,7 @@ export default function Page({ params }) {
         });
       } else {
         stream = await navigator.mediaDevices.getDisplayMedia({
-          video: { displaySurface: "monitor" },
+          video: { displaySurface: "monitor"},
           audio: true,
         });
       }
@@ -195,6 +195,7 @@ export default function Page({ params }) {
         })
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          videoRef.current.muted = true;
         }
       } else {
         throw new Error("Failed to start streaming");
