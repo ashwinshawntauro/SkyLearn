@@ -231,4 +231,4 @@ def upload_certificate_route():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)  # Ensure debug=True is set
+    app.run(debug=True, port=4000,host='0.0.0.0')  # Ensure debug=True is set
