@@ -12,14 +12,17 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
-export default function Page({ courseId }) {
+export default function Page({ courseId,fetchNotes }) {
   const [formData, setFormData] = useState({
     noteTitle: "",
     noteText: "",
   });
+    const { toast } = useToast()
+  
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(false); 
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Dialog open state
 
   const handleChange = (e) => {
@@ -56,7 +59,12 @@ export default function Page({ courseId }) {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Note uploaded successfully!");
+        toast({
+          variant: "success",
+          title: "SkyLearn",
+          description: "Note uploaded successfully!",
+        });
+        fetchNotes()
         setFormData({ noteTitle: "", noteText: "" }); // Reset the form
         setIsDialogOpen(false); // Close the dialog after submission
       } else {

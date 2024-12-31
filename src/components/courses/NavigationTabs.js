@@ -430,7 +430,7 @@ function NavigationTabs({ course }) {
           <TabsContent value="notes" className="p-2">
             {isTutor ? (
               <>
-                <TutorNotes courseId={courseId} />
+                <TutorNotes courseId={courseId} fetchNotes={fetchNotes}/>
                 <div>
                   {notes && notes.length > 0 ? (
                     notes.map((note) => (
@@ -468,7 +468,7 @@ function NavigationTabs({ course }) {
             {isTutor ? (
               <>
                 {/* Display QuizForm for Tutor */}
-                <QuizForm courseId={courseId} />
+                <QuizForm courseId={courseId} fetchQuizData={fetchQuizData}/>
 
                 {/* Display the questions if they exist */}
                 <div>
