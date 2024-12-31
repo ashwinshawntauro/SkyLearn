@@ -42,17 +42,23 @@ export default function Page() {
   return (
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
-      <div className="container-fluid mx-auto grid grid-cols-9 gap-3 p-4">
-        <div className="col-span-6">
-          <Header course={course} className="container mx-auto" />
-          <div>
-            <NavigationTabs course={course} />
+      <div className="container-fluid mx-auto p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-9 gap-3">
+          {/* Main Content */}
+          <div className="col-span-1 sm:col-span-2 lg:col-span-6">
+            <Header course={course} className="container mx-auto" />
+            <div>
+              <NavigationTabs course={course} />
+            </div>
           </div>
-        </div>
-        <div className="col-span-3 flex flex-col h-full">
-          <CourseDetails course={course} className="md:w-full w-full flex-grow" />
+  
+          {/* Course Details Sidebar */}
+          <div className="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-col h-full">
+            <CourseDetails course={course} className="md:w-full w-full flex-grow" />
+          </div>
         </div>
       </div>
     </div>
   );
+  
 }

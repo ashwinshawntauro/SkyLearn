@@ -105,25 +105,23 @@ export default function Dashboard() {
       <div className="container mx-auto">
         <header className="flex justify-between items-center py-4 px-6 border-b bg-white shadow-sm">
           <h1 className="text-2xl font-semibold text-gray-800">My Profile</h1>
-          <Button className="lg:hidden p-2 border rounded-md text-gray-700 hover:text-gray-900 focus:outline-none">
-            ☰
-          </Button>
+          
         </header>
 
         <main className="mt-6 space-y-6">
           <section className="grid lg:grid-cols-2 gap-4">
-            <Card className="ml-10 shadow-lg rounded-lg overflow-hidden bg-white">
-              <CardHeader className="px-6 py-4 border-b border-gray-200">
-                <CardTitle className="inline-flex justify-between items-center text-lg font-semibold text-gray-800">
+          <Card className="ml-10 shadow-lg rounded-lg overflow-hidden bg-white sm:ml-4 sm:mx-2 sm:p-4">
+            <CardHeader className="px-6 py-4 border-b border-gray-200 sm:px-4 sm:py-3">
+              <CardTitle className="inline-flex justify-between items-center text-lg font-semibold text-gray-800 sm:text-base sm:flex-col sm:text-center">
                   <span>User Details</span>
 
                   {/* Edit Account Information Dialog Trigger */}
                   <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                     <DialogTrigger>
-                      <span
-                        onClick={openDialog}
-                        className="cursor-pointer text-gray-600 hover:text-gray-900 transition duration-300"
-                      >
+                    <span
+  onClick={openDialog}
+  className="cursor-pointer text-gray-600 hover:text-gray-900 transition duration-300 sm:w-5 sm:h-5"
+>
                         <svg
                           className="w-6 h-6"
                           aria-hidden="true"
@@ -145,7 +143,7 @@ export default function Dashboard() {
                     </DialogTrigger>
 
                     {/* Dialog Content for Edit Account Info */}
-                    <DialogContent className="px-6 py-4">
+                    <DialogContent className="px-6 py-4 sm:px-4 sm:py-3">
                       <DialogHeader>
                         <DialogTitle className="text-center text-xl font-semibold text-gray-800">
                           Edit your Account Info
@@ -159,11 +157,12 @@ export default function Dashboard() {
                               Full Name
                             </Label>
                             <Input
-                              id="userName"
-                              value={newUserName}
-                              onChange={(e) => setNewUserName(e.target.value)}
-                              className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            />
+  id="userName"
+  value={newUserName}
+  onChange={(e) => setNewUserName(e.target.value)}
+  className="mt-1 p-2 border border-gray-300 rounded-md w-full sm:p-2"
+/>
+
                           </div>
                           <div>
                             <Label
@@ -197,10 +196,11 @@ export default function Dashboard() {
                         </DialogDescription>
                       </DialogHeader>
                       <Button
-                        onClick={handleSave}
-                        className="mt-4 w-full bg-primary text-white hover:bg-primary-light rounded-md py-2"
-                        disabled={saving} // Disable button while saving
-                      >
+  onClick={handleSave}
+  className="mt-4 w-full bg-primary text-white hover:bg-primary-light rounded-md py-2 sm:py-1 sm:text-sm"
+  disabled={saving}
+>
+
                         {saving ? (
                           <div className="flex justify-center items-center space-x-2">
                             <svg

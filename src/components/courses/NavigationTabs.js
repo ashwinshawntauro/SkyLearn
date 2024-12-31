@@ -191,22 +191,18 @@ function NavigationTabs({ course }) {
   return (
     <div>
       {isPurchased || isTutor ? (
-        <Tabs
-          defaultValue="livestreams"
-          className="w-full p-2 bg-gray-100 h-auto"
-        >
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="livestreams">Livestreams</TabsTrigger>
-            <TabsTrigger value="notes">Notes</TabsTrigger>
-            <TabsTrigger value="quizzes">Quizzes</TabsTrigger>
-            <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
-            {isPurchased ? (
-              <TabsTrigger value="askAi">Ask AI</TabsTrigger>
-            ) : (
-              <TabsTrigger value="students">Students Enrolled</TabsTrigger>
-            )}
-          </TabsList>
-
+        <Tabs defaultValue="livestreams" className="w-full p-2 bg-gray-100 h-auto">
+        <TabsList className="grid w-full grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <TabsTrigger value="livestreams">Livestreams</TabsTrigger>
+          <TabsTrigger value="notes">Notes</TabsTrigger>
+          <TabsTrigger value="quizzes">Quizzes</TabsTrigger>
+          <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
+          {isPurchased ? (
+            <TabsTrigger value="askAi">Ask AI</TabsTrigger>
+          ) : (
+            <TabsTrigger value="students">Students Enrolled</TabsTrigger>
+          )}
+        </TabsList>
           <TabsContent
             value="livestreams"
             className="p-2 max-w-full lg:flex flex-col gap-3"
