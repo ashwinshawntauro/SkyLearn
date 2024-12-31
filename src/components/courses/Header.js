@@ -6,10 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
 import { useRouter } from 'next/navigation';
+import { useToast } from "@/hooks/use-toast";
 
 function Header({ course }) {
   const { role, userId } = AuthContext()
   const courseId = course.course_id;
+  const { toast } = useToast()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isPurchased, setIsPurchased] = useState(null);
@@ -28,7 +30,11 @@ function Header({ course }) {
         }),
       })
       if (response.ok) {
-        alert("Course has been ended")
+        toast({
+          variant: "success",
+          title: `${course.course_name}`,
+          description: "Course has been ended",
+        })
       }
     } catch (error) {
       console.log(error)
@@ -53,7 +59,11 @@ function Header({ course }) {
       }
     } catch (error) {
       console.error(error);
-      alert('Error while fetching progress');
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Sorry! Couldnt fetch the progress",
+      })
     }
   };
 
@@ -69,7 +79,6 @@ function Header({ course }) {
         );
         setIsPurchased(isEnrolled);
 
-        // Check if user is tutor
         if (role === "teacher") {
           const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
           const tutorData = await tutorRes.json();
@@ -108,7 +117,7 @@ function Header({ course }) {
             Generate Certificate
           </Button>
         }
-        {role === "student" && isPurchased &&
+        {role === "student" && isPurchased && course.googleClassroomLink !== null &&
           <Button className="bg-white hover:bg-zinc-300 font-semibold text-black" onClick={() => router.push(`${course.googleClassroomLink}?cjc=${course.googleClassroomJoinLink}`)}>
             Join Classroom
           </Button>
@@ -140,7 +149,7 @@ function Header({ course }) {
           <DialogFooter>
             <Button
               onClick={() => setIsModalOpen(false)}
-              disabled={(parseInt(getProgressValue.f4) < 50) || getProgressValue.f5<1}
+              disabled={(parseInt(getProgressValue.f4) < 50) || getProgressValue.f5 < 1}
             >
               Generate
             </Button>

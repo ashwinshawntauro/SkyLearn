@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -55,6 +55,7 @@ model COURSE {
   STUDENTCLASSES          STUDENTCLASSES[]
   TEACHING                TEACHING[]
   livestreams             livestreams[]
+  progress                progress[]
   user_tokens             user_tokens[]
 }
 
@@ -148,6 +149,7 @@ model STUDENT {
   LEADERBOARD        LEADERBOARD[]
   STUDENTCLASSES     STUDENTCLASSES[]
   SUBMISSION         SUBMISSION[]
+  progress           progress[]
   user_tokens        user_tokens[]
 }
 
@@ -211,6 +213,7 @@ model livestreams {
   description                                        String?            @db.Text
   datetime                                           DateTime?          @db.Date
   refLiveId                                          Int?
+  time                                               String?            @db.VarChar(8)
   STUDENTCLASSES                                     STUDENTCLASSES[]
   COURSE                                             COURSE             @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_1")
   TUTOR                                              TUTOR              @relation(fields: [tutor_id], references: [tutor_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_2")
@@ -239,6 +242,19 @@ model user_tokens {
   @@index([livestream_id], map: "fk_livestream_id")
   @@index([refLiveId], map: "fk_refLiveId")
   @@index([user_id], map: "fk_user_id")
+}
+
+model progress {
+  id                    Int     @id @default(autoincrement())
+  student_id            Int
+  course_id             Int
+  quiz_status           Boolean @default(false)
+  livestream_percentage Float   @default(0) @db.Float
+  STUDENT               STUDENT @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "progress_ibfk_1")
+  COURSE                COURSE  @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "progress_ibfk_2")
+
+  @@index([course_id], map: "course_id")
+  @@index([student_id], map: "student_id")
 }
 
 enum livestreams_status {

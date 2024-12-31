@@ -169,7 +169,7 @@ export default function Page({ params }) {
       });
       await newPeer.setLocalDescription(offer);
 
-      const response = await fetch("http://35.208.76.68:5000/broadcast", {
+      const response = await fetch("http://35.208.76.68/broadcast", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -275,7 +275,7 @@ export default function Page({ params }) {
           status: "ended",
         }),
       });
-      const response = await fetch("http://35.208.76.68:5000/stop-broadcast", {
+      const response = await fetch("http://35.208.76.68/stop-broadcast", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ room: room }),

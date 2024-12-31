@@ -5,23 +5,24 @@ import { AuthContext } from "@/providers/AuthProvider";
 import Loading from "../loading";
 import { useRouter, useParams } from "next/navigation";
 
-export default function Layout({ teacher }) {
+export default function Layout({ student}) {
   const { isLogged, role, loading: authLoading, userId } = AuthContext();
-  const [isTutor, setIsTutor] = useState(null); 
+  const [isPurchased, setIsPurchased] = useState(null); 
   const [dataLoading, setDataLoading] = useState(true); 
   const router = useRouter();
   const { courseId } = useParams(); 
 
   const fetchUserDetails = useCallback(async () => {
     try {
-      const [tutorRes] = await Promise.all([
-        fetch(`/api/Course/getTutorCourses?tutorId=${userId}`),
+      const [enrollRes, tutorRes] = await Promise.all([
+        fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`),
       ]);
-      if (role === "teacher" && tutorRes && tutorRes.ok) {
-        const tutorData = await tutorRes.json();
-        setIsTutor(tutorData.some((course) => course.course_id === parseInt(courseId)));
-      } else {
-        setIsTutor(false);
+      if (enrollRes.ok) {
+        const enrollData = await enrollRes.json();
+        const isEnrolled = (enrollData.getEnroll || []).some(
+          (course) => course.course_id === parseInt(courseId)
+        );
+        setIsPurchased(isEnrolled);
       }
     } catch (error) {
       console.error("Error fetching user details:", error);
@@ -45,11 +46,9 @@ export default function Layout({ teacher }) {
   if (authLoading || dataLoading) {
     return <Loading />;
   }
-
-  if (role === "teacher" && isTutor) {
-    return teacher;
+  if (role === "student" && isPurchased) {
+    return student;
   }
-
   return(
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="text-center p-8 bg-white rounded-lg shadow-md">

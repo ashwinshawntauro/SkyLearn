@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { AuthContext } from "@/providers/AuthProvider";
-import Loading from "../loading";
+import Loading from "../../loading";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Router, useRouter } from "next/navigation";

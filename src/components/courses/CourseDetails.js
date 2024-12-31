@@ -12,7 +12,7 @@ function CourseDetails({ course }) {
   const courseDesc = course.course_description;
   const [enrollmentCount, setEnrollmentCount] = useState(null);
 
-  const { userId, role } = AuthContext();
+  const { userId, role, isLogged, loading } = AuthContext();
   const [isTutor, setIsTutor] = useState(null);
   const [isPurchased, setIsPurchased] = useState(null);
 
@@ -126,7 +126,7 @@ function CourseDetails({ course }) {
             course.youtube_link && course.youtube_link.includes("youtube.com/watch")
               ? `https://www.youtube.com/embed/${course.youtube_link.split('v=')[1]?.split('&')[0]}`
               : "https://www.youtube.com/embed/default-video-id"
-          }          
+          }
           title="Course Video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -200,6 +200,12 @@ function CourseDetails({ course }) {
               />
             </svg>
             Enroll in this Course
+          </Button>
+        ) : !isLogged && !loading ? (
+          <Button
+            onClick={()=>router.push('/signin')}
+            className="w-full flex justify-center mt-2 border bg-primary group p-2 rounded-lg hover:bg-primary-light" >
+            Sign In to Purchase
           </Button>
         ) : (
           <Skeleton className="w-full h-[36px] rounded-lg" />

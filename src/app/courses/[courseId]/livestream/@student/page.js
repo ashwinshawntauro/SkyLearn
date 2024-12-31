@@ -212,7 +212,7 @@ export default function Page({ params }) {
       });
       await peer.setLocalDescription(offer);
 
-      const response = await fetch("http://35.208.76.68:5000/consumer", {
+      const response = await fetch("http://35.208.76.68/consumer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

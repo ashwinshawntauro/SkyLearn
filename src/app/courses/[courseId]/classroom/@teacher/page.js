@@ -44,7 +44,7 @@ export default function Page() {
             fetchAssignments();
         }
     }, [courseId]);
-
+    console.log(course)
     const fetchAssignments = async () => {
         try {
             const response = await fetch(`/api/Assignments/getAssignments?courseId=${courseId}`);
@@ -60,7 +60,7 @@ export default function Page() {
 
     const authenticateToken = async () => {
         await localStorage.setItem('course_redirect', courseId)
-        const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=http://localhost:3000/authToken&scope=${encodeURIComponent('https://www.googleapis.com/auth/classroom.student-submissions.me.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.profile.emails https://www.googleapis.com/auth/classroom.profile.photos')}&prompt=select_account`;
+        const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&client_id=128899871237-aip8s1bp02dd3bhtc77q38eo3hidlhjj.apps.googleusercontent.com&redirect_uri=https://skylearn.web.app/authToken&scope=${encodeURIComponent('https://www.googleapis.com/auth/classroom.student-submissions.me.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/classroom.profile.emails https://www.googleapis.com/auth/classroom.profile.photos')}&prompt=select_account`;
         window.location.href = oauthUrl;
     }
 
@@ -184,7 +184,12 @@ export default function Page() {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                alert("Click at Grant Permission");
+                console.log(errorData)
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: `Click at Grant Permission`,
+                })
                 return
             }
             else if (response.ok) {
@@ -194,11 +199,13 @@ export default function Page() {
             const googleClassroomId = data.id;
             const googleClassroomLink = data.alternateLink;
             updateClassroomOnCreate(course, googleClassroomId, googleClassroomLink);
-
-            // alert("Course created in Google Classroom:", data);
         } catch (error) {
             console.error("Error creating Google Classroom course:", error);
-            alert(error.message || "Error creating course in Google Classroom");
+            toast({
+                variant: "failure",
+                title: "SkyLearn",
+                description: `Please Grant Permission`,
+            })
         }
     };
 
@@ -218,14 +225,21 @@ export default function Page() {
 
             if (updateResponse.ok) {
                 setProgress(100)
-                // alert("Course updated with Google Classroom ID and join link");
             } else {
-                alert("Failed to update course with classroom details");
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: `Failed to update course with classroom details`,
+                })
             }
             setProcessing(false)
         } catch (error) {
-            console.log(error);
-            alert("An error occurred while creating or updating the classroom");
+            console.error(error);
+            toast({
+                variant: "failure",
+                title: "SkyLearn",
+                description: `Failed to update course with classroom details`,
+            })
         }
         setProcessing(0)
     };

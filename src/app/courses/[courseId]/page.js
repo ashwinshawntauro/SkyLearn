@@ -49,7 +49,6 @@ export default function Page() {
             <NavigationTabs course={course} />
           </div>
         </div>
-
         <div className="col-span-3 flex flex-col h-full">
           <CourseDetails course={course} className="md:w-full w-full flex-grow" />
         </div>

@@ -11,7 +11,6 @@ export default function Page() {
   const [countdown, setCountdown] = useState(3);
   const searchParams = useSearchParams();
   const courseId = localStorage.getItem('course_redirect');
-  console.log(courseId)
   const router = useRouter();
 
   useEffect(() => {
