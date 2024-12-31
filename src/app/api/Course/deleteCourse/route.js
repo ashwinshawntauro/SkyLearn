@@ -8,7 +8,7 @@ export async function DELETE(req) {
     try {
         const deletedCourse = await prisma.cOURSE.delete({
             where: {
-                course_id: courseId, 
+                course_id: parseInt(courseId), 
             },
         });
 

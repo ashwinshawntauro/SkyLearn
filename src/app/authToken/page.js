@@ -3,17 +3,23 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { CheckCircle } from 'lucide-react';
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle } from "lucide-react";
 
 export default function Page() {
   const [accessToken, setAccessToken] = useState(null);
   const [countdown, setCountdown] = useState(3);
-  const searchParams = useSearchParams();
-  const courseId = localStorage.getItem('course_redirect');
+  const [courseRedirect, setCourseRedirect] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
+    // Fetch the course_redirect from localStorage safely
+    const storedRedirect = localStorage.getItem("course_redirect");
+    if (storedRedirect) {
+      setCourseRedirect(storedRedirect);
+    }
+
+    // Extract the token from the URL hash
     const hash = window.location.hash;
     if (hash) {
       const params = new URLSearchParams(hash.substring(1));
@@ -24,14 +30,19 @@ export default function Page() {
       }
     }
 
+    // Countdown timer
     const timer = setInterval(() => {
       setCountdown((prev) => prev - 1);
     }, 1000);
 
+    // Redirect after the countdown ends
     const redirect = setTimeout(() => {
-      router.replace(`/courses/${courseId}/classroom`);
+      if (storedRedirect) {
+        router.replace(`/courses/${storedRedirect}/classroom`);
+      }
     }, 3000);
 
+    // Cleanup intervals and timeouts
     return () => {
       clearInterval(timer);
       clearTimeout(redirect);
@@ -48,11 +59,10 @@ export default function Page() {
             You have successfully granted permission.
           </p>
           <p className="text-sm text-gray-500">
-            Redirecting in {countdown} second{countdown !== 1 ? 's' : ''}...
+            Redirecting in {countdown} second{countdown !== 1 ? "s" : ""}...
           </p>
         </CardContent>
       </Card>
     </div>
   );
 }
-

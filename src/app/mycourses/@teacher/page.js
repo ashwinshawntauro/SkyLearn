@@ -20,8 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { AuthContext } from "@/providers/AuthProvider";
-import Loading from "@/app/loading";
-import { useToast } from "@/hooks/use-toast";
+import Loading from "../loading";
 import { useRouter } from "next/navigation";
 
 export default function TeacherDashboard() {
@@ -30,9 +29,7 @@ export default function TeacherDashboard() {
   const { toast } = useToast();
   const router = useRouter()
   const [showModal, setShowModal] = useState(false);
-  const router = useRouter()
   const { userId } = AuthContext();
-  const { toast } = useToast();
   const [newCourse, setNewCourse] = useState({
     tutorId: userId,
     CourseName: "",
@@ -42,24 +39,16 @@ export default function TeacherDashboard() {
     courseDuration: "",
     enrollment_deadline: "",
     youtube_link: "",
-    youtube_link: "",
   });
 
   useEffect(() => {
     fetchCourses(userId);
-  });
+  }, [userId]);
 
-  const fetchCourses = async (userId) => {
-    try {
-      const res = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
-      const data = await res.json();
-      setCourses(data);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  if(loading){
+    <Loading/>
+  }
+
   const fetchCourses = async (userId) => {
     try {
       const res = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
@@ -100,13 +89,7 @@ export default function TeacherDashboard() {
           courseDuration: "",
           enrollment_deadline: "",
           youtube_link: "",
-          youtube_link: "",
         });
-        toast({
-          variant: "success",
-          title: "SkyLearn",
-          description: "Great! New course added",
-      })
       } else {
         console.error("Error creating course:", response.statusText);
       }
@@ -114,10 +97,6 @@ export default function TeacherDashboard() {
       console.error("Error submitting form:", error);
     }
   };
-
-  if (loading) {
-    return <Loading />;
-  }
 
   const deleteCourse = async (courseId) => {
     try {
@@ -130,19 +109,19 @@ export default function TeacherDashboard() {
       });
 
       if (response.ok) {
-        await fetchCourses(userId)
-        toast({
-          variant: "success",
-          title: "SkyLearn",
-          description: `Course Deleted`,
-      })
-      } else {
-        const errorData = await response.json();
-        console.error(errorData)
         toast({
           variant: "failure",
           title: "SkyLearn",
-          description: "Sorry! Couldnt delete the course",
+          description: "Course Deleted!",
+      })
+        fetchCourses(userId)
+      } else {
+        const errorData = await response.json();
+        console.error(errorData);
+        toast({
+          variant: "failure",
+          title: "SkyLearn",
+          description: "Sorry! Couldnt delete course",
       })
       }
     } catch (error) {
@@ -172,14 +151,12 @@ export default function TeacherDashboard() {
                 <p className="text-sm text-gray-500 font-semibold">{course.course_description}</p>
                 <p className="text-sm text-gray-500">Price: ₹{course.course_price}</p>
                 <p className="text-sm text-gray-500">Difficulty: {course.difficulty}</p>
-                <p className="text-sm text-red-600 font-semibold">
-                  Enroll Deadline: {new Date(course.enrollment_deadline).toLocaleDateString('en-GB')}
-                </p>
+                <p className="text-sm text-red-600">Deadline: {new Date(course.enrollment_deadline).toLocaleDateString()}</p>
               </CardContent>
               <CardFooter className="mt-2 flex gap-2">
                 <Button
                   className="w-1/2"
-                  onClick={() => router.push(`/courses/${course.course_id}`)}
+                  onClick={() => router.push(`courses/${course.course_id}`)}
                 >
                   Go to Course
                 </Button>
