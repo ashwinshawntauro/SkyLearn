@@ -146,6 +146,8 @@ def generate_certificate_route():
     #     return f"Error calling the API: {response.status_code} - {response.text}"
      
     return json.dumps({
+        "student_id": uid,
+        "course_id": course_id,
         "certificate_id":certificate_id,
         "ipfs_link": f"https://peach-passive-porpoise-942.mypinata.cloud/ipfs/{ipfs_hash}",
         
