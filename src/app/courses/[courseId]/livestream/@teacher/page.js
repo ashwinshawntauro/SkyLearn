@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState,useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -129,7 +129,7 @@ export default function Page({ params }) {
         });
       } else {
         stream = await navigator.mediaDevices.getDisplayMedia({
-          video: { displaySurface: "monitor" },
+          video: { displaySurface: "monitor"},
           audio: true,
         });
       }
@@ -195,6 +195,7 @@ export default function Page({ params }) {
         })
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          videoRef.current.muted = true;
         }
       } else {
         throw new Error("Failed to start streaming");

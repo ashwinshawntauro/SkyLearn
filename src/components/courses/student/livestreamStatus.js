@@ -8,7 +8,7 @@ export default function Page({ livestreamId, userId, course_id }) {
     const [error, setError] = useState(null);
     const [tokenPresent, settokenPresent] = useState(null);
     const courseids = course_id.course_id
-    const { toast } = useToast();
+    const { toast } = useToast()
 
     const getStatus = async (livestreamId, userId, courseids) => {
         try {
@@ -59,17 +59,27 @@ export default function Page({ livestreamId, userId, course_id }) {
 
             if (response.ok) {
                 toast({
-                    variant: "success",
+                    variant: "failure",
                     title: "SkyLearn",
-                    description: "Dont worry, token raised successfully!",
+                    description: "Dont worry! Token raised successfully!",
                 })
                 getStatus(livestreamId, userId, courseids);
             } else {
                 const errorData = await response.json();
                 console.error("Error generating token:", errorData.error);
+                toast({
+                    variant: "failure",
+                    title: "SkyLearn",
+                    description: "Sorry! Couldnt raise token",
+                })
             }
         } catch (error) {
             console.error("Error raising token:", error);
+            toast({
+                variant: "failure",
+                title: "SkyLearn",
+                description: "Sorry! There was an issue",
+            })
         }
     };
 

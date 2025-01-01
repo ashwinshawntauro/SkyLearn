@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 import { Progress } from "@/components/ui/progress"
 import { AuthContext } from '@/providers/AuthProvider';
 import Loading from '@/app/loading';
-import {Skeleton} from '@/components/ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Page() {
     const pathname = usePathname();
@@ -26,10 +26,10 @@ export default function Page() {
     const [isOpen, setIsOpen] = useState(false);
     const [shareableCode, setShareableCode] = useState()
     const [newAssignment, setNewAssignment] = useState({ title: '', description: '', maxPoints: 100, dueDate: new Date });
-    const accessToken = localStorage.getItem('accessToken')
     const [progress, setProgress] = useState(0);
-
+    const [accessToken,setToken] =useState(null)
     useEffect(() => {
+        setToken(localStorage.getItem('accessToken'))
         if (courseId) {
             const fetchCourseData = async () => {
                 try {
@@ -48,11 +48,6 @@ export default function Page() {
             fetchAssignments();
         }
     }, [courseId]);
-
-    if (loading) {
-        <Loading />
-    }
-
     const fetchAssignments = async () => {
         try {
             const response = await fetch(`/api/Assignments/getAssignments?courseId=${courseId}`);
@@ -192,10 +187,11 @@ export default function Page() {
 
             if (!response.ok) {
                 const errorData = await response.json();
+                console.log(errorData)
                 toast({
                     variant: "failure",
                     title: "SkyLearn",
-                    description: "Click at Grant Permission",
+                    description: `Click at Grant Permission`,
                 })
                 return
             }
@@ -206,17 +202,12 @@ export default function Page() {
             const googleClassroomId = data.id;
             const googleClassroomLink = data.alternateLink;
             updateClassroomOnCreate(course, googleClassroomId, googleClassroomLink);
-            toast({
-                variant: "success",
-                title: "SkyLearn",
-                description: "Yes! Course created in Google Classroom",
-            })
         } catch (error) {
             console.error("Error creating Google Classroom course:", error);
             toast({
-                variant: "success",
+                variant: "failure",
                 title: "SkyLearn",
-                description: "Sorry! Error creating course in Google Classroom",
+                description: `Please Grant Permission`,
             })
         }
     };
@@ -241,12 +232,17 @@ export default function Page() {
                 toast({
                     variant: "failure",
                     title: "SkyLearn",
-                    description: "Sorry! Failed to update course with classroom details",
+                    description: `Failed to update course with classroom details`,
                 })
             }
             setProcessing(false)
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            toast({
+                variant: "failure",
+                title: "SkyLearn",
+                description: `Failed to update course with classroom details`,
+            })
         }
         setProcessing(0)
     };
@@ -255,15 +251,15 @@ export default function Page() {
             <div className="flex-1 overflow-auto">
                 <Navbar />
                 <div className="bg-primary p-4 w-full text-white">
-                    {loading &&(
+                    {loading && (
                         <div className="w-1/2 m-auto">
-                        <Skeleton className="h-6 bg-gray-400 w-3/4 mx-auto mb-2" />
-                        <Skeleton className="h-4 bg-gray-400 w-1/2 mx-auto mb-4" />
-                        <div className="flex items-center justify-between text-sm">
-                            <Skeleton className="h-4 bg-gray-400 w-1/4" />
-                            <Skeleton className="h-4 bg-gray-400 w-1/4" />
+                            <Skeleton className="h-6 bg-gray-400 w-3/4 mx-auto mb-2" />
+                            <Skeleton className="h-4 bg-gray-400 w-1/2 mx-auto mb-4" />
+                            <div className="flex items-center justify-between text-sm">
+                                <Skeleton className="h-4 bg-gray-400 w-1/4" />
+                                <Skeleton className="h-4 bg-gray-400 w-1/4" />
+                            </div>
                         </div>
-                    </div>
                     )}
                     {course && (
                         <div className='w-1/2 m-auto'>

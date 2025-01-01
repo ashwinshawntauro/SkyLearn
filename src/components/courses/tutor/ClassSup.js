@@ -10,16 +10,17 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast"; 
+import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Page({ title, description, livestreamId, tutorId, courseId, fetchLivestreams }) {
-    const { toast } = useToast(); 
+    const { toast } = useToast();
 
     const [formData, setFormData] = useState({
         title: `Supplementary: ${title}`,
         description: description,
         datetime: "",
+        time: ""
     });
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -31,6 +32,10 @@ export default function Page({ title, description, livestreamId, tutorId, course
     const handleDatetimeChange = (e) => {
         const value = e.target.value;
         setFormData((prev) => ({ ...prev, datetime: value }));
+    };
+    const handleTimeChange = (e) => {
+        const value = e.target.value;
+        setFormData((prev) => ({ ...prev, time: value }));
     };
 
     const handleCreateLivestream = async () => {
@@ -54,7 +59,7 @@ export default function Page({ title, description, livestreamId, tutorId, course
 
             if (response.ok) {
                 toast({
-                    variant:"success",
+                    variant: "success",
                     title: "SkyLearn",
                     description: "Livestream created successfully!",
                 })
@@ -62,9 +67,9 @@ export default function Page({ title, description, livestreamId, tutorId, course
                 setIsDialogOpen(false);
             } else {
                 toast({
-                    variant:"failure",
+                    variant: "failure",
                     title: "SkyLearn",
-                    description: "Please enter details correctly!", 
+                    description: "Please enter details correctly!",
                 })
             }
         } catch (error) {
@@ -107,6 +112,14 @@ export default function Page({ title, description, livestreamId, tutorId, course
                             name="datetime"
                             value={formData.datetime}
                             onChange={handleDatetimeChange}
+                            className="border px-2 py-1"
+                            required
+                        />
+                        <Input
+                            type="time"
+                            name="time"
+                            value={formData.time}
+                            onChange={handleTimeChange}
                             className="border px-2 py-1"
                             required
                         />

@@ -14,7 +14,8 @@ export async function GET() {
                 title:true,
                 description:true,
                 datetime:true,
-                refLiveId:true
+                refLiveId:true,
+                time:true
             },
             orderBy: {
                 id: 'desc'

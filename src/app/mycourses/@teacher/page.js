@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,7 +28,6 @@ export default function TeacherDashboard() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const router = useRouter()
   const [showModal, setShowModal] = useState(false);
   const { userId } = AuthContext();
   const [newCourse, setNewCourse] = useState({

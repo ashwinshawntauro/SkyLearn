@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -25,10 +25,10 @@ model CERTIFICATES {
   certificate_url String    @db.VarChar(255)
   issuedDate      DateTime? @default(now()) @db.DateTime(0)
   STUDENT         STUDENT   @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "CERTIFICATES_ibfk_1")
-  COURSE          COURSE    @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "CERTIFICATES_ibfk_2")
+  COURSE          COURSE    @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "CERTIFICATES_ibfk_2")
 
-  @@index([course_id], map: "course_id")
   @@index([student_id], map: "student_id")
+  @@index([course_id], map: "CERTIFICATES_ibfk_2")
 }
 
 model COURSE {
@@ -55,6 +55,7 @@ model COURSE {
   STUDENTCLASSES          STUDENTCLASSES[]
   TEACHING                TEACHING[]
   livestreams             livestreams[]
+  progress                progress[]
   user_tokens             user_tokens[]
 }
 
@@ -87,13 +88,14 @@ model ENROLLMENT {
 }
 
 model LEADERBOARD {
-  course_id   Int
-  student_id  Int
-  rank        Int?
-  score       Int?
-  marksStatus String? @default("Not Graded") @db.VarChar(255)
-  COURSE      COURSE  @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "LEADERBOARD_ibfk_1")
-  STUDENT     STUDENT @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "LEADERBOARD_ibfk_2")
+  course_id        Int
+  student_id       Int
+  rank             Int?
+  score            Int?
+  marksStatus      String?  @default("Not Graded") @db.VarChar(255)
+  percentage_score Decimal? @db.Decimal(5, 2)
+  COURSE           COURSE   @relation(fields: [course_id], references: [course_id], onDelete: Cascade, map: "LEADERBOARD_ibfk_1")
+  STUDENT          STUDENT  @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction, map: "LEADERBOARD_ibfk_2")
 
   @@id([course_id, student_id])
   @@index([student_id], map: "student_id")
@@ -104,9 +106,9 @@ model NOTES {
   course_id  Int
   note_title String @db.VarChar(255)
   note_text  String @db.Text
-  COURSE     COURSE @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "NOTES_ibfk_1")
+  COURSE     COURSE @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "NOTES_ibfk_1")
 
-  @@index([course_id], map: "course_id")
+  @@index([course_id], map: "NOTES_ibfk_1")
 }
 
 model QUIZ {
@@ -142,12 +144,14 @@ model STUDENT {
   student_email      String               @unique @db.VarChar(100)
   user_id            String               @db.VarChar(255)
   address            String?              @db.VarChar(255)
+  points             Int?                 @default(0)
   CERTIFICATES       CERTIFICATES[]
   EARNED_CERTIFICATE EARNED_CERTIFICATE[]
   ENROLLMENT         ENROLLMENT[]
   LEADERBOARD        LEADERBOARD[]
   STUDENTCLASSES     STUDENTCLASSES[]
   SUBMISSION         SUBMISSION[]
+  progress           progress[]
   user_tokens        user_tokens[]
 }
 
@@ -160,12 +164,12 @@ model STUDENTCLASSES {
   status            String?     @db.VarChar(255)
   attendance_date   DateTime?   @default(now()) @db.DateTime(0)
   STUDENT           STUDENT     @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_1")
-  COURSE            COURSE      @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_2")
+  COURSE            COURSE      @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_2")
   livestreams       livestreams @relation(fields: [livestreaming_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "STUDENTCLASSES_ibfk_3")
 
-  @@index([course_id], map: "course_id")
   @@index([livestreaming_id], map: "livestreaming_id")
   @@index([student_id], map: "student_id")
+  @@index([course_id], map: "STUDENTCLASSES_ibfk_2")
 }
 
 model SUBMISSION {
@@ -211,14 +215,15 @@ model livestreams {
   description                                        String?            @db.Text
   datetime                                           DateTime?          @db.Date
   refLiveId                                          Int?
+  time                                               String?            @db.VarChar(8)
   STUDENTCLASSES                                     STUDENTCLASSES[]
-  COURSE                                             COURSE             @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_1")
+  COURSE                                             COURSE             @relation(fields: [course_id], references: [course_id], onDelete: Cascade, onUpdate: NoAction, map: "livestreams_ibfk_1")
   TUTOR                                              TUTOR              @relation(fields: [tutor_id], references: [tutor_id], onDelete: NoAction, onUpdate: NoAction, map: "livestreams_ibfk_2")
   user_tokens_user_tokens_livestream_idTolivestreams user_tokens[]      @relation("user_tokens_livestream_idTolivestreams")
   user_tokens_user_tokens_refLiveIdTolivestreams     user_tokens[]      @relation("user_tokens_refLiveIdTolivestreams")
 
-  @@index([course_id], map: "course_id")
   @@index([tutor_id], map: "tutor_id")
+  @@index([course_id], map: "livestreams_ibfk_1")
 }
 
 model user_tokens {
@@ -239,6 +244,19 @@ model user_tokens {
   @@index([livestream_id], map: "fk_livestream_id")
   @@index([refLiveId], map: "fk_refLiveId")
   @@index([user_id], map: "fk_user_id")
+}
+
+model progress {
+  id                    Int     @id @default(autoincrement())
+  student_id            Int
+  course_id             Int
+  quiz_status           Boolean @default(false)
+  livestream_percentage Float   @default(0) @db.Float
+  STUDENT               STUDENT @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "progress_ibfk_1")
+  COURSE                COURSE  @relation(fields: [course_id], references: [course_id], onDelete: NoAction, onUpdate: NoAction, map: "progress_ibfk_2")
+
+  @@index([course_id], map: "course_id")
+  @@index([student_id], map: "student_id")
 }
 
 enum livestreams_status {

@@ -2,14 +2,28 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
-export default function Page({ courseId }) {
+export default function Page({ courseId, fetchQuizData }) {
   const [numQuestions, setNumQuestions] = useState(1); // Number of questions to be added
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(1);
+  const { toast } = useToast();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const openDialog = () => setIsDialogOpen(true);
+  const closeDialog = () => setIsDialogOpen(false);
+
   const [formData, setFormData] = useState({
     questionText: "",
     choice1: "",
@@ -67,12 +81,12 @@ export default function Page({ courseId }) {
       setMessage("Please complete all questions before submitting.");
       return;
     }
-    console.log(courseId)
+    console.log(courseId);
     const reqBody = {
       courseId: courseId,
       questions,
     };
-    console.log(reqBody)
+    console.log(reqBody);
     try {
       const response = await fetch("/api/Quiz/createQuiz", {
         method: "POST",
@@ -85,7 +99,15 @@ export default function Page({ courseId }) {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Quiz submitted successfully!");
+        toast({
+          variant: "success",
+          title: "SkyLearn",
+          description: "Quiz submitted successfully!",
+        });
+
+        fetchQuizData();
+        closeDialog();
+
         setQuestions([]);
         setCurrentQuestion(1);
       } else {
@@ -99,9 +121,12 @@ export default function Page({ courseId }) {
 
   return (
     <div className="py-2 flex justify-end">
-      <Dialog>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light">
+          <Button
+            onClick={openDialog}
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-light"
+          >
             Create Quiz
           </Button>
         </DialogTrigger>
@@ -176,17 +201,11 @@ export default function Page({ courseId }) {
           </div>
           <DialogFooter>
             {currentQuestion <= numQuestions ? (
-              <Button
-                onClick={handleNextQuestion}
-                className="bg-primary-light"
-              >
+              <Button onClick={handleNextQuestion} className="bg-primary-light">
                 Next Question
               </Button>
             ) : (
-              <Button
-                onClick={handleSubmitQuiz}
-                className="bg-primary-light"
-              >
+              <Button onClick={handleSubmitQuiz} className="bg-primary-light">
                 Submit Quiz
               </Button>
             )}

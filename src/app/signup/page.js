@@ -69,19 +69,6 @@ export default function Page() {
     }
   };
 
-  // const setCookie = async (token) => {
-  //   const res = await fetch("/api/cookie", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: token,
-  //     },
-  //   });
-  //   if (!res.ok) {
-  //     throw new Error("Failed to set cookie");
-  //   }
-  // };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);

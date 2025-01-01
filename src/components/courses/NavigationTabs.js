@@ -1,3 +1,4 @@
+"use client"
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import InstructorSection from "@/components/courses/InstructorSection";
@@ -13,8 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import TutorLivestream from "@/components/courses/tutor/TutorLivestream";
@@ -26,18 +25,18 @@ import GetTokens from "./tutor/GetTokens"
 import { Textarea } from "../ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
-
 function NavigationTabs({ course }) {
   const router = useRouter();
-  const { userId, userName, role } = AuthContext();
+  const { userId, userName, role, isLogged, loading } = AuthContext();
   const courseId = course.course_id;
-  const { toast } = useToast();
+  const [aiLoading, setAiLoading] = useState(false);
+  const { toast } = useToast()
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
   const [aiResponse, setAiResponse] = useState("");
   const [userQuestion, setUserQuestion] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [isloading, setLoading] = useState(true);
   const [quizStatus, setQuizStatus] = useState(false);
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState("");
@@ -45,17 +44,10 @@ function NavigationTabs({ course }) {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [enrolledStudents, setEnrolled] = useState([]);
 
-  // Fetch initial data
   useEffect(() => {
     const initializeData = async () => {
       if (!userId) return;
-      if (role === "teacher") {
-        const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
-        const tutorData = await tutorRes.json();
-        setIsTutor(tutorData.some(course => course.course_id === courseId));
-      } else {
-        setIsTutor(false);
-      }
+
       try {
         const enrollRes = await fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`);
         const enrollData = await enrollRes.json();
@@ -71,8 +63,6 @@ function NavigationTabs({ course }) {
         } else {
           setIsTutor(false);
         }
-
-        // Fetch other data
         await Promise.all([
           fetchNotes(),
           fetchQuizData(),
@@ -138,7 +128,7 @@ function NavigationTabs({ course }) {
     const response = await fetch("/api/Livestreams/getLivestreams");
     const data = await response.json();
     setLivestreams(data.filter(
-      (livestream) => livestream.course_id === courseId
+      (livestream) => livestream.course_id === parseInt(courseId)
     ));
   };
 
@@ -171,8 +161,8 @@ function NavigationTabs({ course }) {
         toast({
           variant: "success",
           title: "SkyLearn",
-          description: "Livestream ended",
-      })
+          description: "Livestream has been ended!",
+        })
         fetchLivestreams();
       }
     } catch (error) {
@@ -183,6 +173,7 @@ function NavigationTabs({ course }) {
   const handleQuestionSubmit = async (e) => {
     e.preventDefault();
     try {
+      setAiLoading(true)
       const genAI = new GoogleGenerativeAI(
         "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
       );
@@ -191,6 +182,7 @@ function NavigationTabs({ course }) {
         Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
         Break down complex ideas into easily understandable parts and make sure the student can grasp the main ideas.`;
       const result = await model.generateContent(prompt);
+      result ? setAiLoading(false) : setAiLoading(true)
       setAiResponse(result ? result.response.text() : "No response received");
       setUserQuestion("");
     } catch (error) {
@@ -198,10 +190,6 @@ function NavigationTabs({ course }) {
       setAiResponse("Sorry, I couldn't process your question. Please try again.");
     }
   };
-
-  if (loading) {
-    return <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />;
-  }
 
   return (
     <div>
@@ -242,7 +230,48 @@ function NavigationTabs({ course }) {
                             </span>
                           )}
                         </div>
-                        <div className="font-light font-sans">{livestream.datetime}</div>
+                        <div className="font-semibold inline-flex items-center text-gray-600">
+                          <span className="inline-flex items-center text-sm">
+                            <svg
+                              className="w-4 h-4 text-gray-600"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
+                              />
+                            </svg>
+                            {new Date(livestream.datetime).toLocaleDateString('en-GB')}
+                          </span>
+                          <span className="px-2 text-sm inline-flex items-center">
+                            <svg
+                              className="w-4 h-4 text-gray-600"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                              />
+                            </svg>
+                            {livestream.time == null ? '00:00:00' : livestream.time}
+                          </span>
+                        </div>
                         <div className="text-primary font-bold text-md mb-1">
                           {livestream.title}
                         </div>
@@ -286,7 +315,7 @@ function NavigationTabs({ course }) {
               </div>
             ) : isTutor ? (
               <div>
-                <TutorLivestream courseId={courseId} tutorId={userId} />
+                <TutorLivestream courseId={courseId} tutorId={userId} fetchLivestreams={fetchLivestreams} />
                 {livestreams && livestreams.length > 0 ? (
                   livestreams.map((livestream) => (
                     <div
@@ -301,7 +330,48 @@ function NavigationTabs({ course }) {
                             </span>
                           )}
                         </div>
-                        <div className="font-light font-sans">{livestream.datetime}</div>
+                        <div className="font-semibold inline-flex items-center text-gray-600">
+                          <span className="inline-flex text-sm items-center">
+                            <svg
+                              className="w-4 h-4 text-gray-600"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
+                              />
+                            </svg>
+                            {new Date(livestream.datetime).toLocaleDateString('en-GB')}
+                          </span>
+                          <span className="px-2 inline-flex text-sm items-center">
+                            <svg
+                              className="w-4 h-4 text-gray-600"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                              />
+                            </svg>
+                            {livestream.time}
+                          </span>
+                        </div>
                         <div className="font-bold text-md text-primary mb-1">
                           {livestream.title}
                         </div>
@@ -363,7 +433,7 @@ function NavigationTabs({ course }) {
           <TabsContent value="notes" className="p-2">
             {isTutor ? (
               <>
-                <TutorNotes courseId={courseId} />
+                <TutorNotes courseId={courseId} fetchNotes={fetchNotes} />
                 <div>
                   {notes && notes.length > 0 ? (
                     notes.map((note) => (
@@ -401,7 +471,7 @@ function NavigationTabs({ course }) {
             {isTutor ? (
               <>
                 {/* Display QuizForm for Tutor */}
-                <QuizForm courseId={courseId} />
+                <QuizForm courseId={courseId} fetchQuizData={fetchQuizData} />
 
                 {/* Display the questions if they exist */}
                 <div>
@@ -410,7 +480,7 @@ function NavigationTabs({ course }) {
                   ) : (
                     questions.map((question, index) => (
                       <div key={index} className="border-b bg-white rounded p-4 border-grey-light py-4">
-                        <div className="font-bold text-lg">Q{index+1}. {question.question}</div>
+                        <div className="font-bold text-lg">Q{index + 1}. {question.question}</div>
                         <div className="font-bold text-sm text-green-600 mt-2">
                           Correct Answer: {question.options[question.correct]}
                         </div>
@@ -473,6 +543,7 @@ function NavigationTabs({ course }) {
               </>
             )}
           </TabsContent>
+
           <TabsContent value="leaderboard" className="p-2">
             <Table className="w-full px-4 border bg-white">
               <TableCaption>{course.course_name} Leaderboard</TableCaption>
@@ -491,7 +562,7 @@ function NavigationTabs({ course }) {
                       {entry.STUDENT?.student_name ||
                         `Student ${entry.student_id}`}
                     </TableCell>{" "}
-                    <TableCell className="text-center">{entry.score}</TableCell>
+                    <TableCell className="text-center">{entry.percentage_score}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -523,6 +594,17 @@ function NavigationTabs({ course }) {
                   </Button>
                 </div>
               </form>
+              {
+                aiLoading && (
+                  <div className=" space-y-2">
+                    <Skeleton className='w-full h-[20px]' />
+                    <Skeleton className='w-full h-[20px]' />
+                    <Skeleton className='w-full h-[20px]' />
+                    <Skeleton className='w-full h-[20px]' />
+                  </div>
+                )
+              }
+
               {aiResponse && (
                 <div className="mt-4 p-4 bg-gray-200 rounded-md">
                   <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
@@ -570,31 +652,35 @@ function NavigationTabs({ course }) {
             </TabsContent>
           )}
         </Tabs>
-      ) : isPurchased == false && isTutor == false ? (
-        <Tabs
-          defaultValue="instructors"
-          className="w-full p-2 bg-gray-100 h-auto"
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-            <TabsTrigger value="instructors">Instructor</TabsTrigger>
-          </TabsList>
-          <TabsContent value="curriculum" className="p-2">
-            Course Curriculum is displayed here!
-          </TabsContent>
-          <TabsContent value="discussion" className="p-2">
-            Live stream agenda will be displayed here.
-          </TabsContent>
-          <TabsContent value="review" className="p-2">
-            Take down notes
-          </TabsContent>
-          <TabsContent value="instructors" className="p-2">
-            <InstructorSection className="md:w-2/3 w-full" />
-          </TabsContent>
-        </Tabs>
+      ) : isPurchased == false && isTutor == false || !isLogged ? (
+        <div className="my-2">
+          <InstructorSection className="md:w-2/3 w-full" course={course} />
+        </div>
+
+        // <Tabs
+        //   defaultValue="instructors"
+        //   className="w-full p-2 bg-gray-100 h-auto"
+        // >
+        //   <TabsList className="grid w-full grid-cols-2">
+        //     <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
+        //     <TabsTrigger value="instructors">Instructor</TabsTrigger>
+        //   </TabsList>
+        //   <TabsContent value="curriculum" className="p-2">
+        //     Course Curriculum is displayed here!
+        //   </TabsContent>
+        //   <TabsContent value="discussion" className="p-2">
+        //     Live stream agenda will be displayed here.
+        //   </TabsContent>
+        //   <TabsContent value="review" className="p-2">
+        //     Take down notes
+        //   </TabsContent>
+        //   <TabsContent value="instructors" className="p-2">
+        //   </TabsContent>
+        // </Tabs>
       ) : (
         <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />
-      )}
+      )
+      }
     </div>
   );
 }

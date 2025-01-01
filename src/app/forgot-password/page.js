@@ -6,28 +6,13 @@ import { sendPasswordResetEmail, getAuth, auth } from "@/lib/firebase/auth";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Page() {
   const [emailAdd, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [captchaVerified, setCaptchaVerified] = useState(false);
-
-  // Callback when reCAPTCHA is completed
-  const handleCaptchaChange = (value) => {
-    if (value) {
-      setCaptchaVerified(true);
-    } else {
-      setCaptchaVerified(false);
-    }
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!captchaVerified) {
-      setMessage('Please complete Captcha')
-      return;
-    }
     sendPasswordResetEmail(auth, emailAdd)
       .then(() => {
         setMessage("Reset email sent");
@@ -38,12 +23,12 @@ export default function Page() {
   };
 
   return (
-    <div className="w-full sm:w-full md:w-1/2 lg:w-1/3 flex justify-center flex-col items-center min-h-screen mx-auto my-10 sm:my-6 p-6 sm:p-4">
+    <div className="w-full sm:w-full md:w-1/2 lg:w-2/3 flex justify-center flex-col items-center min-h-screen mx-auto my-10 sm:my-6 p-6 sm:p-4">
       <h1 className="text-xl sm:text-lg font-medium">Reset Password</h1>
       <span className="text-slate-500 text-sm sm:text-xs">Enter your email ID to reset the password</span>
 
       <form onSubmit={handleSubmit} className="my-8 sm:my-6">
-        <div className="flex flex-col space-y-4 sm:space-y-3">
+        <div className="flex flex-col space-y-2 sm:space-y-3">
           {message && <Alert>
             <AlertTitle>Message</AlertTitle>
             <AlertDescription>
@@ -64,19 +49,9 @@ export default function Page() {
             required
           />
 
-
-          <div className="w-full py-2">
-            <ReCAPTCHA
-              sitekey="6LfbuHwqAAAAANRj47td1yUkHKQLFUwtxEpMv4go" // Replace with your site key
-              onChange={handleCaptchaChange}
-              className="flex justify-center"
-            />
-          </div>
-
           <Button
             type="submit"
-            disabled={!captchaVerified}
-            className={`w-full py-3 sm:py-2 text-sm font-medium text-white bg-primary hover:bg-blue rounded-lg hover:shadow ${!captchaVerified ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`w-full py-3 sm:py-2 text-sm font-medium text-white bg-primary hover:bg-blue rounded-lg hover:shadow`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 sm:w-4 sm:h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />

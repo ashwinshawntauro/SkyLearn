@@ -28,7 +28,7 @@ export default function Page() {
                 const response = await fetch(`/api/Classroom/getGradesClassroom?accessToken=${access_token}&courseId=${classroomId}&courseWorkId=${courseWorkId}`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${access_token}`, // Correct Authorization header
+                        'Authorization': `Bearer ${access_token}`, 
                         'Content-Type': 'application/json',
                     },
                 });
@@ -36,12 +36,12 @@ export default function Page() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    setStudents(data.submissions); // Assuming the API returns an array of submissions
+                    setStudents(data.submissions); 
                 } else {
                     toast({
                         variant: "failure",
                         title: "SkyLearn",
-                        description: "Sorry! Failed to fetch student grades",
+                        description: "Sorry! Failed to fetch student grades. Grant Permission and try again",
                     })
                 }
             } catch (error) {

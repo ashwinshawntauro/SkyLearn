@@ -16,7 +16,7 @@ export async function GET(req) {
             where: {
                 course_id: parseInt(course_id,10),
             },
-            orderBy: { score: "desc" }, // Sort by score in descending order
+            orderBy: { percentage_score: "desc" }, // Sort by score in descending order
             include: {
                 STUDENT: { // Include related Student data
                     select: {

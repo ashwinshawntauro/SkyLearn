@@ -12,14 +12,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
-export default function Page({ courseId, tutorId }) {
+export default function Page({ courseId, tutorId ,fetchLivestreams}) {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     datetime: "",
+    time: ""
   });
-  const [message, setMessage] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -28,8 +30,12 @@ export default function Page({ courseId, tutorId }) {
   };
   const handleDatetimeChange = (e) => {
     const value = e.target.value;
-    setFormData((prev) => ({ ...prev, datetime: value })); // Update datetime in formData
-};
+    setFormData((prev) => ({ ...prev, datetime: value }));
+  };
+  const handleTimeChange = (e) => {
+    const value = e.target.value;
+    setFormData((prev) => ({ ...prev, time: value }));
+  };
 
   const handleCreateLivestream = async () => {
     const reqBody = {
@@ -50,14 +56,27 @@ export default function Page({ courseId, tutorId }) {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Livestream created successfully!");
-        setIsDialogOpen(false); // Close dialog after success
+        toast({
+          variant: "success",
+          title: "SkyLearn",
+          description: "Livestream created!",
+        })
+        fetchLivestreams()
+        setIsDialogOpen(false);
       } else {
-        setMessage(`Error: ${data.error || "Something went wrong"}`);
+        toast({
+          variant: "failure",
+          title: "SkyLearn",
+          description: "Sorry! Couldnt create livestream",
+        })
       }
     } catch (error) {
       console.error("Error creating livestream:", error);
-      setMessage("An error occurred. Please try again.");
+      toast({
+        variant: "failure",
+        title: "SkyLearn",
+        description: "Sorry! There was an issue",
+      })
     }
   };
 
@@ -100,6 +119,14 @@ export default function Page({ courseId, tutorId }) {
               className="border px-2 py-1"
               required
             />
+            <Input
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleTimeChange}
+              className="border px-2 py-1"
+              required
+            />
           </div>
           <DialogFooter>
             <Button onClick={handleCreateLivestream} className="bg-primary-light">
@@ -108,16 +135,6 @@ export default function Page({ courseId, tutorId }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-      {message && (
-        <p
-          className={`mt-4 ${
-            message.includes("successfully") ? "text-green-500" : "text-red-500"
-          }`}
-        >
-          {message}
-        </p>
-      )}
     </div>
   );
 }
