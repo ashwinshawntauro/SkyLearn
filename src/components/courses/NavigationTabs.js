@@ -29,6 +29,7 @@ function NavigationTabs({ course }) {
   const router = useRouter();
   const { userId, userName, role, isLogged, loading } = AuthContext();
   const courseId = course.course_id;
+  const [aiLoading, setAiLoading] = useState(false);
   const { toast } = useToast()
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
@@ -172,6 +173,7 @@ function NavigationTabs({ course }) {
   const handleQuestionSubmit = async (e) => {
     e.preventDefault();
     try {
+      setAiLoading(true)
       const genAI = new GoogleGenerativeAI(
         "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
       );
@@ -180,6 +182,7 @@ function NavigationTabs({ course }) {
         Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
         Break down complex ideas into easily understandable parts and make sure the student can grasp the main ideas.`;
       const result = await model.generateContent(prompt);
+      result ? setAiLoading(false) : setAiLoading(true)
       setAiResponse(result ? result.response.text() : "No response received");
       setUserQuestion("");
     } catch (error) {
@@ -266,7 +269,7 @@ function NavigationTabs({ course }) {
                                 d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                               />
                             </svg>
-                            {livestream.time}
+                            {livestream.time == null ? '00:00:00' : livestream.time}
                           </span>
                         </div>
                         <div className="text-primary font-bold text-md mb-1">
@@ -430,7 +433,7 @@ function NavigationTabs({ course }) {
           <TabsContent value="notes" className="p-2">
             {isTutor ? (
               <>
-                <TutorNotes courseId={courseId} fetchNotes={fetchNotes}/>
+                <TutorNotes courseId={courseId} fetchNotes={fetchNotes} />
                 <div>
                   {notes && notes.length > 0 ? (
                     notes.map((note) => (
@@ -468,7 +471,7 @@ function NavigationTabs({ course }) {
             {isTutor ? (
               <>
                 {/* Display QuizForm for Tutor */}
-                <QuizForm courseId={courseId} fetchQuizData={fetchQuizData}/>
+                <QuizForm courseId={courseId} fetchQuizData={fetchQuizData} />
 
                 {/* Display the questions if they exist */}
                 <div>
@@ -540,6 +543,7 @@ function NavigationTabs({ course }) {
               </>
             )}
           </TabsContent>
+
           <TabsContent value="leaderboard" className="p-2">
             <Table className="w-full px-4 border bg-white">
               <TableCaption>{course.course_name} Leaderboard</TableCaption>
@@ -590,6 +594,17 @@ function NavigationTabs({ course }) {
                   </Button>
                 </div>
               </form>
+              {
+                aiLoading && (
+                  <div className=" space-y-2">
+                    <Skeleton className='w-full h-[20px]' />
+                    <Skeleton className='w-full h-[20px]' />
+                    <Skeleton className='w-full h-[20px]' />
+                    <Skeleton className='w-full h-[20px]' />
+                  </div>
+                )
+              }
+
               {aiResponse && (
                 <div className="mt-4 p-4 bg-gray-200 rounded-md">
                   <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
@@ -638,27 +653,30 @@ function NavigationTabs({ course }) {
           )}
         </Tabs>
       ) : isPurchased == false && isTutor == false || !isLogged ? (
-        <Tabs
-          defaultValue="instructors"
-          className="w-full p-2 bg-gray-100 h-auto"
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-            <TabsTrigger value="instructors">Instructor</TabsTrigger>
-          </TabsList>
-          <TabsContent value="curriculum" className="p-2">
-            Course Curriculum is displayed here!
-          </TabsContent>
-          <TabsContent value="discussion" className="p-2">
-            Live stream agenda will be displayed here.
-          </TabsContent>
-          <TabsContent value="review" className="p-2">
-            Take down notes
-          </TabsContent>
-          <TabsContent value="instructors" className="p-2">
-            <InstructorSection className="md:w-2/3 w-full" />
-          </TabsContent>
-        </Tabs>
+        <div className="my-2">
+          <InstructorSection className="md:w-2/3 w-full" course={course} />
+        </div>
+
+        // <Tabs
+        //   defaultValue="instructors"
+        //   className="w-full p-2 bg-gray-100 h-auto"
+        // >
+        //   <TabsList className="grid w-full grid-cols-2">
+        //     <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
+        //     <TabsTrigger value="instructors">Instructor</TabsTrigger>
+        //   </TabsList>
+        //   <TabsContent value="curriculum" className="p-2">
+        //     Course Curriculum is displayed here!
+        //   </TabsContent>
+        //   <TabsContent value="discussion" className="p-2">
+        //     Live stream agenda will be displayed here.
+        //   </TabsContent>
+        //   <TabsContent value="review" className="p-2">
+        //     Take down notes
+        //   </TabsContent>
+        //   <TabsContent value="instructors" className="p-2">
+        //   </TabsContent>
+        // </Tabs>
       ) : (
         <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />
       )
