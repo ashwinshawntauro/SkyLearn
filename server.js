@@ -157,6 +157,6 @@ app.post('/stop-broadcast', async (req, res) => {
 // Server setup
 const PORT = 5000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://35.208.76.68:${PORT}`);
+    console.log(`Server running on http://34.56.118.158:${PORT}`);
 });
 
