@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import InstructorSection from "@/components/courses/InstructorSection";
@@ -21,7 +21,7 @@ import QuizForm from "./tutor/TutorQuiz";
 import TutorNotes from "@/components/courses/tutor/TutorNotes";
 import LivestreamStatus from "./student/livestreamStatus";
 import ClassSupp from "./tutor/ClassSup";
-import GetTokens from "./tutor/GetTokens"
+import GetTokens from "./tutor/GetTokens";
 import { Textarea } from "../ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
@@ -30,7 +30,7 @@ function NavigationTabs({ course }) {
   const { userId, userName, role, isLogged, loading } = AuthContext();
   const courseId = course.course_id;
   const [aiLoading, setAiLoading] = useState(false);
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [livestreams, setLivestreams] = useState([]);
   const [isPurchased, setIsPurchased] = useState(null);
   const [isTutor, setIsTutor] = useState(null);
@@ -49,7 +49,9 @@ function NavigationTabs({ course }) {
       if (!userId) return;
 
       try {
-        const enrollRes = await fetch(`/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`);
+        const enrollRes = await fetch(
+          `/api/Enrollments/getEnroll?student_id=${encodeURIComponent(userId)}`
+        );
         const enrollData = await enrollRes.json();
         const isEnrolled = (enrollData.getEnroll || []).some(
           (course) => course.course_id === courseId
@@ -57,9 +59,11 @@ function NavigationTabs({ course }) {
         setIsPurchased(isEnrolled);
 
         if (role === "teacher") {
-          const tutorRes = await fetch(`/api/Course/getTutorCourses?tutorId=${userId}`);
+          const tutorRes = await fetch(
+            `/api/Course/getTutorCourses?tutorId=${userId}`
+          );
           const tutorData = await tutorRes.json();
-          setIsTutor(tutorData.some(course => course.course_id === courseId));
+          setIsTutor(tutorData.some((course) => course.course_id === courseId));
         } else {
           setIsTutor(false);
         }
@@ -69,9 +73,8 @@ function NavigationTabs({ course }) {
           fetchLivestreams(),
           fetchLeaderboardData(),
           fetchEnrolled(),
-          fetchQuizStatus()
+          fetchQuizStatus(),
         ]);
-
       } catch (error) {
         console.error("Error initializing data:", error);
         setError("Failed to load course data");
@@ -85,19 +88,23 @@ function NavigationTabs({ course }) {
 
   const fetchEnrolled = async () => {
     try {
-      const response = await fetch(`/api/Enrollments/getEnrolledStudents?courseId=${courseId}`);
+      const response = await fetch(
+        `/api/Enrollments/getEnrolledStudents?courseId=${courseId}`
+      );
 
       if (response.ok) {
         const data = await response.json();
         setEnrolled(data.students);
       } else {
-        console.error('Failed to fetch enrolled students:', response.statusText);
+        console.error(
+          "Failed to fetch enrolled students:",
+          response.statusText
+        );
       }
     } catch (error) {
-      console.error('Error fetching enrolled students:', error);
+      console.error("Error fetching enrolled students:", error);
     }
   };
-
 
   const fetchNotes = async () => {
     const response = await fetch(`/api/uploadNotes?courseId=${courseId}`);
@@ -127,9 +134,9 @@ function NavigationTabs({ course }) {
   const fetchLivestreams = async () => {
     const response = await fetch("/api/Livestreams/getLivestreams");
     const data = await response.json();
-    setLivestreams(data.filter(
-      (livestream) => livestream.course_id === parseInt(courseId)
-    ));
+    setLivestreams(
+      data.filter((livestream) => livestream.course_id === parseInt(courseId))
+    );
   };
 
   const fetchLeaderboardData = async () => {
@@ -162,7 +169,7 @@ function NavigationTabs({ course }) {
           variant: "success",
           title: "SkyLearn",
           description: "Livestream has been ended!",
-        })
+        });
         fetchLivestreams();
       }
     } catch (error) {
@@ -173,21 +180,34 @@ function NavigationTabs({ course }) {
   const handleQuestionSubmit = async (e) => {
     e.preventDefault();
     try {
-      setAiLoading(true)
+      setAiLoading(true);
+      setAiResponse("");
       const genAI = new GoogleGenerativeAI(
-        "AIzaSyDhiQ6NBSbzNP4dEWMKyzaE97oVdeASbO0"
+        "AIzaSyC4ofcx0JENzanVUbkIay8CkqNrTDHHo6Q"
       );
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `My name is ${userName}. You are an expert tutor on ${course.course_name}. Your Course description is ${course.course_description}. A student asked: "${userQuestion}".
-        Please explain the concept in a clear, step-by-step manner. Use simple language and examples where possible.
-        Break down complex ideas into easily understandable parts and make sure the student can grasp the main ideas.`;
+      const prompt = `You are an expert tutor for the course: ${course.course_name}.
+        Course Description: ${course.course_description}
+        A student asked: "${userQuestion}"
+        Your task:
+        - Provide a clear, concise, and step-by-step explanation.
+        - Use simple, easy-to-understand language.
+        - Include relevant examples where helpful.
+        - Avoid introductions or pleasantries. Do not repeat the student's question or say phrases like "That's a great question" or "Hi Student".
+        - Start directly with the explanation.
+        - Structure your answer using bullet points or numbered steps if needed.
+
+        Only output the explanation.`;
       const result = await model.generateContent(prompt);
-      result ? setAiLoading(false) : setAiLoading(true)
+      result ? setAiLoading(false) : setAiLoading(true);
       setAiResponse(result ? result.response.text() : "No response received");
       setUserQuestion("");
     } catch (error) {
+      setAiLoading(false);
       console.error("Error with Gemini API:", error);
-      setAiResponse("Sorry, I couldn't process your question. Please try again.");
+      setAiResponse(
+        "Sorry, I couldn't process your question. Please try again."
+      );
     }
   };
 
@@ -249,7 +269,9 @@ function NavigationTabs({ course }) {
                                 d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
                               />
                             </svg>
-                            {new Date(livestream.datetime).toLocaleDateString('en-GB')}
+                            {new Date(livestream.datetime).toLocaleDateString(
+                              "en-GB"
+                            )}
                           </span>
                           <span className="px-2 text-sm inline-flex items-center">
                             <svg
@@ -269,7 +291,9 @@ function NavigationTabs({ course }) {
                                 d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                               />
                             </svg>
-                            {livestream.time == null ? '00:00:00' : livestream.time}
+                            {livestream.time == null
+                              ? "00:00:00"
+                              : livestream.time}
                           </span>
                         </div>
                         <div className="text-primary font-bold text-md mb-1">
@@ -298,7 +322,9 @@ function NavigationTabs({ course }) {
                       {livestream.status === "active" && (
                         <Button
                           onClick={() =>
-                            router.push(`${courseId}L${livestream.id}/livestream`)
+                            router.push(
+                              `${courseId}L${livestream.id}/livestream`
+                            )
                           }
                           className="flex items-center mx-2 w-fit h-1/2 text-nowrap bg-primary px-3 rounded-lg text-white hover:bg-primary-light"
                         >
@@ -315,7 +341,11 @@ function NavigationTabs({ course }) {
               </div>
             ) : isTutor ? (
               <div>
-                <TutorLivestream courseId={courseId} tutorId={userId} fetchLivestreams={fetchLivestreams} />
+                <TutorLivestream
+                  courseId={courseId}
+                  tutorId={userId}
+                  fetchLivestreams={fetchLivestreams}
+                />
                 {livestreams && livestreams.length > 0 ? (
                   livestreams.map((livestream) => (
                     <div
@@ -349,7 +379,9 @@ function NavigationTabs({ course }) {
                                 d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
                               />
                             </svg>
-                            {new Date(livestream.datetime).toLocaleDateString('en-GB')}
+                            {new Date(livestream.datetime).toLocaleDateString(
+                              "en-GB"
+                            )}
                           </span>
                           <span className="px-2 inline-flex text-sm items-center">
                             <svg
@@ -403,7 +435,9 @@ function NavigationTabs({ course }) {
                         <div className="grid grid-flow-col gap-2">
                           <Button
                             onClick={() =>
-                              router.push(`${courseId}L${livestream.id}/livestream`)
+                              router.push(
+                                `${courseId}L${livestream.id}/livestream`
+                              )
                             }
                             className="flex items-center mx-2 w-full text-nowrap bg-primary px-3 text-white hover:bg-primary-light"
                           >
@@ -437,7 +471,10 @@ function NavigationTabs({ course }) {
                 <div>
                   {notes && notes.length > 0 ? (
                     notes.map((note) => (
-                      <div key={note.id} className="border bg-white p-4 rounded-lg">
+                      <div
+                        key={note.id}
+                        className="border bg-white p-4 rounded-lg"
+                      >
                         <h3 className="text-lg font-bold">{note.note_title}</h3>
                         <p className="mt-2">{note.note_text}</p>
                       </div>
@@ -476,18 +513,28 @@ function NavigationTabs({ course }) {
                 {/* Display the questions if they exist */}
                 <div>
                   {questions.length === 0 ? (
-                    <div className="text-gray-500 text-center py-4">No quizzes available for this course.</div>
+                    <div className="text-gray-500 text-center py-4">
+                      No quizzes available for this course.
+                    </div>
                   ) : (
                     questions.map((question, index) => (
-                      <div key={index} className="border-b bg-white rounded p-4 border-grey-light py-4">
-                        <div className="font-bold text-lg">Q{index + 1}. {question.question}</div>
+                      <div
+                        key={index}
+                        className="border-b bg-white rounded p-4 border-grey-light py-4"
+                      >
+                        <div className="font-bold text-lg">
+                          Q{index + 1}. {question.question}
+                        </div>
                         <div className="font-bold text-sm text-green-600 mt-2">
                           Correct Answer: {question.options[question.correct]}
                         </div>
 
                         <div className="mt-2">
                           {question.options.map((option, idx) => (
-                            <div key={idx} className="flex items-center space-x-2">
+                            <div
+                              key={idx}
+                              className="flex items-center space-x-2"
+                            >
                               <input
                                 type="radio"
                                 name={`question-${index}`}
@@ -513,7 +560,9 @@ function NavigationTabs({ course }) {
               <>
                 {/* For Non-Tutors */}
                 {questions.length === 0 ? (
-                  <div className="text-gray-500 text-center py-4">No quizzes available for this course.</div>
+                  <div className="text-gray-500 text-center py-4">
+                    No quizzes available for this course.
+                  </div>
                 ) : (
                   <div className="border-r border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light bg-white rounded-lg lg:rounded-b-none lg:rounded-r p-4 flex flex-row justify-between leading-normal">
                     <div>
@@ -524,11 +573,13 @@ function NavigationTabs({ course }) {
                           </span>
                         )}
                       </div>
-                      <div className="text-black font-bold text-xl mb-2">Quiz</div>
+                      <div className="text-black font-bold text-xl mb-2">
+                        Quiz
+                      </div>
                       <p className="text-grey-darker text-base">
-                        Challenge your knowledge with this engaging quiz! Test your
-                        skills, new concepts, and push your limits. This quiz will
-                        provide an exciting and rewarding experience.
+                        Challenge your knowledge with this engaging quiz! Test
+                        your skills, new concepts, and push your limits. This
+                        quiz will provide an exciting and rewarding experience.
                       </p>
                     </div>
                     <Button
@@ -557,12 +608,16 @@ function NavigationTabs({ course }) {
               <TableBody>
                 {leaderboardData.map((entry, index) => (
                   <TableRow key={entry.student_id}>
-                    <TableCell className="font-medium text-center">{index + 1}</TableCell>
+                    <TableCell className="font-medium text-center">
+                      {index + 1}
+                    </TableCell>
                     <TableCell className="text-center">
                       {entry.STUDENT?.student_name ||
                         `Student ${entry.student_id}`}
                     </TableCell>{" "}
-                    <TableCell className="text-center">{entry.percentage_score}</TableCell>
+                    <TableCell className="text-center">
+                      {entry.percentage_score}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -588,25 +643,40 @@ function NavigationTabs({ course }) {
                     className="px-4 py-2 my-2 bg-primary text-white rounded-md"
                   >
                     <p className="px-1 font-sans">Ask AI</p>
-                    <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18.5A2.493 2.493 0 0 1 7.51 20H7.5a2.468 2.468 0 0 1-2.4-3.154 2.98 2.98 0 0 1-.85-5.274 2.468 2.468 0 0 1 .92-3.182 2.477 2.477 0 0 1 1.876-3.344 2.5 2.5 0 0 1 3.41-1.856A2.5 2.5 0 0 1 12 5.5m0 13v-13m0 13a2.493 2.493 0 0 0 4.49 1.5h.01a2.468 2.468 0 0 0 2.403-3.154 2.98 2.98 0 0 0 .847-5.274 2.468 2.468 0 0 0-.921-3.182 2.477 2.477 0 0 0-1.875-3.344A2.5 2.5 0 0 0 14.5 3 2.5 2.5 0 0 0 12 5.5m-8 5a2.5 2.5 0 0 1 3.48-2.3m-.28 8.551a3 3 0 0 1-2.953-5.185M20 10.5a2.5 2.5 0 0 0-3.481-2.3m.28 8.551a3 3 0 0 0 2.954-5.185" />
+                    <svg
+                      className="w-6 h-6 text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 18.5A2.493 2.493 0 0 1 7.51 20H7.5a2.468 2.468 0 0 1-2.4-3.154 2.98 2.98 0 0 1-.85-5.274 2.468 2.468 0 0 1 .92-3.182 2.477 2.477 0 0 1 1.876-3.344 2.5 2.5 0 0 1 3.41-1.856A2.5 2.5 0 0 1 12 5.5m0 13v-13m0 13a2.493 2.493 0 0 0 4.49 1.5h.01a2.468 2.468 0 0 0 2.403-3.154 2.98 2.98 0 0 0 .847-5.274 2.468 2.468 0 0 0-.921-3.182 2.477 2.477 0 0 0-1.875-3.344A2.5 2.5 0 0 0 14.5 3 2.5 2.5 0 0 0 12 5.5m-8 5a2.5 2.5 0 0 1 3.48-2.3m-.28 8.551a3 3 0 0 1-2.953-5.185M20 10.5a2.5 2.5 0 0 0-3.481-2.3m.28 8.551a3 3 0 0 0 2.954-5.185"
+                      />
                     </svg>
                   </Button>
                 </div>
               </form>
-              {
-                aiLoading && (
-                  <div className=" space-y-2">
-                    <Skeleton className='w-full h-[20px]' />
-                    <Skeleton className='w-full h-[20px]' />
-                    <Skeleton className='w-full h-[20px]' />
-                    <Skeleton className='w-full h-[20px]' />
-                  </div>
-                )
-              }
+              {aiLoading && (
+                <div className=" space-y-2">
+                  <Skeleton className="w-full h-[20px]" />
+                  <Skeleton className="w-full h-[20px]" />
+                  <Skeleton className="w-full h-[20px]" />
+                  <Skeleton className="w-full h-[20px]" />
+                </div>
+              )}
 
               {aiResponse && (
-                <div className="mt-4 p-4 bg-gray-200 rounded-md">
+                <div
+                  className="mt-4 p-4 bg-gray-200 rounded-md"
+                  style={{ fontFamily: "'Inter', sans-serif", fontSize: 14 }}
+                >
                   <h4 className="font-semibold text-lg mb-2">Explanation:</h4>
                   <div className="space-y-3 leading-relaxed text-gray-800">
                     {aiResponse.split("\n").map((line, index) => (
@@ -640,23 +710,30 @@ function NavigationTabs({ course }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {Array.isArray(enrolledStudents) && enrolledStudents.map((entry, index) => (
-                    <TableRow key={entry.student_id}>
-                      <TableCell className="text-center">{entry.student_id}</TableCell>
-                      <TableCell className="text-center">{entry.student_name}</TableCell>
-                      <TableCell className="text-center">{entry.student_email}</TableCell>
-                    </TableRow>
-                  ))}
+                  {Array.isArray(enrolledStudents) &&
+                    enrolledStudents.map((entry, index) => (
+                      <TableRow key={entry.student_id}>
+                        <TableCell className="text-center">
+                          {entry.student_id}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {entry.student_name}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          {entry.student_email}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TabsContent>
           )}
         </Tabs>
-      ) : isPurchased == false && isTutor == false || !isLogged ? (
+      ) : (isPurchased == false && isTutor == false) || !isLogged ? (
         <div className="my-2">
           <InstructorSection className="md:w-2/3 w-full" course={course} />
         </div>
-
+      ) : (
         // <Tabs
         //   defaultValue="instructors"
         //   className="w-full p-2 bg-gray-100 h-auto"
@@ -677,10 +754,8 @@ function NavigationTabs({ course }) {
         //   <TabsContent value="instructors" className="p-2">
         //   </TabsContent>
         // </Tabs>
-      ) : (
         <Skeleton className="w-full mt-2 h-[250px] rounded-lg" />
-      )
-      }
+      )}
     </div>
   );
 }

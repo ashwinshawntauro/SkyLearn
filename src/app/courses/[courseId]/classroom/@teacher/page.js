@@ -117,8 +117,6 @@ export default function Page() {
         const monthDate = new Date(dueDate).getMonth() + 1;
         const dayDate = new Date(dueDate).getDate();
 
-        console.log(dueDate)
-        console.log(yearDate, monthDate, dayDate)
         try {
             const response = await fetch('/api/Assignments/addAssignment', {
                 method: 'POST',

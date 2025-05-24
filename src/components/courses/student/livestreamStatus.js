@@ -59,7 +59,7 @@ export default function Page({ livestreamId, userId, course_id }) {
 
             if (response.ok) {
                 toast({
-                    variant: "failure",
+                    variant: "success",
                     title: "SkyLearn",
                     description: "Dont worry! Token raised successfully!",
                 })

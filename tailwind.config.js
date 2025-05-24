@@ -6,7 +6,7 @@ export const content = [
   export const theme = {
 	extend: {
 	  fontFamily: {
-		sans: ['Inter', 'sans'], 
+		sans: ['Geist', 'sans'], 
 	  },
 	  animation: {
 		blink: 'blink 2s infinite',

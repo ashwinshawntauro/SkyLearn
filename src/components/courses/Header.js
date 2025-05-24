@@ -243,7 +243,7 @@ function Header({ course }) {
             <Button
               className="bg-white hover:bg-zinc-300 text-black font-semibold"
               onClick={endCourse}
-              disabled={isLoading} // Disable button while loading
+              disabled={isLoading} 
             >
               {isLoading ? (
                 <div className="flex justify-center items-center space-x-2">
@@ -362,9 +362,9 @@ function Header({ course }) {
                 setIsModalOpen(false);
                 genCert();
               }}
-              disabled={
-                parseInt(getProgressValue.f4) < 50 || getProgressValue.f5 < 1
-              }
+              // disabled={
+              //   parseInt(getProgressValue.f4) < 50 || getProgressValue.f5 < 1
+              // }
             >
               Generate
             </Button>
